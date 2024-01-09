@@ -133,4 +133,59 @@ public sealed partial class MainPage : Page
     {
         PerformStudentNoteChange(0.00, 5.00, "DM3", "Copier/Coller de contenu en ligne");
     }
+
+    public void TP1_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 1.00, "TP1", "Bavardage pendant activité à faire seul");
+    }
+
+    public void TP2_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "TP2", "Bavarder trop fort avec son binôme/groupe");
+    }
+
+    public void TP3_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 5.00, "TP3", "Jouer à des jeux sans avoir terminé le travail demandé");
+    }
+
+    public void TP4_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.50, "TP4", "Ne pas rétablir les armoires de brassage en fin de séance");
+    }
+
+    public void TP5_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(1.00, 0.00, "TP5", "Rétablir correctement les armoires de brassage en fin de séance");
+    }
+
+    public void TP6_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 3.00, "TP6", "Recourir à ChatGPT");
+    }
+
+    public void TP7_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "TP7", "Refus de travailler");
+    }
+
+    public void TP8_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 5.00, "TP8", "Travail non rendu");
+    }
+
+    public void TP9_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "TP9", "Nouveau jour de retard sur le rendu d'un travail");
+    }
+
+    public void TP10_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 5.00, "TP10", "Dormir en cours");
+    }
+
+    public void TP11_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 3.00, "TP11", "Passivité durant un travail de groupe");
+    }
 }

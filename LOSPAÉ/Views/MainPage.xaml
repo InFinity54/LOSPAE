@@ -52,20 +52,20 @@
             <TextBlock x:Name="TPHead" x:Uid="TPHead" FontSize="20" Margin="0,0,0,10" />
 
             <StackPanel x:Name="TPStack1" Orientation="Vertical" RelativePanel.Below="TPHead">
-                <Button x:Name="TP1" x:Uid="TP1" />
-                <Button x:Name="TP3" x:Uid="TP3" Margin="0,10,0,0" />
-                <Button x:Name="TP5" x:Uid="TP5" Margin="0,10,0,0" />
-                <Button x:Name="TP7" x:Uid="TP7" Margin="0,10,0,0" />
-                <Button x:Name="TP9" x:Uid="TP9" Margin="0,10,0,0" />
-                <Button x:Name="TP11" x:Uid="TP11" Margin="0,10,0,0" />
+                <Button x:Name="TP1" x:Uid="TP1" Click="TP1_Click" />
+                <Button x:Name="TP3" x:Uid="TP3" Click="TP3_Click" Margin="0,10,0,0" />
+                <Button x:Name="TP5" x:Uid="TP5" Click="TP5_Click"  Margin="0,10,0,0" />
+                <Button x:Name="TP7" x:Uid="TP7" Click="TP7_Click" Margin="0,10,0,0" />
+                <Button x:Name="TP9" x:Uid="TP9" Click="TP9_Click" Margin="0,10,0,0" />
+                <Button x:Name="TP11" x:Uid="TP11" Click="TP11_Click" Margin="0,10,0,0" />
             </StackPanel>
 
             <StackPanel x:Name="TPStack2" Orientation="Vertical" RelativePanel.Below="TPHead" RelativePanel.RightOf="TPStack1">
-                <Button x:Name="TP2" x:Uid="TP2" Margin="10,0,0,0" />
-                <Button x:Name="TP4" x:Uid="TP4" Margin="10,10,0,0" />
-                <Button x:Name="TP6" x:Uid="TP6" Margin="10,10,0,0" />
-                <Button x:Name="TP8" x:Uid="TP8" Margin="10,10,0,0" />
-                <Button x:Name="TP10" x:Uid="TP10" Margin="10,10,0,0" />
+                <Button x:Name="TP2" x:Uid="TP2" Click="TP2_Click" Margin="10,0,0,0" />
+                <Button x:Name="TP4" x:Uid="TP4" Click="TP4_Click" Margin="10,10,0,0" />
+                <Button x:Name="TP6" x:Uid="TP6" Click="TP6_Click" Margin="10,10,0,0" />
+                <Button x:Name="TP8" x:Uid="TP8" Click="TP8_Click" Margin="10,10,0,0" />
+                <Button x:Name="TP10" x:Uid="TP10" Click="TP10_Click" Margin="10,10,0,0" />
             </StackPanel>
         </RelativePanel>
 
