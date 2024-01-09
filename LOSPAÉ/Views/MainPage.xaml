@@ -18,20 +18,20 @@
             <StackPanel x:Name="CPStack1" Orientation="Vertical" RelativePanel.Below="CPHead">
                 <Button x:Name="CP1" x:Uid="CP1" Click="CP1_Click" />
                 <Button x:Name="CP3" x:Uid="CP3" Click="CP3_Click" Margin="0,10,0,0" />
-                <Button x:Name="CP5" x:Uid="CP5" Margin="0,10,0,0" />
-                <Button x:Name="CP7" x:Uid="CP7" Margin="0,10,0,0" />
-                <Button x:Name="CP9" x:Uid="CP9" Margin="0,10,0,0" />
-                <Button x:Name="CP11" x:Uid="CP11" Margin="0,10,0,0" />
-                <Button x:Name="CP13" x:Uid="CP13" Margin="0,10,0,0" />
+                <Button x:Name="CP5" x:Uid="CP5" Click="CP5_Click" Margin="0,10,0,0" />
+                <Button x:Name="CP7" x:Uid="CP7" Click="CP7_Click" Margin="0,10,0,0" />
+                <Button x:Name="CP9" x:Uid="CP9" Click="CP9_Click" Margin="0,10,0,0" />
+                <Button x:Name="CP11" x:Uid="CP11" Click="CP11_Click" Margin="0,10,0,0" />
+                <Button x:Name="CP13" x:Uid="CP13" Click="CP13_Click" Margin="0,10,0,0" />
             </StackPanel>
 
             <StackPanel x:Name="CPStack2" Orientation="Vertical" RelativePanel.Below="CPHead" RelativePanel.RightOf="CPStack1">
                 <Button x:Name="CP2" x:Uid="CP2" Click="CP2_Click" Margin="10,0,0,0" />
-                <Button x:Name="CP4" x:Uid="CP4" Margin="10,10,0,0" />
-                <Button x:Name="CP6" x:Uid="CP6" Margin="10,10,0,0" />
-                <Button x:Name="CP8" x:Uid="CP8" Margin="10,10,0,0" />
-                <Button x:Name="CP10" x:Uid="CP10" Margin="10,10,0,0" />
-                <Button x:Name="CP12" x:Uid="CP12" Margin="10,10,0,0" />
+                <Button x:Name="CP4" x:Uid="CP4" Click="CP4_Click" Margin="10,10,0,0" />
+                <Button x:Name="CP6" x:Uid="CP6" Click="CP6_Click" Margin="10,10,0,0" />
+                <Button x:Name="CP8" x:Uid="CP8" Click="CP8_Click" Margin="10,10,0,0" />
+                <Button x:Name="CP10" x:Uid="CP10" Click="CP10_Click" Margin="10,10,0,0" />
+                <Button x:Name="CP12" x:Uid="CP12" Click="CP12_Click" Margin="10,10,0,0" />
             </StackPanel>
         </RelativePanel>
 
