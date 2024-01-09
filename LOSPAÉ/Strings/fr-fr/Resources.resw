@@ -144,4 +144,133 @@
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
     <value>L'application permet de gérer une liste d'étudiants, et de leur ajouter ou retirer des points en fonction des critères de notation de la note de participation. Elle permet également un historique des ajouts et retraits, et d'afficher le détail pour chaque étudiant.</value>
   </data>
+  <data name="CO1.Content" xml:space="preserve">
+    <value>CO1</value>
+  </data>
+  <data name="CO2.Content" xml:space="preserve">
+    <value>CO2</value>
+  </data>
+  <data name="CO3.Content" xml:space="preserve">
+    <value>CO3</value>
+  </data>
+  <data name="CO4.Content" xml:space="preserve">
+    <value>CO4</value>
+  </data>
+  <data name="CO5.Content" xml:space="preserve">
+    <value>CO5</value>
+  </data>
+  <data name="COHead.Text" xml:space="preserve">
+    <value>Cours</value>
+  </data>
+  <data name="CP1.Content" xml:space="preserve">
+    <value>CP1</value>
+  </data>
+  <data name="CP10.Content" xml:space="preserve">
+    <value>CP10</value>
+  </data>
+  <data name="CP11.Content" xml:space="preserve">
+    <value>CP11</value>
+  </data>
+  <data name="CP12.Content" xml:space="preserve">
+    <value>CP12</value>
+  </data>
+  <data name="CP13.Content" xml:space="preserve">
+    <value>CP13</value>
+  </data>
+  <data name="CP2.Content" xml:space="preserve">
+    <value>CP2</value>
+  </data>
+  <data name="CP3.Content" xml:space="preserve">
+    <value>CP3</value>
+  </data>
+  <data name="CP4.Content" xml:space="preserve">
+    <value>CP4</value>
+  </data>
+  <data name="CP5.Content" xml:space="preserve">
+    <value>CP5</value>
+  </data>
+  <data name="CP6.Content" xml:space="preserve">
+    <value>CP6</value>
+  </data>
+  <data name="CP7.Content" xml:space="preserve">
+    <value>CP7</value>
+  </data>
+  <data name="CP8.Content" xml:space="preserve">
+    <value>CP8</value>
+  </data>
+  <data name="CP9.Content" xml:space="preserve">
+    <value>CP9</value>
+  </data>
+  <data name="CPHead.Text" xml:space="preserve">
+    <value>Comportement</value>
+  </data>
+  <data name="DM1.Content" xml:space="preserve">
+    <value>DM1</value>
+  </data>
+  <data name="DM2.Content" xml:space="preserve">
+    <value>DM2</value>
+  </data>
+  <data name="DM3.Content" xml:space="preserve">
+    <value>DM3</value>
+  </data>
+  <data name="DMHead.Text" xml:space="preserve">
+    <value>Devoirs maison</value>
+  </data>
+  <data name="DS1.Content" xml:space="preserve">
+    <value>DS1</value>
+  </data>
+  <data name="DS2.Content" xml:space="preserve">
+    <value>DS2</value>
+  </data>
+  <data name="DS3.Content" xml:space="preserve">
+    <value>DS3</value>
+  </data>
+  <data name="DS4.Content" xml:space="preserve">
+    <value>DS4</value>
+  </data>
+  <data name="DSHead.Text" xml:space="preserve">
+    <value>Devoirs surveillés</value>
+  </data>
+  <data name="StudentSelector.Header" xml:space="preserve">
+    <value>Étudiant</value>
+  </data>
+  <data name="StudentSelector.PlaceholderText" xml:space="preserve">
+    <value>Sélectionnez un étudiant...</value>
+  </data>
+  <data name="TP1.Content" xml:space="preserve">
+    <value>TP1</value>
+  </data>
+  <data name="TP10.Content" xml:space="preserve">
+    <value>TP10</value>
+  </data>
+  <data name="TP11.Content" xml:space="preserve">
+    <value>TP11</value>
+  </data>
+  <data name="TP2.Content" xml:space="preserve">
+    <value>TP2</value>
+  </data>
+  <data name="TP3.Content" xml:space="preserve">
+    <value>TP3</value>
+  </data>
+  <data name="TP4.Content" xml:space="preserve">
+    <value>TP4</value>
+  </data>
+  <data name="TP5.Content" xml:space="preserve">
+    <value>TP5</value>
+  </data>
+  <data name="TP6.Content" xml:space="preserve">
+    <value>TP6</value>
+  </data>
+  <data name="TP7.Content" xml:space="preserve">
+    <value>TP7</value>
+  </data>
+  <data name="TP8.Content" xml:space="preserve">
+    <value>TP8</value>
+  </data>
+  <data name="TP9.Content" xml:space="preserve">
+    <value>TP9</value>
+  </data>
+  <data name="TPHead.Text" xml:space="preserve">
+    <value>Travaux pratiques</value>
+  </data>
 </root>

@@ -6,7 +6,102 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea">
-        
-    </Grid>
+    <RelativePanel>
+        <RelativePanel x:Name="MainPageHeader" Width="990">
+            <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" Width="350" RelativePanel.AlignLeftWithPanel="True">
+                <x:String>Étudiant 1</x:String>
+                <x:String>Étudiant 2</x:String>
+                <x:String>Étudiant 3</x:String>
+                <x:String>Étudiant 4</x:String>
+            </ComboBox>
+
+            <TextBlock x:Name="CurrentNote" Text="Note actuelle : ??/20" RelativePanel.AlignRightWithPanel="True" />
+        </RelativePanel>
+
+        <RelativePanel x:Name="CPPanel" Width="200" RelativePanel.Below="MainPageHeader" Margin="0,30,0,0">
+            <TextBlock x:Name="CPHead" x:Uid="CPHead" FontSize="20" Margin="0,0,0,10" />
+
+            <StackPanel x:Name="CPStack1" Orientation="Vertical" RelativePanel.Below="CPHead">
+                <Button x:Name="CP1" x:Uid="CP1" />
+                <Button x:Name="CP3" x:Uid="CP3" Margin="0,10,0,0" />
+                <Button x:Name="CP5" x:Uid="CP5" Margin="0,10,0,0" />
+                <Button x:Name="CP7" x:Uid="CP7" Margin="0,10,0,0" />
+                <Button x:Name="CP9" x:Uid="CP9" Margin="0,10,0,0" />
+                <Button x:Name="CP11" x:Uid="CP11" Margin="0,10,0,0" />
+                <Button x:Name="CP13" x:Uid="CP13" Margin="0,10,0,0" />
+            </StackPanel>
+
+            <StackPanel x:Name="CPStack2" Orientation="Vertical" RelativePanel.Below="CPHead" RelativePanel.RightOf="CPStack1">
+                <Button x:Name="CP2" x:Uid="CP2" Margin="10,0,0,0" />
+                <Button x:Name="CP4" x:Uid="CP4" Margin="10,10,0,0" />
+                <Button x:Name="CP6" x:Uid="CP6" Margin="10,10,0,0" />
+                <Button x:Name="CP8" x:Uid="CP8" Margin="10,10,0,0" />
+                <Button x:Name="CP10" x:Uid="CP10" Margin="10,10,0,0" />
+                <Button x:Name="CP12" x:Uid="CP12" Margin="10,10,0,0" />
+            </StackPanel>
+        </RelativePanel>
+
+        <RelativePanel x:Name="DMPanel" Width="200" RelativePanel.Below="MainPageHeader" RelativePanel.RightOf="CPPanel" Margin="0,30,0,0">
+            <TextBlock x:Name="DMHead" x:Uid="DMHead" FontSize="20" Margin="0,0,0,10" />
+
+            <StackPanel x:Name="DMStack1" Orientation="Vertical" RelativePanel.Below="DMHead">
+                <Button x:Name="DM1" x:Uid="DM1" />
+                <Button x:Name="DM3" x:Uid="DM3" Margin="0,10,0,0" />
+            </StackPanel>
+
+            <StackPanel x:Name="DMStack2" Orientation="Vertical" RelativePanel.Below="DMHead" RelativePanel.RightOf="DMStack1">
+                <Button x:Name="DM2" x:Uid="DM2" Margin="10,0,0,0" />
+            </StackPanel>
+        </RelativePanel>
+
+        <RelativePanel x:Name="TPPanel" Width="200" RelativePanel.Below="MainPageHeader" RelativePanel.RightOf="DMPanel" Margin="0,30,0,0">
+            <TextBlock x:Name="TPHead" x:Uid="TPHead" FontSize="20" Margin="0,0,0,10" />
+
+            <StackPanel x:Name="TPStack1" Orientation="Vertical" RelativePanel.Below="TPHead">
+                <Button x:Name="TP1" x:Uid="TP1" />
+                <Button x:Name="TP3" x:Uid="TP3" Margin="0,10,0,0" />
+                <Button x:Name="TP5" x:Uid="TP5" Margin="0,10,0,0" />
+                <Button x:Name="TP7" x:Uid="TP7" Margin="0,10,0,0" />
+                <Button x:Name="TP9" x:Uid="TP9" Margin="0,10,0,0" />
+                <Button x:Name="TP11" x:Uid="TP11" Margin="0,10,0,0" />
+            </StackPanel>
+
+            <StackPanel x:Name="TPStack2" Orientation="Vertical" RelativePanel.Below="TPHead" RelativePanel.RightOf="TPStack1">
+                <Button x:Name="TP2" x:Uid="TP2" Margin="10,0,0,0" />
+                <Button x:Name="TP4" x:Uid="TP4" Margin="10,10,0,0" />
+                <Button x:Name="TP6" x:Uid="TP6" Margin="10,10,0,0" />
+                <Button x:Name="TP8" x:Uid="TP8" Margin="10,10,0,0" />
+                <Button x:Name="TP10" x:Uid="TP10" Margin="10,10,0,0" />
+            </StackPanel>
+        </RelativePanel>
+
+        <RelativePanel x:Name="COPanel" Width="200" RelativePanel.Below="MainPageHeader" RelativePanel.RightOf="TPPanel" Margin="0,30,0,0">
+            <TextBlock x:Name="COHead" x:Uid="COHead" FontSize="20" Margin="0,0,0,10" />
+
+            <StackPanel x:Name="COStack1" Orientation="Vertical" RelativePanel.Below="COHead">
+                <Button x:Name="CO1" x:Uid="CO1" />
+                <Button x:Name="CO3" x:Uid="CO3" Margin="0,10,0,0" />
+                <Button x:Name="CO5" x:Uid="CO5" Margin="0,10,0,0" />
+            </StackPanel>
+
+            <StackPanel x:Name="COStack2" Orientation="Vertical" RelativePanel.Below="COHead" RelativePanel.RightOf="COStack1">
+                <Button x:Name="CO2" x:Uid="CO2" Margin="10,0,0,0" />
+                <Button x:Name="CO4" x:Uid="CO4" Margin="10,10,0,0" />
+            </StackPanel>
+        </RelativePanel>
+
+        <RelativePanel x:Name="DSPanel" Width="200" RelativePanel.Below="MainPageHeader" RelativePanel.RightOf="COPanel" Margin="0,30,0,0">
+            <TextBlock x:Name="DSHead" x:Uid="DSHead" FontSize="20" Margin="0,0,0,10" />
+
+            <StackPanel x:Name="DSStack1" Orientation="Vertical" RelativePanel.Below="DSHead">
+                <Button x:Name="DS1" x:Uid="DS1" />
+                <Button x:Name="DS3" x:Uid="DS3" Margin="0,10,0,0" />
+            </StackPanel>
+
+            <StackPanel x:Name="DSStack2" Orientation="Vertical" RelativePanel.Below="DSHead" RelativePanel.RightOf="DSStack1">
+                <Button x:Name="DS2" x:Uid="DS2" Margin="10,0,0,0" />
+                <Button x:Name="DS4" x:Uid="DS4" Margin="10,10,0,0" />
+            </StackPanel>
+        </RelativePanel>
+    </RelativePanel>
 </Page>
