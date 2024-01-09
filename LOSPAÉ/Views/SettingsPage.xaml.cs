@@ -22,7 +22,7 @@ public sealed partial class SettingsPage : Page
     {
         ViewModel = App.GetService<SettingsViewModel>();
         InitializeComponent();
-        ConfigFolderPath.Text = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        ConfigFolderPath.Text = (string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"];
     }
 
     private async void CsvDataImport_Click(object sender, RoutedEventArgs e)
@@ -62,20 +62,17 @@ public sealed partial class SettingsPage : Page
                 }
 
                 parser.Close();
-                File.WriteAllText(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json"), JsonSerializer.Serialize(App.etudiants));
-                File.WriteAllText(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "note_edit_events.json"), JsonSerializer.Serialize(App.noteEditEvents));
+                File.WriteAllText(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "students.json"), JsonSerializer.Serialize(App.etudiants));
+                File.WriteAllText(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "note_edit_events.json"), JsonSerializer.Serialize(App.noteEditEvents));
             }
 
             ContentDialog dialog = new ContentDialog();
-
-            // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
             dialog.XamlRoot = this.XamlRoot;
             dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
             dialog.Title = "Importation CSV";
             dialog.PrimaryButtonText = "OK";
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.Content = "Le fichier \"" + file.Name + "\" a été importé avec succès.";
-
             await dialog.ShowAsync();
         }
 
@@ -88,5 +85,32 @@ public sealed partial class SettingsPage : Page
         var package = new DataPackage();
         package.SetText(ConfigFolderPath.Text);
         Clipboard.SetContent(package);
+    }
+
+    private async void ConfigFolderChangeButton_Click(object sender, RoutedEventArgs e)
+    {
+        var picker = new Windows.Storage.Pickers.FolderPicker();
+        picker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
+        picker.FileTypeFilter.Add("*");
+
+        var WindowHandle = WindowNative.GetWindowHandle(App.MainWindow);
+        InitializeWithWindow.Initialize(picker, WindowHandle);
+
+        Windows.Storage.StorageFolder folder = await picker.PickSingleFolderAsync();
+
+        if (folder != null)
+        {
+            Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"] = folder.Path;
+            ConfigFolderPath.Text = folder.Path;
+
+            ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            dialog.Title = "Dossier de stockage de la configuration";
+            dialog.PrimaryButtonText = "OK";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.Content = "Le dossier de stockage de la configuration a été correctement modifié." + Environment.NewLine + "Le nouveau dossier est le suivant : \"" + folder.Path + "\"" + Environment.NewLine + "L'application va maintenant redémarrer. Déplacez les fichiers de configuration depuis l'ancien vers le nouveau dossier pour conserver les données, ou redémarrez le programme pour repartir de zéro.";
+            await dialog.ShowAsync();
+        }
     }
 }

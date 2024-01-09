@@ -300,6 +300,9 @@
   <data name="Shell_Notes.Content" xml:space="preserve">
     <value>Détail des notes des étudiants</value>
   </data>
+  <data name="ConfigFolderChangeButton.Content" xml:space="preserve">
+    <value>Changer le dossier</value>
+  </data>
   <data name="ConfigFolderCopyButton.Content" xml:space="preserve">
     <value>Copier le chemin dans le presse-papiers</value>
   </data>

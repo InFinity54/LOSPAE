@@ -92,6 +92,11 @@ public partial class App : Application
         Build();
 
         UnhandledException += App_UnhandledException;
+
+        if (Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"] == null)
+        {
+            Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"] = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        }
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
