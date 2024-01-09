@@ -30,8 +30,11 @@ public sealed partial class MainPage : Page
             }
         }
 
-        StudentSelector.SelectedIndex = 0;
-        CurrentNote.Text = App.etudiants[StudentSelector.SelectedIndex].EtudiantNote.ToString() + "/20";
+        if (App.etudiants.Count > 0)
+        {
+            StudentSelector.SelectedIndex = 0;
+            CurrentNote.Text = App.etudiants[StudentSelector.SelectedIndex].EtudiantNote.ToString() + "/20";
+        }
     }
 
     public void SaveStudentsConfigFiles()
