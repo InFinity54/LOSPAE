@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "LOSPAÉ (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "LOSPAÉ (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
