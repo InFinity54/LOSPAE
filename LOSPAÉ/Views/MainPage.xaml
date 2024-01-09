@@ -15,7 +15,7 @@
                 <x:String>Étudiant 4</x:String>
             </ComboBox>
 
-            <TextBlock x:Name="CurrentNote" Text="Note actuelle : ??/20" RelativePanel.AlignRightWithPanel="True" />
+            <TextBlock x:Name="CurrentNote" Text="20,00/20" FontSize="50" RelativePanel.AlignRightWithPanel="True" />
         </RelativePanel>
 
         <RelativePanel x:Name="CPPanel" Width="200" RelativePanel.Below="MainPageHeader" Margin="0,30,0,0">
