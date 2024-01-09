@@ -8,16 +8,15 @@
 
     <RelativePanel>
         <RelativePanel x:Name="MainPageHeader" Width="990">
-            <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" Width="350" RelativePanel.AlignLeftWithPanel="True"></ComboBox>
-
-            <TextBlock x:Name="CurrentNote" Text="20,00/20" FontSize="50" RelativePanel.AlignRightWithPanel="True" />
+            <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" SelectionChanged="StudentSelector_SelectionChanged" Width="350" RelativePanel.AlignLeftWithPanel="True"></ComboBox>
+            <TextBlock x:Name="CurrentNote" Text="20/20" FontSize="50" RelativePanel.AlignRightWithPanel="True" />
         </RelativePanel>
 
         <RelativePanel x:Name="CPPanel" Width="200" RelativePanel.Below="MainPageHeader" Margin="0,30,0,0">
             <TextBlock x:Name="CPHead" x:Uid="CPHead" FontSize="20" Margin="0,0,0,10" />
 
             <StackPanel x:Name="CPStack1" Orientation="Vertical" RelativePanel.Below="CPHead">
-                <Button x:Name="CP1" x:Uid="CP1" />
+                <Button x:Name="CP1" x:Uid="CP1" Click="CP1_Click" />
                 <Button x:Name="CP3" x:Uid="CP3" Margin="0,10,0,0" />
                 <Button x:Name="CP5" x:Uid="CP5" Margin="0,10,0,0" />
                 <Button x:Name="CP7" x:Uid="CP7" Margin="0,10,0,0" />

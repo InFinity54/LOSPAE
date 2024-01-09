@@ -89,6 +89,7 @@ public partial class App : Application
         {
             FileStream studentsConfigFile = File.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json"));
             etudiants = JsonSerializer.Deserialize<List<Etudiant>>(studentsConfigFile);
+            studentsConfigFile.Close();
         }
 
         UnhandledException += App_UnhandledException;
