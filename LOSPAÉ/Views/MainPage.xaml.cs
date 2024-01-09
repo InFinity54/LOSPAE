@@ -118,4 +118,19 @@ public sealed partial class MainPage : Page
     {
         PerformStudentNoteChange(0.00, 5.00, "CP11", "Frapper un collègue");
     }
+
+    public void DM1_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 3.00, "DM1", "Recourir à ChatGPT");
+    }
+
+    public void DM2_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 5.00, "DM2", "Copie similaire à un collègue");
+    }
+
+    public void DM3_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 5.00, "DM3", "Copier/Coller de contenu en ligne");
+    }
 }
