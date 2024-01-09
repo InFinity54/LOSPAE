@@ -17,23 +17,50 @@ public sealed partial class MainPage : Page
     {
         ViewModel = App.GetService<MainViewModel>();
         InitializeComponent();
-        StudentsListUpdate();
+        Loaded += MainPage_Loaded;
     }
 
-    public void StudentsListUpdate()
+    private async void MainPage_Loaded(object sender, RoutedEventArgs e)
     {
-        if (App.etudiants != null)
+        if (File.Exists(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json")))
         {
-            foreach (Etudiant etudiant in App.etudiants)
-            {
-                StudentSelector.Items.Add(etudiant.EtudiantName);
-            }
+            FileStream studentsConfigFile = File.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json"));
+            App.etudiants = JsonSerializer.Deserialize<List<Etudiant>>(studentsConfigFile);
+            studentsConfigFile.Close();
         }
+        else
+        {
+            App.etudiants = new List<Etudiant>();
+        }
+
+        if (File.Exists(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "note_edit_events.json")))
+        {
+            FileStream eventsConfigFile = File.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "note_edit_events.json"));
+            App.noteEditEvents = JsonSerializer.Deserialize<List<NoteEditEvent>>(eventsConfigFile);
+            eventsConfigFile.Close();
+        }
+        else
+        {
+            App.noteEditEvents = new List<NoteEditEvent>();
+        }
+
+        StudentsListUpdate();
 
         if (App.etudiants.Count > 0)
         {
             StudentSelector.SelectedIndex = 0;
             CurrentNote.Text = App.etudiants[StudentSelector.SelectedIndex].EtudiantNote.ToString() + "/20";
+        }
+    }
+
+    public void StudentsListUpdate()
+    {
+        if (App.etudiants.Count > 0)
+        {
+            foreach (Etudiant etudiant in App.etudiants)
+            {
+                StudentSelector.Items.Add(etudiant.EtudiantName);
+            }
         }
     }
 

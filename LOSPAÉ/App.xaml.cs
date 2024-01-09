@@ -44,8 +44,8 @@ public partial class App : Application
 
     public static UIElement? AppTitlebar { get; set; }
 
-    public static List<Etudiant> etudiants = new List<Etudiant>();
-    public static List<NoteEditEvent> noteEditEvents = new List<NoteEditEvent>();
+    public static List<Etudiant> etudiants;
+    public static List<NoteEditEvent> noteEditEvents;
 
     public App()
     {
@@ -85,20 +85,6 @@ public partial class App : Application
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
         }).
         Build();
-
-        if (File.Exists(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json")))
-        {
-            FileStream studentsConfigFile = File.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json"));
-            etudiants = JsonSerializer.Deserialize<List<Etudiant>>(studentsConfigFile);
-            studentsConfigFile.Close();
-        }
-
-        if (File.Exists(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "note_edit_events.json")))
-        {
-            FileStream eventsConfigFile = File.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "note_edit_events.json"));
-            noteEditEvents = JsonSerializer.Deserialize<List<NoteEditEvent>>(eventsConfigFile);
-            eventsConfigFile.Close();
-        }
 
         UnhandledException += App_UnhandledException;
     }
