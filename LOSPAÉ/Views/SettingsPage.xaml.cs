@@ -42,7 +42,8 @@ public sealed partial class SettingsPage : Page
 
         if (file != null)
         {
-            App.etudiants = new List<Etudiant>();
+            App.etudiants.Clear();
+            App.noteEditEvents.Clear();
 
             using (TextFieldParser parser = new TextFieldParser(file.Path, System.Text.Encoding.UTF8))
             {
@@ -60,8 +61,9 @@ public sealed partial class SettingsPage : Page
                     }
                 }
 
-                File.WriteAllText(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json"), JsonSerializer.Serialize(App.etudiants));
                 parser.Close();
+                File.WriteAllText(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json"), JsonSerializer.Serialize(App.etudiants));
+                File.WriteAllText(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "note_edit_events.json"), JsonSerializer.Serialize(App.noteEditEvents));
             }
 
             ContentDialog dialog = new ContentDialog();
