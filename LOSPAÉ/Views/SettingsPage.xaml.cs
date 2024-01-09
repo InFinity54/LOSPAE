@@ -4,6 +4,7 @@ using LOSPAÉ.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.VisualBasic.FileIO;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Store;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
@@ -21,7 +22,7 @@ public sealed partial class SettingsPage : Page
     {
         ViewModel = App.GetService<SettingsViewModel>();
         InitializeComponent();
-        // TODO: Ajouter le chemin vers le dossier de configuration dans la page des paramètres.
+        ConfigFolderPath.Text = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
     }
 
     private async void CsvDataImport_Click(object sender, RoutedEventArgs e)
@@ -80,5 +81,12 @@ public sealed partial class SettingsPage : Page
 
         CsvDataImport.IsEnabled = true;
         CsvDataImportProgress.IsActive = false;
+    }
+
+    private void ConfigFolderCopyButton_Click(object sender, RoutedEventArgs e)
+    {
+        var package = new DataPackage();
+        package.SetText(ConfigFolderPath.Text);
+        Clipboard.SetContent(package);
     }
 }

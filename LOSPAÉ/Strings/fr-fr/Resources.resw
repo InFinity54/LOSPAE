@@ -300,4 +300,13 @@
   <data name="Shell_Notes.Content" xml:space="preserve">
     <value>Détail des notes des étudiants</value>
   </data>
+  <data name="ConfigFolderCopyButton.Content" xml:space="preserve">
+    <value>Copier le chemin dans le presse-papiers</value>
+  </data>
+  <data name="ConfigFolderHead.Text" xml:space="preserve">
+    <value>Stockage de la configuration</value>
+  </data>
+  <data name="ConfigFolderMessage.Text" xml:space="preserve">
+    <value>Les fichiers de configuration de LOSPAÉ sont stockés dans le dossier ci-dessous.</value>
+  </data>
 </root>
