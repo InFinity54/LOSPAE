@@ -9,7 +9,6 @@
 
 	<Grid x:Name="ContentArea">
 		<controls:DataGrid
-            x:Name="HistoryGrid"
             AutoGenerateColumns="False"
             CanUserSortColumns="False"
             CanUserReorderColumns="False"

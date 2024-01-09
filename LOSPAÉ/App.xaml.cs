@@ -75,6 +75,8 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<NotesViewModel>();
+            services.AddTransient<NotesPage>();
             services.AddTransient<HistoryViewModel>();
             services.AddTransient<HistoryPage>();
             services.AddTransient<SettingsViewModel>();

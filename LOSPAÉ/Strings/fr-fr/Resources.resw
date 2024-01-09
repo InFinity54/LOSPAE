@@ -291,4 +291,13 @@
   <data name="Shell_History.Content" xml:space="preserve">
     <value>Historique des modifications des notes</value>
   </data>
+  <data name="NotesPage_EtudiantNameCol.Header" xml:space="preserve">
+    <value>Nom et prénom</value>
+  </data>
+  <data name="NotesPage_EtudiantNoteCol.Header" xml:space="preserve">
+    <value>Note actuelle</value>
+  </data>
+  <data name="Shell_Notes.Content" xml:space="preserve">
+    <value>Détail des notes des étudiants</value>
+  </data>
 </root>
