@@ -126,17 +126,8 @@
   <data name="Shell_Main.Content" xml:space="preserve">
     <value>Mise à jour d'une note</value>
   </data>
-  <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Thème</value>
-  </data>
-  <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Clair</value>
-  </data>
-  <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Sombre</value>
-  </data>
-  <data name="Settings_Theme_Default.Content" xml:space="preserve">
-    <value>Par défaut</value>
+  <data name="Settings_Temp.Text" xml:space="preserve">
+    <value>Aucun paramètre pour le moment.</value>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
     <value>Application permettant de suivre les notes de participation des étudiants.</value>
