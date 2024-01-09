@@ -1,4 +1,5 @@
-﻿using LOSPAÉ.Activation;
+﻿using System.Text.Json;
+using LOSPAÉ.Activation;
 using LOSPAÉ.Contracts.Services;
 using LOSPAÉ.Core.Contracts.Services;
 using LOSPAÉ.Core.Services;
@@ -43,6 +44,8 @@ public partial class App : Application
 
     public static UIElement? AppTitlebar { get; set; }
 
+    public static List<Etudiant> etudiants = new List<Etudiant>();
+
     public App()
     {
         InitializeComponent();
@@ -81,6 +84,12 @@ public partial class App : Application
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
         }).
         Build();
+
+        if (File.Exists(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json")))
+        {
+            FileStream studentsConfigFile = File.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "students.json"));
+            etudiants = JsonSerializer.Deserialize<List<Etudiant>>(studentsConfigFile);
+        }
 
         UnhandledException += App_UnhandledException;
     }

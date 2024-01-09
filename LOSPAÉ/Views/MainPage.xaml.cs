@@ -16,6 +16,17 @@ public sealed partial class MainPage : Page
     {
         ViewModel = App.GetService<MainViewModel>();
         InitializeComponent();
-        //MainPage_StudentSelector.Items.Add();
+        StudentsListUpdate();
+    }
+
+    public void StudentsListUpdate()
+    {
+        if (App.etudiants != null)
+        {
+            foreach (Etudiant etudiant in App.etudiants)
+            {
+                StudentSelector.Items.Add(etudiant.EtudiantName);
+            }
+        }
     }
 }

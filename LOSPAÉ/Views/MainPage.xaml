@@ -8,12 +8,7 @@
 
     <RelativePanel>
         <RelativePanel x:Name="MainPageHeader" Width="990">
-            <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" Width="350" RelativePanel.AlignLeftWithPanel="True">
-                <x:String>Étudiant 1</x:String>
-                <x:String>Étudiant 2</x:String>
-                <x:String>Étudiant 3</x:String>
-                <x:String>Étudiant 4</x:String>
-            </ComboBox>
+            <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" Width="350" RelativePanel.AlignLeftWithPanel="True"></ComboBox>
 
             <TextBlock x:Name="CurrentNote" Text="20,00/20" FontSize="50" RelativePanel.AlignRightWithPanel="True" />
         </RelativePanel>
