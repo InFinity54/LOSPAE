@@ -188,4 +188,29 @@ public sealed partial class MainPage : Page
     {
         PerformStudentNoteChange(0.00, 3.00, "TP11", "Passivité durant un travail de groupe");
     }
+
+    public void CO1_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "CO1", "Bavardage en cours");
+    }
+
+    public void CO2_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.50, 0.00, "CO2", "Participation utile au cours quand interrogé");
+    }
+
+    public void CO3_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(1.00, 0.00, "CO3", "Participation volontaire utile au cours");
+    }
+
+    public void CO4_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 1.00, "CO4", "Participation volontaire inutile au cours");
+    }
+
+    public void CO5_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 5.00, "CO5", "Dormir en cours");
+    }
 }
