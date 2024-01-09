@@ -21,6 +21,8 @@ public sealed partial class SettingsPage : Page
     {
         ViewModel = App.GetService<SettingsViewModel>();
         InitializeComponent();
+        // TODO: Ajouter un avertissement sur l'encodage du fichier CSV (UTF-8 obligatoire).
+        // TODO: Ajouter le chemin vers le dossier de configuration dans la page des paramètres.
     }
 
     private async void CsvDataImport_Click(object sender, RoutedEventArgs e)
