@@ -264,4 +264,16 @@
   <data name="TPHead.Text" xml:space="preserve">
     <value>Travaux pratiques</value>
   </data>
+  <data name="CsvDataImport.Content" xml:space="preserve">
+    <value>Importer une nouvelle liste d'étudiants</value>
+  </data>
+  <data name="CsvDataWarning.Message" xml:space="preserve">
+    <value>Importer une nouvelle liste d'étudiants réinitialisera le contenu de l'application. Tous les étudiants précédemment ajoutés, ainsi que leurs notes, seront défintivement perdus.</value>
+  </data>
+  <data name="CsvDataWarning.Title" xml:space="preserve">
+    <value>Avertissement</value>
+  </data>
+  <data name="CsvDataHead.Text" xml:space="preserve">
+    <value>Liste d'étudiants</value>
+  </data>
 </root>

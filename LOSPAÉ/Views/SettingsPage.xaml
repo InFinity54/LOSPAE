@@ -13,7 +13,12 @@
     <Grid>
         <StackPanel
             x:Name="ContentArea">
-            <TextBlock x:Uid="Settings_Temp" />
+            <TextBlock x:Name="CsvDataHead" x:Uid="CsvDataHead" FontSize="20" Margin="0,0,0,10" />
+            <InfoBar IsOpen="True" Severity="Warning" IsClosable="False" x:Uid="CsvDataWarning" />
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="CsvDataImport" x:Uid="CsvDataImport" Click="CsvDataImport_Click" Margin="0,10,0,0" />
+                <ProgressRing x:Name="CsvDataImportProgress" IsActive="False" Width="32" Margin="10,10,0,0" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>
