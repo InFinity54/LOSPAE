@@ -213,4 +213,24 @@ public sealed partial class MainPage : Page
     {
         PerformStudentNoteChange(0.00, 5.00, "CO5", "Dormir en cours");
     }
+
+    public void DS1_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "DS1", "Bavardage sans autorisation pendant le devoir");
+    }
+
+    public void DS2_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 3.00, "DS2", "Rendre copie blanche");
+    }
+
+    public void DS3_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 10.00, "DS3", "Flagrant délit de tricherie");
+    }
+
+    public void DS4_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 10.00, "DS4", "Recourir à ChatGPT");
+    }
 }
