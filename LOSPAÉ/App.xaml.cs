@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+
 using LOSPAÉ.Activation;
 using LOSPAÉ.Contracts.Services;
 using LOSPAÉ.Core.Contracts.Services;
@@ -74,6 +75,8 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<HistoryViewModel>();
+            services.AddTransient<HistoryPage>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
             services.AddTransient<MainViewModel>();

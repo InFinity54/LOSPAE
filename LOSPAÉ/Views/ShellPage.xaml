@@ -41,6 +41,11 @@
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe75f;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem x:Uid="Shell_History" helpers:NavigationHelper.NavigateTo="LOSPAÉ.ViewModels.HistoryViewModel">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe121;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.HeaderTemplate>
                 <DataTemplate>

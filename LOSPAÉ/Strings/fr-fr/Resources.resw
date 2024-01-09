@@ -276,4 +276,19 @@
   <data name="CsvDataHead.Text" xml:space="preserve">
     <value>Liste d'étudiants</value>
   </data>
+  <data name="HistoryPage_ChangedOccurDateTimeCol.Header" xml:space="preserve">
+    <value>Date et heure de l'opération</value>
+  </data>
+  <data name="HistoryPage_EtudiantNameCol.Header" xml:space="preserve">
+    <value>Étudiant concerné</value>
+  </data>
+  <data name="HistoryPage_NoteChangeDescCol.Header" xml:space="preserve">
+    <value>Description de l'opération</value>
+  </data>
+  <data name="HistoryPage_NoteChangeIdCol.Header" xml:space="preserve">
+    <value>Identifiant de l'opération</value>
+  </data>
+  <data name="Shell_History.Content" xml:space="preserve">
+    <value>Historique des modifications des notes</value>
+  </data>
 </root>
