@@ -22,7 +22,7 @@ public sealed partial class SettingsPage : Page
     {
         ViewModel = App.GetService<SettingsViewModel>();
         InitializeComponent();
-        ConfigFolderPath.Text = (string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"];
+        ConfigFolderPath.Text = App.savedFilesFolderPath;
     }
 
     private async void CsvDataImport_Click(object sender, RoutedEventArgs e)
@@ -62,8 +62,8 @@ public sealed partial class SettingsPage : Page
                 }
 
                 parser.Close();
-                File.WriteAllText(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "students.json"), JsonSerializer.Serialize(App.etudiants));
-                File.WriteAllText(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "note_edit_events.json"), JsonSerializer.Serialize(App.noteEditEvents));
+                File.WriteAllText(Path.Combine(App.savedFilesFolderPath, "students.json"), JsonSerializer.Serialize(App.etudiants));
+                File.WriteAllText(Path.Combine(App.savedFilesFolderPath, "note_edit_events.json"), JsonSerializer.Serialize(App.noteEditEvents));
             }
 
             ContentDialog dialog = new ContentDialog();
@@ -89,7 +89,7 @@ public sealed partial class SettingsPage : Page
 
     private async void ConfigFolderChangeButton_Click(object sender, RoutedEventArgs e)
     {
-        var picker = new Windows.Storage.Pickers.FolderPicker();
+        var picker = new FolderPicker();
         picker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
         picker.FileTypeFilter.Add("*");
 
@@ -100,8 +100,9 @@ public sealed partial class SettingsPage : Page
 
         if (folder != null)
         {
-            Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"] = folder.Path;
+            App.savedFilesFolderPath = folder.Path;
             ConfigFolderPath.Text = folder.Path;
+            File.WriteAllText(Path.Combine(App.appSettingsFilesFolderPath, "saved_files_location.txt"), folder.Path);
 
             ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = this.XamlRoot;

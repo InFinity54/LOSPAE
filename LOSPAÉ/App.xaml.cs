@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Windows.Storage.Search;
 
 namespace LOSPAÉ;
 
@@ -44,6 +45,9 @@ public partial class App : Application
     public static WindowEx MainWindow { get; } = new MainWindow();
 
     public static UIElement? AppTitlebar { get; set; }
+
+    public static string appSettingsFilesFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LOSPAÉ");
+    public static string savedFilesFolderPath;
 
     public static List<Etudiant> etudiants;
     public static List<NoteEditEvent> noteEditEvents;
@@ -93,10 +97,18 @@ public partial class App : Application
 
         UnhandledException += App_UnhandledException;
 
-        if (Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"] == null)
+        if (!Directory.Exists(appSettingsFilesFolderPath))
         {
-            Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"] = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+            Directory.CreateDirectory(appSettingsFilesFolderPath);
+            File.WriteAllText(Path.Combine(appSettingsFilesFolderPath, "saved_files_location.txt"), appSettingsFilesFolderPath);
         }
+
+        if (!File.Exists(Path.Combine(appSettingsFilesFolderPath, "saved_files_location.txt")))
+        {
+            File.WriteAllText(Path.Combine(appSettingsFilesFolderPath, "saved_files_location.txt"), appSettingsFilesFolderPath);
+        }
+
+        savedFilesFolderPath = File.ReadAllText(Path.Combine(appSettingsFilesFolderPath, "saved_files_location.txt"));
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)

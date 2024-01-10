@@ -22,9 +22,9 @@ public sealed partial class MainPage : Page
 
     private async void MainPage_Loaded(object sender, RoutedEventArgs e)
     {
-        if (File.Exists(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "students.json")))
+        if (File.Exists(Path.Combine(App.savedFilesFolderPath, "students.json")))
         {
-            FileStream studentsConfigFile = File.OpenRead(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "students.json"));
+            FileStream studentsConfigFile = File.OpenRead(Path.Combine(App.savedFilesFolderPath, "students.json"));
             App.etudiants = JsonSerializer.Deserialize<List<Etudiant>>(studentsConfigFile);
             studentsConfigFile.Close();
         }
@@ -33,9 +33,9 @@ public sealed partial class MainPage : Page
             App.etudiants = new List<Etudiant>();
         }
 
-        if (File.Exists(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "note_edit_events.json")))
+        if (File.Exists(Path.Combine(App.savedFilesFolderPath, "note_edit_events.json")))
         {
-            FileStream eventsConfigFile = File.OpenRead(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "note_edit_events.json"));
+            FileStream eventsConfigFile = File.OpenRead(Path.Combine(App.savedFilesFolderPath, "note_edit_events.json"));
             App.noteEditEvents = JsonSerializer.Deserialize<List<NoteEditEvent>>(eventsConfigFile);
             eventsConfigFile.Close();
         }
@@ -67,8 +67,8 @@ public sealed partial class MainPage : Page
     public void SaveStudentsConfigFiles()
     {
         CurrentNote.Text = App.etudiants[StudentSelector.SelectedIndex].EtudiantNote.ToString() + "/20";
-        File.WriteAllText(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "students.json"), JsonSerializer.Serialize(App.etudiants));
-        File.WriteAllText(Path.Combine((string) Windows.Storage.ApplicationData.Current.LocalSettings.Values["configFolderPath"], "note_edit_events.json"), JsonSerializer.Serialize(App.noteEditEvents));
+        File.WriteAllText(Path.Combine(App.savedFilesFolderPath, "students.json"), JsonSerializer.Serialize(App.etudiants));
+        File.WriteAllText(Path.Combine(App.savedFilesFolderPath, "note_edit_events.json"), JsonSerializer.Serialize(App.noteEditEvents));
     }
 
     public void StudentSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
