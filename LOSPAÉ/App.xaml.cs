@@ -46,7 +46,7 @@ public partial class App : Application
 
     public static UIElement? AppTitlebar { get; set; }
 
-    public static string version = "1.0.0";
+    public static string version = "1.1.0";
 
     public static string appSettingsFilesFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LOSPAÉ");
     public static string savedFilesFolderPath;

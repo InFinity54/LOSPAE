@@ -312,4 +312,10 @@
   <data name="ConfigFolderMessage.Text" xml:space="preserve">
     <value>Les fichiers de configuration de LOSPAÉ sont stockés dans le dossier ci-dessous.</value>
   </data>
+  <data name="TP12.Content" xml:space="preserve">
+    <value>TP12</value>
+  </data>
+  <data name="TP13.Content" xml:space="preserve">
+    <value>TP13</value>
+  </data>
 </root>

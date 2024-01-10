@@ -219,6 +219,16 @@ public sealed partial class MainPage : Page
         PerformStudentNoteChange(0.00, 3.00, "TP11", "Passivité durant un travail de groupe");
     }
 
+    public void TP12_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 5.00, "TP12", "Consommation de boissons ou nourriture devant les postes");
+    }
+
+    public void TP13_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "TP13", "Ne pas éteindre son ordinateur avant de partir");
+    }
+
     public void CO1_Click(object sender, RoutedEventArgs e)
     {
         PerformStudentNoteChange(0.00, 2.00, "CO1", "Bavardage en cours");
