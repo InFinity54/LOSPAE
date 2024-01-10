@@ -13,7 +13,9 @@
     <Grid>
         <StackPanel
             x:Name="ContentArea">
-            <TextBlock x:Name="CsvDataHead" x:Uid="CsvDataHead" FontSize="20" Margin="0,0,0,10" />
+            <TextBlock x:Name="AppVersionDisplay" />
+            
+            <TextBlock x:Name="CsvDataHead" x:Uid="CsvDataHead" FontSize="20" Margin="0,30,0,10" />
             <InfoBar IsOpen="True" Severity="Warning" IsClosable="False" x:Uid="CsvDataWarning" />
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="CsvDataImport" x:Uid="CsvDataImport" Click="CsvDataImport_Click" />

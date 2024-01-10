@@ -23,6 +23,7 @@ public sealed partial class SettingsPage : Page
         ViewModel = App.GetService<SettingsViewModel>();
         InitializeComponent();
         ConfigFolderPath.Text = App.savedFilesFolderPath;
+        AppVersionDisplay.Text = "Version " + App.version;
     }
 
     private async void CsvDataImport_Click(object sender, RoutedEventArgs e)
