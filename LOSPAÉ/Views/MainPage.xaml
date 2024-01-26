@@ -32,6 +32,7 @@
                 <Button x:Name="CP8" x:Uid="CP8" Click="CP8_Click" Margin="10,10,0,0" />
                 <Button x:Name="CP10" x:Uid="CP10" Click="CP10_Click" Margin="10,10,0,0" />
                 <Button x:Name="CP12" x:Uid="CP12" Click="CP12_Click" Margin="10,10,0,0" />
+                <Button x:Name="CP14" x:Uid="CP14" Click="CP14_Click" Margin="10,10,0,0" />
             </StackPanel>
         </RelativePanel>
 

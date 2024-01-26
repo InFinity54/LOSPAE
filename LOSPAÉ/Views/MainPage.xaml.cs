@@ -86,12 +86,12 @@ public sealed partial class MainPage : Page
 
     public void CP1_Click(object sender, RoutedEventArgs e)
     {
-        PerformStudentNoteChange(0.00, 0.25, "CP1", "Absence à un cours");
+        PerformStudentNoteChange(0.00, 1.00, "CP1", "Absence à un cours");
     }
 
     public void CP2_Click(object sender, RoutedEventArgs e)
     {
-        PerformStudentNoteChange(0.00, 0.10, "CP2", "Retard à un cours");
+        PerformStudentNoteChange(0.00, 0.50, "CP2", "Retard à un cours");
     }
 
     public void CP3_Click(object sender, RoutedEventArgs e)
@@ -146,7 +146,12 @@ public sealed partial class MainPage : Page
 
     public void CP13_Click(object sender, RoutedEventArgs e)
     {
-        PerformStudentNoteChange(0.00, 5.00, "CP11", "Frapper un collègue");
+        PerformStudentNoteChange(0.00, 5.00, "CP13", "Frapper un collègue");
+    }
+
+    public void CP14_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 20.00, "CP14", "Dégradation de matériel scolaire");
     }
 
     public void DM1_Click(object sender, RoutedEventArgs e)
