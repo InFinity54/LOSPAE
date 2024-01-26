@@ -113,6 +113,8 @@ public sealed partial class SettingsPage : Page
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.Content = "Le dossier de stockage de la configuration a été correctement modifié." + Environment.NewLine + "Le nouveau dossier est le suivant : \"" + folder.Path + "\"" + Environment.NewLine + "L'application va maintenant redémarrer. Déplacez les fichiers de configuration depuis l'ancien vers le nouveau dossier pour conserver les données, ou redémarrez le programme pour repartir de zéro.";
             await dialog.ShowAsync();
+
+            App.MainWindow.Close();
         }
     }
 }
