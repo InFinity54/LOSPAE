@@ -60,6 +60,7 @@
                 <Button x:Name="TP9" x:Uid="TP9" Click="TP9_Click" Margin="0,10,0,0" />
                 <Button x:Name="TP11" x:Uid="TP11" Click="TP11_Click" Margin="0,10,0,0" />
                 <Button x:Name="TP13" x:Uid="TP13" Click="TP13_Click" Margin="0,10,0,0" />
+                <Button x:Name="TP15" x:Uid="TP15" Click="TP15_Click" Margin="0,10,0,0" />
             </StackPanel>
 
             <StackPanel x:Name="TPStack2" Orientation="Vertical" RelativePanel.Below="TPHead" RelativePanel.RightOf="TPStack1">
@@ -69,6 +70,7 @@
                 <Button x:Name="TP8" x:Uid="TP8" Click="TP8_Click" Margin="10,10,0,0" />
                 <Button x:Name="TP10" x:Uid="TP10" Click="TP10_Click" Margin="10,10,0,0" />
                 <Button x:Name="TP12" x:Uid="TP12" Click="TP12_Click" Margin="10,10,0,0" />
+                <Button x:Name="TP14" x:Uid="TP14" Click="TP14_Click" Margin="10,10,0,0" />
             </StackPanel>
         </RelativePanel>
 
@@ -93,6 +95,7 @@
             <StackPanel x:Name="DSStack1" Orientation="Vertical" RelativePanel.Below="DSHead">
                 <Button x:Name="DS1" x:Uid="DS1" Click="DS1_Click" />
                 <Button x:Name="DS3" x:Uid="DS3" Click="DS3_Click" Margin="0,10,0,0" />
+                <Button x:Name="DS5" x:Uid="DS5" Click="DS5_Click" Margin="0,10,0,0" />
             </StackPanel>
 
             <StackPanel x:Name="DSStack2" Orientation="Vertical" RelativePanel.Below="DSHead" RelativePanel.RightOf="DSStack1">

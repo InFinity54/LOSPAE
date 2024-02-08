@@ -321,4 +321,13 @@
   <data name="CP14.Content" xml:space="preserve">
     <value>CP14</value>
   </data>
+  <data name="DS5.Content" xml:space="preserve">
+    <value>DS5</value>
+  </data>
+  <data name="TP14.Content" xml:space="preserve">
+    <value>TP14</value>
+  </data>
+  <data name="TP15.Content" xml:space="preserve">
+    <value>TP15</value>
+  </data>
 </root>

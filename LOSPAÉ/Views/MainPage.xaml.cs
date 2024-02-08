@@ -234,6 +234,16 @@ public sealed partial class MainPage : Page
         PerformStudentNoteChange(0.00, 2.00, "TP13", "Ne pas éteindre son ordinateur avant de partir");
     }
 
+    public void TP14_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "TP14", "Surcharge physique d'un bâtiment");
+    }
+
+    public void TP15_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(2.00, 0.00, "TP15", "Travail rendu à l'heure");
+    }
+
     public void CO1_Click(object sender, RoutedEventArgs e)
     {
         PerformStudentNoteChange(0.00, 2.00, "CO1", "Bavardage en cours");
@@ -277,5 +287,10 @@ public sealed partial class MainPage : Page
     public void DS4_Click(object sender, RoutedEventArgs e)
     {
         PerformStudentNoteChange(0.00, 10.00, "DS4", "Recourir à ChatGPT");
+    }
+
+    public void DS5_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "DS5", "Réponse(s) troll");
     }
 }
