@@ -330,10 +330,139 @@
   <data name="TP15.Content" xml:space="preserve">
     <value>TP15</value>
   </data>
+  <data name="CO1.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Bavardage en cours</value>
+  </data>
+  <data name="CO2.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Participation utile au cours quand interrogé</value>
+  </data>
+  <data name="CO3.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Participation volontaire utile au cours</value>
+  </data>
+  <data name="CO4.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Participation volontaire inutile au cours</value>
+  </data>
+  <data name="CO5.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Dormir en cours</value>
+  </data>
+  <data name="CP1.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Absence à un cours</value>
+  </data>
+  <data name="CP10.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Écouter de la musique sur un haut-parleur sans autorisation (PC, téléphone, enceinte…)</value>
+  </data>
+  <data name="CP11.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Partir pendant une récréation sans y être autorisé</value>
+  </data>
+  <data name="CP12.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Sécher un cours</value>
+  </data>
+  <data name="CP13.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Frapper un collègue</value>
+  </data>
+  <data name="CP14.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Dégradation de matériel scolaire</value>
+  </data>
   <data name="CP15.Content" xml:space="preserve">
     <value>CP15</value>
   </data>
+  <data name="CP15.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Manque de respect envers le professeur</value>
+  </data>
+  <data name="CP2.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Retard à un cours</value>
+  </data>
+  <data name="CP3.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Envoyer des objets dans la tête d'un collègue</value>
+  </data>
+  <data name="CP4.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Insolence envers le professeur</value>
+  </data>
+  <data name="CP5.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Préparation et consommation d'alcool en cours</value>
+  </data>
+  <data name="CP6.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Préparation et consommation de drogue en cours</value>
+  </data>
+  <data name="CP7.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Utilisation du téléphone portable sans autorisation</value>
+  </data>
+  <data name="CP8.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Ne pas se tenir correctement en cours</value>
+  </data>
+  <data name="CP9.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Écouter de la musique trop fort</value>
+  </data>
+  <data name="DM1.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Recourir à ChatGPT</value>
+  </data>
+  <data name="DM2.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Copie similaire à un collègue</value>
+  </data>
+  <data name="DM3.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Copier/Coller de contenu en ligne</value>
+  </data>
+  <data name="DS1.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Bavardage sans autorisation pendant le devoir</value>
+  </data>
+  <data name="DS2.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Rendre copie blanche</value>
+  </data>
+  <data name="DS3.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Flagrant délit de tricherie</value>
+  </data>
+  <data name="DS4.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Recourir à ChatGPT</value>
+  </data>
+  <data name="DS5.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Réponse "troll"</value>
+  </data>
   <data name="RemoveStudent.ToolTipService.ToolTip" xml:space="preserve">
     <value>Supprimer l'étudiant</value>
+  </data>
+  <data name="TP1.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Bavardage pendant activité à faire seul</value>
+  </data>
+  <data name="TP10.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Dormir en cours</value>
+  </data>
+  <data name="TP11.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Passivité durant un travail de groupe</value>
+  </data>
+  <data name="TP12.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Consommation de boissons ou nourriture devant les postes</value>
+  </data>
+  <data name="TP13.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Ne pas éteindre son ordinateur avant de partir</value>
+  </data>
+  <data name="TP14.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Surcharge physique d'un bâtiment (+ de 4 personnes)</value>
+  </data>
+  <data name="TP15.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Travail rendu en temps et en heure</value>
+  </data>
+  <data name="TP2.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Bavarder trop fort avec son binôme/groupe</value>
+  </data>
+  <data name="TP3.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Jouer à des jeux sans avoir terminé le travail demandé</value>
+  </data>
+  <data name="TP4.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Ne pas rétablir les armoires de brassage en fin de séance</value>
+  </data>
+  <data name="TP5.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Rétablir correctement les armoires de brassage en fin de séance</value>
+  </data>
+  <data name="TP6.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Recourir à ChatGPT</value>
+  </data>
+  <data name="TP7.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Refus de travailler</value>
+  </data>
+  <data name="TP8.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Travail non rendu</value>
+  </data>
+  <data name="TP9.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Travail rendu en retard</value>
   </data>
 </root>
