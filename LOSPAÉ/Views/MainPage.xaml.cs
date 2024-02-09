@@ -2,7 +2,6 @@
 using LOSPAÉ.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Windows.UI.Popups;
 
 namespace LOSPAÉ.Views;
 
@@ -152,6 +151,11 @@ public sealed partial class MainPage : Page
     public void CP14_Click(object sender, RoutedEventArgs e)
     {
         PerformStudentNoteChange(0.00, 20.00, "CP14", "Dégradation de matériel scolaire");
+    }
+
+    public void CP15_Click(object sender, RoutedEventArgs e)
+    {
+        PerformStudentNoteChange(0.00, 2.00, "CP15", "Manque de respect envers le professeur");
     }
 
     public void DM1_Click(object sender, RoutedEventArgs e)

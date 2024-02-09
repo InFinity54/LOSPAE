@@ -330,4 +330,7 @@
   <data name="TP15.Content" xml:space="preserve">
     <value>TP15</value>
   </data>
+  <data name="CP15.Content" xml:space="preserve">
+    <value>CP15</value>
+  </data>
 </root>
