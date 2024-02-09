@@ -333,4 +333,7 @@
   <data name="CP15.Content" xml:space="preserve">
     <value>CP15</value>
   </data>
+  <data name="RemoveStudent.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Supprimer l'étudiant</value>
+  </data>
 </root>

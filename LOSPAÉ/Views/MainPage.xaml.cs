@@ -56,10 +56,16 @@ public sealed partial class MainPage : Page
     {
         if (App.etudiants.Count > 0)
         {
+            StudentSelector.SelectionChanged -= StudentSelector_SelectionChanged;
+            StudentSelector.Items.Clear();
+
             foreach (Etudiant etudiant in App.etudiants)
             {
                 StudentSelector.Items.Add(etudiant.EtudiantName);
             }
+
+            StudentSelector.SelectionChanged += StudentSelector_SelectionChanged;
+            StudentSelector.SelectedIndex = 0;
         }
     }
 
@@ -74,6 +80,48 @@ public sealed partial class MainPage : Page
     {
         Etudiant selectedStudent = App.etudiants[StudentSelector.SelectedIndex];
         CurrentNote.Text = selectedStudent.EtudiantNote.ToString() + "/20";
+    }
+
+    private async void RemoveStudent_Click(object sender, RoutedEventArgs e)
+    {
+        Etudiant currentStudent = App.etudiants[StudentSelector.SelectedIndex];
+
+        ContentDialog confirmDialog = new ContentDialog()
+        {
+            XamlRoot = this.XamlRoot,
+            Title = "LOSPAÉ",
+            Content = "Voulez-vous vraiment supprimer l'étudiant " + currentStudent.EtudiantName + " de LOSPAÉ ?" + Environment.NewLine + "Cette opération est irréversible.",
+            PrimaryButtonText = "Oui",
+            SecondaryButtonText = "Non",
+            DefaultButton = ContentDialogButton.Primary
+        };
+
+        var result = await confirmDialog.ShowAsync();
+
+        if (result == ContentDialogResult.Primary)
+        {
+            List<NoteEditEvent> noteEditEventsForCurrentStudent = App.noteEditEvents.Where(x => x.EtudiantName.Equals(currentStudent.EtudiantName)).ToList();
+
+            foreach (NoteEditEvent noteEditEventToRemove in noteEditEventsForCurrentStudent)
+            {
+                App.noteEditEvents.Remove(noteEditEventToRemove);
+            }
+
+            App.etudiants.Remove(currentStudent);
+            StudentsListUpdate();
+            SaveStudentsConfigFiles();
+
+            ContentDialog removedStudentDialog = new ContentDialog()
+            {
+                XamlRoot = this.XamlRoot,
+                Title = "LOSPAÉ",
+                Content = currentStudent.EtudiantName + " a été correctement supprimé de LOSPAÉ.",
+                CloseButtonText = "OK",
+                DefaultButton = ContentDialogButton.Close
+            };
+
+            await removedStudentDialog.ShowAsync();
+        }
     }
 
     public void PerformStudentNoteChange(double pointsToAdd, double pointsToRemove, string operationId, string operationDesc)

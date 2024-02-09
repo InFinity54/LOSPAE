@@ -8,7 +8,10 @@
 
     <RelativePanel>
         <RelativePanel x:Name="MainPageHeader" Width="990">
-            <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" SelectionChanged="StudentSelector_SelectionChanged" Width="350" RelativePanel.AlignLeftWithPanel="True"></ComboBox>
+            <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" SelectionChanged="StudentSelector_SelectionChanged" Width="350" RelativePanel.AlignLeftWithPanel="True" Margin="0,0,60,0"></ComboBox>
+            <Button x:Name="RemoveStudent" x:Uid="RemoveStudent" RelativePanel.AlignRightWith="StudentSelector" Margin="0,28,0,0" Click="RemoveStudent_Click">
+                <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe74d;"/>
+            </Button>
             <TextBlock x:Name="CurrentNote" Text="20/20" FontSize="50" RelativePanel.AlignRightWithPanel="True" />
         </RelativePanel>
 
