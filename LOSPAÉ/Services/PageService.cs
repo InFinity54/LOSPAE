@@ -18,6 +18,7 @@ public class PageService : IPageService
         Configure<SettingsViewModel, SettingsPage>();
         Configure<HistoryViewModel, HistoryPage>();
         Configure<NotesViewModel, NotesPage>();
+        Configure<SchoolDetentionGeneratorViewModel, SchoolDetentionGeneratorPage>();
     }
 
     public Type GetPageType(string key)

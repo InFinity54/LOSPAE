@@ -47,7 +47,7 @@ public partial class App : Application
 
     public static UIElement? AppTitlebar { get; set; }
 
-    public static string version = "1.3.0";
+    public static string version = "1.4.0";
 
     public static string appSettingsFilesFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LOSPAÉ");
     public static string savedFilesFolderPath;
@@ -82,6 +82,8 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<SchoolDetentionGeneratorViewModel>();
+            services.AddTransient<SchoolDetentionGeneratorPage>();
             services.AddTransient<NotesViewModel>();
             services.AddTransient<NotesPage>();
             services.AddTransient<HistoryViewModel>();

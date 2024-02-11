@@ -465,4 +465,25 @@
   <data name="TP9.ToolTipService.ToolTip" xml:space="preserve">
     <value>Travail rendu en retard</value>
   </data>
+  <data name="SchoolDetentionDuration.Header" xml:space="preserve">
+    <value>Durée de la retenue</value>
+  </data>
+  <data name="SchoolDetentionNotificationGeneration.Content" xml:space="preserve">
+    <value>Générer le bulletin de retenue</value>
+  </data>
+  <data name="SchoolDetentionReason.Header" xml:space="preserve">
+    <value>Motif de la retenue</value>
+  </data>
+  <data name="SchoolDetentionReason.PlaceholderText" xml:space="preserve">
+    <value>Saisissez le motif...</value>
+  </data>
+  <data name="SchoolDetentionWorkToDo.Header" xml:space="preserve">
+    <value>Travail à réaliser durant la retenue</value>
+  </data>
+  <data name="SchoolDetentionWorkToDo.PlaceholderText" xml:space="preserve">
+    <value>Saisissez le travail à réaliser...</value>
+  </data>
+  <data name="Shell_SchoolDetentionGenerator.Content" xml:space="preserve">
+    <value>Générateur de bulletin de retenue</value>
+  </data>
 </root>

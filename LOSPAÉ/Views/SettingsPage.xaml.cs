@@ -58,7 +58,7 @@ public sealed partial class SettingsPage : Page
 
                     if (fields[0] != "Etudiant" && fields[1] != "Spe")
                     {
-                        App.etudiants.Add(new Etudiant(fields[0], fields[1], 20.00));
+                        App.etudiants.Add(new Etudiant(fields[0], fields[1], 20.00, fields[2]));
                     }
                 }
 
