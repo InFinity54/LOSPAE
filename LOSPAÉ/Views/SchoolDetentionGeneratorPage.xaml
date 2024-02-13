@@ -9,8 +9,8 @@
     <Grid x:Name="ContentArea">
         <StackPanel Orientation="Vertical">
             <ComboBox x:Name="StudentSelector" x:Uid="StudentSelector" Width="350" Margin="0,0,60,0"></ComboBox>
-            <TextBox x:Name="SchoolDetentionReason" x:Uid="SchoolDetentionReason" Width="950" TextWrapping="Wrap" IsSpellCheckEnabled="True" Margin="0,25,60,0" />
-            <TextBox x:Name="SchoolDetentionWorkToDo" x:Uid="SchoolDetentionWorkToDo" Width="950" TextWrapping="Wrap" IsSpellCheckEnabled="True" Margin="0,25,60,0" />
+            <TextBox x:Name="SchoolDetentionReason" x:Uid="SchoolDetentionReason" Width="950" TextWrapping="Wrap" IsSpellCheckEnabled="True" Margin="0,25,60,0" HorizontalAlignment="Left" />
+            <TextBox x:Name="SchoolDetentionWorkToDo" x:Uid="SchoolDetentionWorkToDo" Width="950" TextWrapping="Wrap" IsSpellCheckEnabled="True" Margin="0,25,60,0" HorizontalAlignment="Left" />
             <NumberBox x:Name="SchoolDetentionDuration" x:Uid="SchoolDetentionDuration" Width="200" Value="1" Minimum="1" Maximum="8" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="1" Margin="0,25,60,0" HorizontalAlignment="Left"></NumberBox>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="SchoolDetentionNotificationGeneration" x:Uid="SchoolDetentionNotificationGeneration" Click="SchoolDetentionNotificationGeneration_Click" Margin="0,25,60,0"></Button>
