@@ -9,21 +9,27 @@
 
 	<Grid x:Name="ContentArea">
 		<controls:DataGrid
+            x:Uid="HistoryDataGrid" x:Name="HistoryDataGrid"
             AutoGenerateColumns="False"
             CanUserSortColumns="False"
             CanUserReorderColumns="False"
             CanUserResizeColumns="False"
             GridLinesVisibility="Horizontal"
+            SelectionMode="Single"
+            SelectionChanged="HistoryDataGrid_SelectionChanged"
             ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
 			<controls:DataGrid.Resources>
 				<SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />
 			</controls:DataGrid.Resources>
-			<controls:DataGrid.Columns>
-				<controls:DataGridTextColumn Binding="{Binding EtudiantName}" x:Uid="HistoryPage_EtudiantNameCol" />
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn Binding="{Binding EtudiantName}" x:Uid="HistoryPage_EtudiantNameCol" />
 				<controls:DataGridTextColumn Binding="{Binding NoteChangeId}" x:Uid="HistoryPage_NoteChangeIdCol" />
 				<controls:DataGridTextColumn Binding="{Binding NoteChangeDesc}" x:Uid="HistoryPage_NoteChangeDescCol" />
-				<controls:DataGridTextColumn Binding="{Binding ChangedOccurDateTime}" x:Uid="HistoryPage_ChangedOccurDateTimeCol" SortDirection="Descending" />
-			</controls:DataGrid.Columns>
-		</controls:DataGrid>
-	</Grid>
+                <controls:DataGridTextColumn Binding="{Binding ChangedOccurDateTime}" x:Uid="HistoryPage_ChangedOccurDateTimeCol" SortDirection="Descending" />
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+        <Button x:Uid="HistoryDataEventRemove" x:Name="HistoryDataEventRemove" Click="UndoEventFromHistory" VerticalAlignment="Top" Margin="510,-55,0,0" IsEnabled="False">
+            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe75c;"/>
+        </Button>
+    </Grid>
 </Page>
