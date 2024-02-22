@@ -1,5 +1,7 @@
 twig:
     file_name_pattern: '*.twig'
+    globals:
+        lospae_version: '%env(LOSPAE_VERSION)%'
 
 when@test:
     twig:
