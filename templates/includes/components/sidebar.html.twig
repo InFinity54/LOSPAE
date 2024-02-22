@@ -1,0 +1,60 @@
+<div id="sidebar">
+    <div class="sidebar-wrapper active">
+        <div class="sidebar-header position-relative">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo">
+                    <a href="{{ path("homepage") }}">LOSPAÉ</a>
+                </div>
+
+                {% include "includes/components/theme_toggle.html.twig" %}
+
+                <div class="sidebar-toggler x">
+                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body py-3 px-3">
+                <div class="d-flex align-items-center">
+                    <div class="avatar avatar-xl">
+                        <img src="/assets/img/avatars/{{ app.user.avatar }}" alt="Photo de profil de {{ app.user.firstName }} {{ app.user.lastName }}" />
+                    </div>
+
+                    <div class="ms-3 name">
+                        <h5 class="font-bold">{{ app.user.firstName }} {{ app.user.lastName }}</h5>
+                        <h6 class="text-muted mb-0">
+                            {% if "ROLE_TEACHER" in app.user.roles %}
+                                Enseignant
+                            {% endif %}
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul class="menu">
+                <li class="sidebar-item active">
+                    <a href="{{ path("homepage") }}" class='sidebar-link'>
+                        <i class="fas fa-home"></i>
+                        <span>Accueil</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="fas fa-user"></i>
+                        <span>Mon compte</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="{{ path("_logout_main") }}" class="submenu-link">Déconnexion</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
