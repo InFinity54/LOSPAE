@@ -35,21 +35,24 @@
 
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-item active">
+                <li class="sidebar-item {% if app.current_route is same as("homepage") %}active{% endif %}">
                     <a href="{{ path("homepage") }}" class='sidebar-link'>
                         <i class="fas fa-home"></i>
                         <span>Accueil</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item {% if app.current_route in ["profile", "_logout_main"] %}active{% endif %} has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-user"></i>
                         <span>Mon compte</span>
                     </a>
 
-                    <ul class="submenu">
-                        <li class="submenu-item">
+                    <ul class="submenu {% if app.current_route in ["profile", "_logout_main"] %}active{% endif %}">
+                        <li class="submenu-item {% if app.current_route is same as("profile") %}active{% endif %}">
+                            <a href="{{ path("profile") }}" class="submenu-link">Profil</a>
+                        </li>
+                        <li class="submenu-item {% if app.current_route is same as("_logout_main") %}active{% endif %}">
                             <a href="{{ path("_logout_main") }}" class="submenu-link">Déconnexion</a>
                         </li>
                     </ul>
