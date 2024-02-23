@@ -1,0 +1,119 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Profil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+    <link rel="stylesheet" type="text/css" href="/template/extensions/filepond/filepond.min.css" />
+    <link rel="stylesheet" type="text/css" href="/template/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Bienvenue sur LOSPAÉ</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form action="{{ path("profile") }}" method="POST" enctype="multipart/form-data">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-5">Changer ma photo de profil</h4>
+                                        <p class="card-text">
+                                            <input type="file" name="avatar" id="avatar" />
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-between">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer la nouvelle photo</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/template/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
+    <script src="/template/extensions/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js"></script>
+    <script src="/template/extensions/filepond/filepond.min.js"></script>
+    <script>
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginImageCrop
+        );
+
+        FilePond.setOptions({
+            labelIdle: 'Déposez un fichier ici ou <span class="filepond--label-action">cliquez ici pour en sélectionner un</span>.',
+            labelInvalidField: 'Des fichiers invalides ont été détectés.',
+            labelFileWaitingForSize: 'Calcul de la taille du fichier...',
+            labelFileSizeNotAvailable: 'Impossible de déterminer la taille du fichier.',
+            labelFileLoading: 'Chargement...',
+            labelFileLoadError: 'Erreur durant le chargement',
+            labelFileProcessing: 'Envoi du fichier...',
+            labelFileProcessingComplete: 'Envoi du fichier terminé',
+            labelFileProcessingAborted: 'Envoi du fichier annulé',
+            labelFileProcessingError: 'Envoi durant l\'envoi du fichier',
+            labelFileProcessingRevertError: 'Erreur durant l\'annulation de l\'envoi du fichier',
+            labelFileRemoveError: 'Erreur durant la suppression du fichier',
+            labelTapToCancel: 'Cliquez pour annuler',
+            labelTapToRetry: 'Cliquez pour réessayer',
+            labelTapToUndo: 'Cliquez pour annuler',
+            labelButtonRemoveItem: 'Supprimer',
+            labelButtonAbortItemLoad: 'Annuler',
+            labelButtonRetryItemLoad: 'Réessayer',
+            labelButtonAbortItemProcessing: 'Annuler',
+            labelButtonUndoItemProcessing: 'Annuler',
+            labelButtonRetryItemProcessing: 'Réessayer',
+            labelButtonProcessItem: 'Envoyer le fichier',
+            labelMaxFileSizeExceeded: 'Le fichier est trop lourd.',
+            labelMaxFileSize: 'Taille maximum autorisée : {filesize}',
+            labelMaxTotalFileSizeExceeded: 'Poids total des fichiers dépassé.',
+            labelMaxTotalFileSize: 'Poids maximal autorisé : {filesize}',
+            labelFileTypeNotAllowed: 'Type de fichier non autorisé.',
+            fileValidateTypeLabelExpectedTypes: 'Fichiers autorisés : {allButLastType} ou {lastType}',
+            imageValidateSizeLabelFormatError: 'Image non supportée.',
+            imageValidateSizeLabelImageSizeTooSmall: 'L\'image est trop petite.',
+            imageValidateSizeLabelImageSizeTooBig: 'L\'image est trop grande.',
+            imageValidateSizeLabelExpectedMinSize: 'Taille minimale autorisée : {minWidth} × {minHeight}',
+            imageValidateSizeLabelExpectedMaxSize: 'Taille maximum autorisée : {maxWidth} × {maxHeight}',
+            imageValidateSizeLabelImageResolutionTooLow: 'La résolution de l\'image est trop petite.',
+            imageValidateSizeLabelImageResolutionTooHigh: 'La résolution de l\'image est trop grande.',
+            imageValidateSizeLabelExpectedMinResolution: 'Résolution minimale autorisée : {minResolution}',
+            imageValidateSizeLabelExpectedMaxResolution: 'Résolution maximale autorisée : {maxResolution}'
+        });
+
+        FilePond.create(document.querySelector("#avatar"), {
+            credits: null,
+            allowImagePreview: true,
+            allowImageFilter: false,
+            allowImageExifOrientation: false,
+            allowImageCrop: true,
+            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
+            fileValidateTypeDetectType: (source, type) =>
+                new Promise((resolve, reject) => {
+                    // Do custom type detection here and return with promise
+                    resolve(type)
+                }),
+            storeAsFile: true
+        });
+    </script>
+{% endblock %}
