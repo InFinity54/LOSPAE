@@ -28,12 +28,12 @@ class RegisterController extends AbstractController
                     $user->setFirstName($request->request->get("firstname"));
                     $user->setEmail($request->request->get("email"));
                     $user->setPassword($passwordHasher->hashPassword($user, $request->request->get("password")));
-                    $user->setRoles(["ROLE_TEACHER", "ROLE_ADMIN"]);
+                    $user->setIsActivated(false);
 
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-                    $this->addFlash("success", "Vous êtes désormais inscrit à LOSPAÉ, félicitations !");
+                    return $this->render('pages/register_success.html.twig');
                 } else {
                     $this->addFlash("warning", "Un compte existe déjà pour cette adresse e-mail.");
                 }
