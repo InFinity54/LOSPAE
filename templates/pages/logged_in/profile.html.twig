@@ -20,7 +20,7 @@
             </header>
 
             <div class="page-heading">
-                <h3>Bienvenue sur LOSPAÉ</h3>
+                <h3>Profil utilisateur</h3>
             </div>
 
             <div class="page-content">
@@ -37,8 +37,79 @@
                                     </div>
                                 </div>
 
-                                <div class="card-footer d-flex justify-content-between">
+                                <div class="card-footer d-flex justify-content-end">
                                     <button class="btn btn-light-primary" type="submit">Enregistrer la nouvelle photo</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form action="{{ path("profile") }}" method="POST" class="form form-horizontal">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Modifier mes informations</h4>
+
+                                        <div class="form-body">
+                                            <p class="text-muted">Votre mot de passe actuel est requis pour modifier les informations de votre compte. Ne remplissez que les champs correspondants aux informations que vous souhaitez modifier, puis cliquez sur le bouton pour valider les modifications apportées.</p>
+                                            <p class="text-muted"></p>
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <input type="password" class="form-control" placeholder="Mot de passe actuel" id="currentpassword" name="currentpassword">
+                                                            <div class="form-control-icon">
+                                                                <i class="bi bi-lock"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <input type="email" class="form-control" placeholder="Nouvelle adresse e-mail" id="email" name="email">
+                                                            <div class="form-control-icon">
+                                                                <i class="bi bi-envelope"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 col-md-6">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <input type="password" class="form-control" placeholder="Nouveau mot de passe" id="newpassword" name="newpassword">
+                                                            <div class="form-control-icon">
+                                                                <i class="bi bi-lock"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 col-md-6">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <input type="password" class="form-control" placeholder="Confirmation du nouveau mot de passe" id="confirmnewpassword" name="confirmnewpassword">
+                                                            <div class="form-control-icon">
+                                                                <i class="bi bi-lock"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer les modifications</button>
                                 </div>
                             </div>
                         </form>
