@@ -7,7 +7,11 @@
     toastr.options.hideDuration = 300;
     toastr.options.timeOut = 5000;
     toastr.options.extendedTimeOut = 3000;
+    {% if app.current_route in ["login", "register"] %}
     toastr.options.positionClass = "toast-bottom-full-width";
+    {% else %}
+    toastr.options.positionClass = "toast-top-right";
+    {% endif  %}
 
     {% for message in app.flashes('success') %}
     toastr.success("{{ message }}");
