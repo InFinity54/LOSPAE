@@ -11,6 +11,10 @@ class HomeController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
         if (is_null($this->getUser())) {
             return $this->redirectToRoute("login");
         }

@@ -25,4 +25,18 @@ class LoginController extends AbstractController
             "error" => $error
         ]);
     }
+
+    #[Route('/deactivated', name: 'deactivated')]
+    public function deactivated(Request $request): Response
+    {
+        if (!is_null($this->getUser()) && $this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("homepage");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        return $this->render('pages/deactivated.html.twig');
+    }
 }

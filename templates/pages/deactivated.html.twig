@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/pages/auth.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="auth">
+        <div class="row h-100">
+            <div class="col-lg-5 col-12">
+                <div id="auth-left">
+                    <div id="header" class="d-flex justify-content-between align-items-center">
+                        <div class="logo">
+                            <a href="{{ path("login") }}">LOSPAÉ</a>
+                        </div>
+                        {% include "includes/components/theme_toggle.html.twig" %}
+                    </div>
+
+                    <h1 class="auth-title">Compte désactivé</h1>
+                    <p class="auth-subtitle mb-5">Si vous venez de vous inscrire, c'est que votre enseignant n'a pas encore activé votre compte. Veuillez revenir plus tard.</p>
+                    <p class="auth-subtitle mb-5">Si vous pouviez vous connecter auparavant, c'est que vous ne faites plus partie de la promotion, et n'avez plus accès à LOSPAÉ.</p>
+
+                    <div class="text-center mt-5 text-lg fs-4">
+                        <p class="text-gray-600"><a href="{{ path("_logout_main") }}" class="font-bold">Se déconnecter</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7 d-none d-lg-block">
+                <div id="auth-right"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

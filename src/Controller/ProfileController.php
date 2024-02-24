@@ -16,6 +16,10 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'profile')]
     public function profile(Request $request, EntityManagerInterface $entityManager, UserAvatarUpload $avatarUploader, UserPasswordHasherInterface $passwordHasher): Response
     {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
         if (is_null($this->getUser())) {
             return $this->redirectToRoute("login");
         }
