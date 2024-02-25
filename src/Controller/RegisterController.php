@@ -29,6 +29,7 @@ class RegisterController extends AbstractController
                     $user->setEmail($request->request->get("email"));
                     $user->setPassword($passwordHasher->hashPassword($user, $request->request->get("password")));
                     $user->setIsActivated(false);
+                    $user->setRoles(["ROLE_STUDENT"]);
 
                     $entityManager->persist($user);
                     $entityManager->flush();
