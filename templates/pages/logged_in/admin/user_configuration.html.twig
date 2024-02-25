@@ -1,0 +1,94 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Utilisateurs{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Configuration d'un utilisateur</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="{{ path("admin_user_configure", { id: user.id }) }}" method="POST">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Attribution de rôles</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="card">
+                                        <div class="card-body py-3 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-xl">
+                                                    <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                                </div>
+
+                                                <div class="ms-3 name">
+                                                    <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
+                                                    <h6 class="text-muted mb-0">
+                                                        {% if "ROLE_TEACHER" in user.roles %}
+                                                            Enseignant
+                                                        {% elseif "ROLE_STUDENT" in user.roles %}
+                                                            Étudiant
+                                                        {% endif %}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p>Sélectionnez ou désélectionnez les rôles à attribuer à l'utilisateur ci-dessus, puis cliquez sur le bouton pour enregistrer les modifications.</p>
+
+                                    <div class="form-check">
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="roleTeacher" name="roleTeacher" class="form-check-input" {% if "ROLE_TEACHER" in user.roles %}checked{% endif %} />
+                                            <label for="roleTeacher">Enseignant</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="roleStudent" name="roleStudent" class="form-check-input" {% if "ROLE_STUDENT" in user.roles %}checked{% endif %} />
+                                            <label for="roleStudent">Étudiant</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="roleAdmin" name="roleAdmin" class="form-check-input" {% if "ROLE_ADMIN" in user.roles %}checked{% endif %} {% if "ROLE_ADMIN" not in app.user.roles %}disabled{% endif %} />
+                                            <label for="roleAdmin">Administrateur</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer les modifications</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
