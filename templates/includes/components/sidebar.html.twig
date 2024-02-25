@@ -26,6 +26,8 @@
                         <h6 class="text-muted mb-0">
                             {% if "ROLE_TEACHER" in app.user.roles %}
                                 Enseignant
+                            {% elseif "ROLE_STUDENT" in user.roles %}
+                                Étudiant
                             {% endif %}
                         </h6>
                     </div>
@@ -57,6 +59,17 @@
                         </li>
                     </ul>
                 </li>
+
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <li class="sidebar-title">Administration</li>
+
+                    <li class="sidebar-item {% if app.current_route in ["admin_users"] %}active{% endif %}">
+                        <a href="{{ path("admin_users") }}" class='sidebar-link'>
+                            <i class="fas fa-users"></i>
+                            <span>Utilisateurs</span>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
