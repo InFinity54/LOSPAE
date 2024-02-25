@@ -192,7 +192,7 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("admin_users");
         }
 
-        $user->setIsActivated(true);
+        $user->setIsActivated(false);
         $entityManager->flush();
 
         $this->addFlash("success", "Le compte utilisateur ciblé a été désactivé.");
