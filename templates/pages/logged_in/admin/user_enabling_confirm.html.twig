@@ -46,6 +46,10 @@
                                                     {% elseif "ROLE_STUDENT" in user.roles %}
                                                         Étudiant
                                                     {% endif %}
+
+                                                    {% if "ROLE_ADMIN" in app.user.roles %}
+                                                        <span class="badge bg-secondary">Admin</span>
+                                                    {% endif %}
                                                 </h6>
                                             </div>
                                         </div>
