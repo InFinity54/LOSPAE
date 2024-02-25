@@ -26,7 +26,7 @@
                         <h6 class="text-muted mb-0">
                             {% if "ROLE_TEACHER" in app.user.roles %}
                                 Enseignant
-                            {% elseif "ROLE_STUDENT" in user.roles %}
+                            {% elseif "ROLE_STUDENT" in app.user.roles %}
                                 Étudiant
                             {% endif %}
                         </h6>
