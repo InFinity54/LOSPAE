@@ -48,6 +48,15 @@
                     </a>
                 </li>
 
+                {% if "ROLE_STUDENT" in app.user.roles %}
+                    <li class="sidebar-item {% if app.current_route is same as("criterias") %}active{% endif %}">
+                        <a href="{{ path("criterias") }}" class='sidebar-link'>
+                            <i class="fas fa-calculator"></i>
+                            <span>Critères de notation</span>
+                        </a>
+                    </li>
+                {% endif %}
+
                 <li class="sidebar-item {% if app.current_route in ["profile", "_logout_main"] %}active{% endif %} has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-user"></i>
