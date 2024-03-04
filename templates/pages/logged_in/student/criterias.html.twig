@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Critères de notation{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Liste des critères de notation</h3>
+                <p class="text-muted">Cette page vous permet de (re)voir les critères de notation appliquables sur LOSPAÉ. Les critères sont affichés en fonction de leur impact, de la plus grande perte au plus grand gain de points possible. Notez qu'ils sont susceptibles de changer à n'importe quel moment, sans préavis, sur décision de votre enseignant.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste des critères de notation</h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">NOM</th>
+                                                <th class="text-center">IMPACT</th>
+                                                <th class="text-center">MODALITÉS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for criteria in criterias %}
+                                                <tr>
+                                                    <td class="text-center">{{ criteria.name }}</td>
+                                                    <td class="text-center">{{ criteria.impact|number_format(2) }}</td>
+                                                    <td class="text-center">
+                                                        {% if criteria.modality is not same as("") %}
+                                                            {{ criteria.modality }}
+                                                        {% else %}
+                                                            Aucune modalité particulière.
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

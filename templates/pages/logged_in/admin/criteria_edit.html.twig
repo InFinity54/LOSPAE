@@ -1,0 +1,83 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Critères de notation{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Édition d'un critère de notation</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="{{ path("admin_criteria_edit", { id: criteria.id }) }}" method="POST" data-parsley-validate>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Informations sur le nouveau critère</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Remplissez les champs ci-dessous pour définir les nouvelles informations concernant le critère ciblé, puis cliquez sur le bouton pour enregistrer les modifications.
+                                        <br />
+                                        Le nom du critère sera affiché sur l'ensemble de l'application, à chaque fois que ce critère sera utilisable, utilisé ou affiché. Veillez à ce qu'il soit clair et concis : le nom d'un critère ne peut pas dépasser 255 caractères.
+                                        <br />
+                                        Concernant l'impact du critère, notez qu'une valeur inférieure à zéro correspond à une perte de points, tandis qu'une valeur supérieure à zéro représente un gain de points.
+                                        <br />
+                                        Enfin, la modalité d'application du critère permet d'expliquer plus précisément dans quelques circonstances ou de quelle façon sera appliqué ce dernier.
+                                    </p>
+
+                                    <div class="form-group position-relative has-icon-left mb-4">
+                                        <input id="name" name="name" type="text" value="{{ criteria.name }}" class="form-control form-control-xl" placeholder="Nom du critère" data-parsley-required="true" data-parsley-error-message="Vous devez saisir le nom du critère." data-parsley-maxlength="255">
+                                        <div class="form-control-icon">
+                                            <i class="fas fa-signature"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group position-relative has-icon-left mb-4">
+                                        <input id="impact" name="impact" type="number" value="{{ criteria.impact }}" step="0.25" class="form-control form-control-xl" placeholder="Impact du critère" data-parsley-required="true" data-parsley-error-message="Vous devez saisir les points gagnés ou perdus pour ce critère.">
+                                        <div class="form-control-icon">
+                                            <i class="fas fa-file-signature"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group position-relative has-icon-left mb-4">
+                                        <input id="modality" name="modality" type="text" value="{{ criteria.modality }}" class="form-control form-control-xl" placeholder="Modalité d'application du critère (facultatif)" data-parsley-required="false" data-parsley-maxlength="65535" data-parsley-error-message="On dirait que vos modalités ont atteint le nombre maximal de caractères autorisés : essayez de résumer un peu plus vos modalités !">
+                                        <div class="form-control-icon">
+                                            <i class="fas fa-file-signature"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer le critère de notation</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/template/extensions/parsleyjs/parsley.min.js"></script>
+    <script src="/template/static/js/pages/parsley.js"></script>
+{% endblock %}

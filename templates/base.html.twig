@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>LOSPAÉ | {% block title %}{% endblock %}</title>
+        <meta charset="UTF-8" />
+        <link rel="favicon icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="/template/compiled/css/app.css" />
+        <link rel="stylesheet" type="text/css" href="/template/compiled/css/app-dark.css" />
+        <link rel="stylesheet" href="/template/extensions/toastr/toastr_custom.css" />
+        <link rel="stylesheet" type="text/css" href="/template/extensions/@fortawesome/fontawesome-free/css/all.min.css" />
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <script src="/template/static/js/initTheme.js"></script>
+        {% block body %}{% endblock %}
+
+        <script src="/template/static/js/components/dark.js"></script>
+        <script src="/template/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script src="/template/compiled/js/app.js"></script>
+        <script src="/template/extensions/jquery/jquery.min.js"></script>
+        <script src="/template/extensions/toastr/toastr.min.js"></script>
+        {% include "includes/toasts.html.twig" %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
