@@ -1,0 +1,97 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Utilisateurs{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Gestion des utilisateurs</h3>
+                <p class="text-muted">Cette page permet de gérer les utilisateurs de LOSPAÉ. Il est possible d'activer les comptes en attente, de les désactiver, d'attribuer des droits d'accès particuliers ou même de les supprimer définitivement.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste des utilisateurs</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">NOM</th>
+                                                <th class="text-center">PRÉNOM</th>
+                                                <th class="text-center">ADRESSE E-MAIL</th>
+                                                <th class="text-center">ÉTAT DU COMPTE</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for user in users %}
+                                                <tr>
+                                                    <td class="text-center">{{ user.lastName }}</td>
+                                                    <td class="text-center">{{ user.firstName }}</td>
+                                                    <td class="text-center">{{ user.email }}</td>
+                                                    <td class="text-center">
+                                                        {% if user.isActivated %}
+                                                            <i class="fas fa-check"></i>
+                                                        {% else %}
+                                                            <i class="fas fa-times"></i>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if user.email is not same as(app.user.email) %}
+                                                            <a href="{{ path("admin_user_configure", { id: user.id }) }}" class="btn btn-primary" title="Configurer le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                                <i class="fas fa-user-cog"></i>
+                                                            </a>
+
+                                                            {% if user.isActivated %}
+                                                                <a href="{{ path("admin_user_disable", { id: user.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                                    <i class="fas fa-user-times"></i>
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{{ path("admin_user_enable", { id: user.id }) }}" class="btn btn-success" title="Activer le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                                    <i class="fas fa-user-check"></i>
+                                                                </a>
+                                                            {% endif %}
+
+                                                            <a href="{{ path("admin_user_remove", { id: user.id }) }}" class="btn btn-dark" title="Supprimer le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                                <i class="fas fa-user-slash"></i>
+                                                            </a>
+                                                        {% else %}
+                                                            Aucune action possible pour votre propre compte.
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

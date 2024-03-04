@@ -1,0 +1,76 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Utilisateurs{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Désactivation d'un utilisateur</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Confirmation de l'opération</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Vous êtes sur le point de désactiver le compte utilisateur suivant :</p>
+
+                                <div class="card">
+                                    <div class="card-body py-3 px-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar avatar-xl">
+                                                <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                            </div>
+
+                                            <div class="ms-3 name">
+                                                <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
+                                                <h6 class="text-muted mb-0">
+                                                    {% if "ROLE_TEACHER" in user.roles %}
+                                                        Enseignant
+                                                    {% elseif "ROLE_STUDENT" in user.roles %}
+                                                        Étudiant
+                                                    {% endif %}
+
+                                                    {% if "ROLE_ADMIN" in user.roles %}
+                                                        <span class="badge bg-secondary">Admin</span>
+                                                    {% endif %}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
+                                    <p>
+                                        <a href="{{ path("admin_user_dodisable", { id: user.id }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
+                                        <a href="{{ path("admin_users") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

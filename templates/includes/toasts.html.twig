@@ -1,0 +1,31 @@
+<script>
+    toastr.options.escapeHtml = false;
+    toastr.options.preventDuplicates = true;
+    toastr.options.progressBar = true;
+    toastr.options.closeButton = true;
+    toastr.options.showDuration = 300;
+    toastr.options.hideDuration = 300;
+    toastr.options.timeOut = 5000;
+    toastr.options.extendedTimeOut = 3000;
+    {% if app.current_route in ["login", "register"] %}
+    toastr.options.positionClass = "toast-bottom-full-width";
+    {% else %}
+    toastr.options.positionClass = "toast-top-right";
+    {% endif  %}
+
+    {% for message in app.flashes('success') %}
+    toastr.success("{{ message }}");
+    {% endfor %}
+
+    {% for message in app.flashes('danger') %}
+    toastr.error("{{ message }}");
+    {% endfor %}
+
+    {% for message in app.flashes('warning') %}
+    toastr.warning("{{ message }}");
+    {% endfor %}
+
+    {% for message in app.flashes('info') %}
+    toastr.info("{{ message }}");
+    {% endfor %}
+</script>

@@ -1,0 +1,132 @@
+<div id="sidebar">
+    <div class="sidebar-wrapper active">
+        <div class="sidebar-header position-relative">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo">
+                    <a href="{{ path("homepage") }}">LOSPAÉ</a>
+                </div>
+
+                {% include "includes/components/theme_toggle.html.twig" %}
+
+                <div class="sidebar-toggler x">
+                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body py-3 px-3">
+                <div class="d-flex align-items-center">
+                    <div class="avatar avatar-xl">
+                        <img src="/assets/img/avatars/{{ app.user.avatar }}" alt="Photo de profil de {{ app.user.firstName }} {{ app.user.lastName }}" />
+                    </div>
+
+                    <div class="ms-3 name">
+                        <h5 class="font-bold">{{ app.user.firstName }} {{ app.user.lastName }}</h5>
+                        <h6 class="text-muted mb-0">
+                            {% if "ROLE_TEACHER" in app.user.roles %}
+                                Enseignant
+                            {% elseif "ROLE_STUDENT" in app.user.roles %}
+                                Étudiant
+                            {% endif %}
+
+                            {% if "ROLE_ADMIN" in app.user.roles %}
+                                <span class="badge bg-secondary">Admin</span>
+                            {% endif %}
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul class="menu">
+                <li class="sidebar-item {% if app.current_route is same as("homepage") %}active{% endif %}">
+                    <a href="{{ path("homepage") }}" class='sidebar-link'>
+                        <i class="fas fa-home"></i>
+                        <span>Accueil</span>
+                    </a>
+                </li>
+
+                {% if "ROLE_STUDENT" in app.user.roles %}
+                    <li class="sidebar-item {% if app.current_route is same as("student_history") %}active{% endif %}">
+                        <a href="{{ path("student_history") }}" class='sidebar-link'>
+                            <i class="fas fa-history"></i>
+                            <span>Modifications de ma note</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="sidebar-item {% if app.current_route in ["profile", "_logout_main"] %}active{% endif %} has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="fas fa-user"></i>
+                        <span>Mon compte</span>
+                    </a>
+
+                    <ul class="submenu {% if app.current_route in ["profile", "_logout_main"] %}active{% endif %}">
+                        <li class="submenu-item {% if app.current_route is same as("profile") %}active{% endif %}">
+                            <a href="{{ path("profile") }}" class="submenu-link">Profil</a>
+                        </li>
+                        <li class="submenu-item {% if app.current_route is same as("_logout_main") %}active{% endif %}">
+                            <a href="{{ path("_logout_main") }}" class="submenu-link">Déconnexion</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {% if "ROLE_STUDENT" in app.user.roles %}
+                    <li class="sidebar-title">Informations générales</li>
+
+                    <li class="sidebar-item {% if app.current_route is same as("student_criterias") %}active{% endif %}">
+                        <a href="{{ path("student_criterias") }}" class='sidebar-link'>
+                            <i class="fas fa-calculator"></i>
+                            <span>Critères de notation</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if "ROLE_TEACHER" in app.user.roles %}
+                    <li class="sidebar-title">Gestion de la classe</li>
+
+                    <li class="sidebar-item {% if app.current_route in ["teacher_notes"] %}active{% endif %}">
+                        <a href="{{ path("teacher_notes") }}" class='sidebar-link'>
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Suivi des notes</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {% if app.current_route in ["teacher_notechange"] %}active{% endif %}">
+                        <a href="{{ path("teacher_notechange") }}" class='sidebar-link'>
+                            <i class="fas fa-exchange-alt fa-rotate-90"></i>
+                            <span>Modifier une note</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {% if app.current_route in ["teacher_history"] %}active{% endif %}">
+                        <a href="{{ path("teacher_history") }}" class='sidebar-link'>
+                            <i class="fas fa-history"></i>
+                            <span>Historique des modifications</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <li class="sidebar-title">Administration</li>
+
+                    <li class="sidebar-item {% if app.current_route in ["admin_users", "admin_user_configure", "admin_user_enable", "admin_user_disable", "admin_user_remove"] %}active{% endif %}">
+                        <a href="{{ path("admin_users") }}" class='sidebar-link'>
+                            <i class="fas fa-users"></i>
+                            <span>Utilisateurs</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {% if app.current_route in ["admin_criterias", "admin_criteria_add", "admin_criteria_edit", "admin_criteria_remove"] %}active{% endif %}">
+                        <a href="{{ path("admin_criterias") }}" class='sidebar-link'>
+                            <i class="fas fa-calculator"></i>
+                            <span>Critères de notation</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

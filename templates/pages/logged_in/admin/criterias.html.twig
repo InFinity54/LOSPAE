@@ -1,0 +1,82 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Critères de notation{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Gestion des critères de notation</h3>
+                <p class="text-muted">Cette page permet de gérer les critères de notation qui sont utilisables sur LOSPAÉ. Il est possible d'ajouter de nouveaux critères ou d'en supprimer s'ils n'ont pas été utilisés.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h4 class="card-title">Liste des critères de notation</h4>
+                                <a href="{{ path("admin_criteria_add") }}" class="btn btn-primary">Ajouter un nouveau critère</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">NOM</th>
+                                                <th class="text-center">MODALITÉS</th>
+                                                <th class="text-center">IMPACT</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for criteria in criterias %}
+                                                <tr>
+                                                    <td class="text-center">{{ criteria.name }}</td>
+                                                    <td class="text-center">
+                                                        {% if criteria.modality is not same as("") %}
+                                                            {{ criteria.modality }}
+                                                        {% else %}
+                                                            Aucune modalité particulière.
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="text-center">{{ criteria.impact|number_format(2) }}</td>
+                                                    <td>
+                                                        <a href="{{ path("admin_criteria_edit", { id: criteria.id }) }}" class="btn btn-primary" title="Modifier le critère">
+                                                            <i class="fas fa-pen"></i>
+                                                        </a>
+
+                                                        <a href="{{ path("admin_criteria_remove", { id: criteria.id }) }}" class="btn btn-danger" title="Supprimer le critère">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

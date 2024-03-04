@@ -7,6 +7,8 @@ L'application permet de gérer une liste d'étudiants, et de leur ajouter ou ret
 ## Fonctionnalités
 
 * Modifier la note d'un étudiant (choisi via une liste déroulante), en fonction du comportement de ce dernier en cours
+* Afficher l'historique des opérations apportées aux étudiants
+* Annuler une opération apportée à la note d'un étudiant
 * Afficher les notes actuelles de l'ensemble des étudiants
 * Importer une nouvelle liste d'étudiants (via fichier CSV)
 

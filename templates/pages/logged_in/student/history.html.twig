@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Historique de modification de la note de participation{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Historique de modification de la note</h3>
+                <p class="text-muted">Cette page permet de consulter toutes les modifications apportées à votre note de participation, de la plus récente à la plus ancienne.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h4 class="card-title">Liste des modifications apportées</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">CRITÈRE</th>
+                                            <th class="text-center">IMPACT</th>
+                                            <th class="text-center">DATE ET HEURE</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for noteChange in noteChanges %}
+                                            <tr>
+                                                <td class="text-center">{{ noteChange.criteria.name }}</td>
+                                                <td class="text-center">
+                                                    {% if noteChange.impact < 0 %}
+                                                        - {{ (noteChange.impact * -1)|number_format(2) }}
+                                                    {% else %}
+                                                        + {{ noteChange.impact|number_format(2) }}
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-center">{{ noteChange.occuredAt|date("d/m/Y") }} à {{ noteChange.occuredAt|date("H:i")|replace({":": "h"}) }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
