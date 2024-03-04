@@ -48,15 +48,6 @@
                     </a>
                 </li>
 
-                {% if "ROLE_STUDENT" in app.user.roles %}
-                    <li class="sidebar-item {% if app.current_route is same as("criterias") %}active{% endif %}">
-                        <a href="{{ path("criterias") }}" class='sidebar-link'>
-                            <i class="fas fa-calculator"></i>
-                            <span>Critères de notation</span>
-                        </a>
-                    </li>
-                {% endif %}
-
                 <li class="sidebar-item {% if app.current_route in ["profile", "_logout_main"] %}active{% endif %} has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-user"></i>
@@ -72,6 +63,26 @@
                         </li>
                     </ul>
                 </li>
+
+                {% if "ROLE_STUDENT" in app.user.roles %}
+                    <li class="sidebar-item {% if app.current_route is same as("student_criterias") %}active{% endif %}">
+                        <a href="{{ path("student_criterias") }}" class='sidebar-link'>
+                            <i class="fas fa-calculator"></i>
+                            <span>Critères de notation</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if "ROLE_TEACHER" in app.user.roles %}
+                    <li class="sidebar-title">Gestion de la classe</li>
+
+                    <li class="sidebar-item {% if app.current_route in ["teacher_notes"] %}active{% endif %}">
+                        <a href="{{ path("teacher_notes") }}" class='sidebar-link'>
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Suivi des notes</span>
+                        </a>
+                    </li>
+                {% endif %}
 
                 {% if "ROLE_ADMIN" in app.user.roles %}
                     <li class="sidebar-title">Administration</li>

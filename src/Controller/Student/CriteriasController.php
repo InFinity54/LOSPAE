@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Student;
 
 use App\Entity\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CriteriasController extends AbstractController
 {
-    #[Route('/criterias', name: 'criterias')]
+    #[Route('/criterias', name: 'student_criterias')]
     public function criterias(EntityManagerInterface $entityManager): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {

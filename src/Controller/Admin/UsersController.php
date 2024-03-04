@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\StudentNote;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -134,7 +135,16 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("admin_users");
         }
 
+        if (in_array("ROLE_STUDENT", $user->getRoles()) && is_null($user->getNote())) {
+            $note = new StudentNote();
+            $note->setStudent($user);
+            $note->setCurrentNote(20);
+            $entityManager->persist($note);
+            $entityManager->flush();
+        }
+
         $user->setIsActivated(true);
+        $user->setNote($note);
         $entityManager->flush();
 
         $this->addFlash("success", "Le compte utilisateur ciblé a été activé.");
