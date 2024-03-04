@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,6 +47,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
     private ?StudentNote $note = null;
+
+    #[ORM\OneToMany(targetEntity: NoteChange::class, mappedBy: 'student', orphanRemoval: true)]
+    private Collection $noteChanges;
+
+    public function __construct()
+    {
+        $this->noteChanges = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -187,6 +197,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NoteChange>
+     */
+    public function getNoteChanges(): Collection
+    {
+        return $this->noteChanges;
+    }
+
+    public function addNoteChange(NoteChange $noteChange): static
+    {
+        if (!$this->noteChanges->contains($noteChange)) {
+            $this->noteChanges->add($noteChange);
+            $noteChange->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNoteChange(NoteChange $noteChange): static
+    {
+        if ($this->noteChanges->removeElement($noteChange)) {
+            // set the owning side to null (unless already changed)
+            if ($noteChange->getStudent() === $this) {
+                $noteChange->setStudent(null);
+            }
+        }
 
         return $this;
     }
