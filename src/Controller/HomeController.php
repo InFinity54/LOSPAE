@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\NoteChange;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,16 @@ class HomeController extends AbstractController
 
         if (is_null($this->getUser())) {
             return $this->redirectToRoute("login");
+        }
+
+        if (in_array("ROLE_STUDENT", $this->getUser()->getRoles())) {
+            $student = $entityManager->getRepository(User::class)->findOneBy(["email" => $this->getUser()->getUserIdentifier()]);
+            $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student->getId()], ["occuredAt" => "DESC"]);
+
+            return $this->render('pages/logged_in/index_student.html.twig', [
+                "noteChangesCount" => count($noteChanges),
+                "recentNoteChanges" => array_slice($noteChanges, 0, 5)
+            ]);
         }
 
         if (in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
