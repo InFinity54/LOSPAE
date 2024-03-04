@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class NoteChangeHistoryController extends AbstractController
 {
-    #[Route('/history', name: 'teacher_history')]
+    #[Route('/notes/history', name: 'teacher_history')]
     public function history(EntityManagerInterface $entityManager): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
@@ -33,7 +33,7 @@ class NoteChangeHistoryController extends AbstractController
         ]);
     }
 
-    #[Route('/history/cancel/{id}', name: 'teacher_history_cancel')]
+    #[Route('/notes/history/cancel/{id}', name: 'teacher_history_cancel')]
     public function historyCancel(string $id, EntityManagerInterface $entityManager): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
@@ -55,7 +55,7 @@ class NoteChangeHistoryController extends AbstractController
         ]);
     }
 
-    #[Route('/history/cancel/{id}/do', name: 'teacher_history_docancel')]
+    #[Route('/notes/history/cancel/{id}/do', name: 'teacher_history_docancel')]
     public function historyDoCancel(string $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
