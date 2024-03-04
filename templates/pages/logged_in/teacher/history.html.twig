@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Historique de modification des notes des étudiants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Historique de modification des notes des étudiants</h3>
+                <p class="text-muted">Cette page permet de consulter toutes les modifications apportées aux notes des étudiants, de la plus récente à la plus ancienne.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h4 class="card-title">Liste des modifications apportées</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">ÉTUDIANT</th>
+                                                <th class="text-center">CRITÈRE</th>
+                                                <th class="text-center">IMPACT</th>
+                                                <th class="text-center">DATE ET HEURE</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for noteChange in noteChanges %}
+                                            <tr>
+                                                <td class="text-center">{{ noteChange.student.lastName }} {{ noteChange.student.firstName }}</td>
+                                                <td class="text-center">{{ noteChange.criteria.name }}</td>
+                                                <td class="text-center">
+                                                    {% if noteChange.impact < 0 %}
+                                                        - {{ (noteChange.impact * -1)|number_format(2) }}
+                                                    {% else %}
+                                                        + {{ noteChange.impact|number_format(2) }}
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-center">{{ noteChange.occuredAt|date("d/m/Y") }} à {{ noteChange.occuredAt|date("H:i")|replace({":": "h"}) }}</td>
+                                                <td>
+                                                    <a href="{{ path("teacher_history_cancel", { id: noteChange.id }) }}" class="btn btn-danger" title="Annuler cette modification">
+                                                        <i class="fas fa-undo"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
