@@ -1,0 +1,63 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Annulation de la modification d'une note{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Annulation de la modification d'une note</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Confirmation de l'opération</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Vous êtes sur le point d'annuler la modification suivante de LOSPAÉ :</p>
+                                <ul>
+                                    <li>Opération concernant la note de {{ noteChange.student.lastName }} {{ noteChange.student.firstName }}</li>
+                                    <li>Opération réalisée pour "{{ noteChange.criteria.name }}"</li>
+                                    <li>
+                                        {% if noteChange.impact < 0 %}
+                                            Opération ayant entrainée le retrait de {{ (noteChange.impact * -1)|number_format(2) }} point(s)
+                                        {% else %}
+                                            Opération ayant entrainée l'ajout de {{ noteChange.impact|number_format(2) }} point(s)
+                                        {% endif %}
+                                    </li>
+                                    <li>Opération réalisée le {{ noteChange.occuredAt|date("d/m/Y") }} à {{ noteChange.occuredAt|date("H:i")|replace({":": "h"}) }}</li>
+                                </ul>
+                                <p>Êtes-vous sûr de vouloir annuler cette modification ?</p>
+                                <p>
+                                    <a href="{{ path("teacher_history_docancel", { id: noteChange.id }) }}" class="btn btn-danger">Oui, je suis sûr(e).</a>
+                                    <a href="{{ path("teacher_history") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
+                                </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

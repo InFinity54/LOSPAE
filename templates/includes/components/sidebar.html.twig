@@ -89,6 +89,13 @@
                             <span>Modifier une note</span>
                         </a>
                     </li>
+
+                    <li class="sidebar-item {% if app.current_route in ["teacher_history"] %}active{% endif %}">
+                        <a href="{{ path("teacher_history") }}" class='sidebar-link'>
+                            <i class="fas fa-history"></i>
+                            <span>Historique des modifications</span>
+                        </a>
+                    </li>
                 {% endif %}
 
                 {% if "ROLE_ADMIN" in app.user.roles %}
