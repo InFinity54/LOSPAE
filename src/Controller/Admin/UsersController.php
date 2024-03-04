@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\NoteChange;
 use App\Entity\StudentNote;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -258,6 +259,22 @@ class UsersController extends AbstractController
         if (is_null($user)) {
             $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
             return $this->redirectToRoute("admin_users");
+        }
+
+        $note = $entityManager->getRepository(StudentNote::class)->findOneBy(["student" => $id]);
+
+        if (!is_null($note)) {
+            $entityManager->remove($note);
+            $entityManager->flush();
+        }
+
+        $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $id]);
+
+        if (!is_null($noteChanges) && count($noteChanges) > 0) {
+            foreach ($noteChanges as $noteChange) {
+                $entityManager->remove($noteChange);
+                $entityManager->flush();
+            }
         }
 
         $entityManager->remove($user);
