@@ -48,6 +48,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {% if app.current_route is same as("student_history") %}active{% endif %}">
+                    <a href="{{ path("student_history") }}" class='sidebar-link'>
+                        <i class="fas fa-history"></i>
+                        <span>Modifications de ma note</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-item {% if app.current_route in ["profile", "_logout_main"] %}active{% endif %} has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-user"></i>
@@ -65,6 +72,8 @@
                 </li>
 
                 {% if "ROLE_STUDENT" in app.user.roles %}
+                    <li class="sidebar-title">Informations générales</li>
+
                     <li class="sidebar-item {% if app.current_route is same as("student_criterias") %}active{% endif %}">
                         <a href="{{ path("student_criterias") }}" class='sidebar-link'>
                             <i class="fas fa-calculator"></i>
