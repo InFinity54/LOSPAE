@@ -27,7 +27,7 @@ class CriteriasController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $criterias = $entityManager->getRepository(Criteria::class)->findAll();
+        $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
 
         return $this->render('pages/logged_in/admin/criterias.html.twig', [
             "criterias" => $criterias
