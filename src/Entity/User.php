@@ -43,6 +43,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActivated = null;
 
+    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    private ?StudentNote $note = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -162,6 +165,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActivated(bool $isActivated): static
     {
         $this->isActivated = $isActivated;
+
+        return $this;
+    }
+
+    public function getNote(): ?StudentNote
+    {
+        return $this->note;
+    }
+
+    public function setNote(?StudentNote $note): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($note === null && $this->note !== null) {
+            $this->note->setStudent(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($note !== null && $note->getStudent() !== $this) {
+            $note->setStudent($this);
+        }
+
+        $this->note = $note;
 
         return $this;
     }

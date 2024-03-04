@@ -1,0 +1,57 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Suivi des notes des étudiants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Suivi des notes des étudiants</h3>
+                <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants. Les notes affichées ci-dessous ont été mises à jour pour la dernière fois le {{ "now"|date("d/m/Y") }} à {{ "now"|date("H:i")|replace({':': 'h'}) }}.</p>
+            </div>
+
+            <div class="row">
+                {% for student in students %}
+                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                        <div class="card">
+                            <div class="card-body py-4 px-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-xl">
+                                        <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
+                                    </div>
+                                    <div class="ms-3 name">
+                                        <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }}</h5>
+                                        <h6 class="text-muted mb-0">
+                                            {% if student.note is not null %}
+                                                {{ student.note.currentNote|number_format(2) }} / 20
+                                            {% else %}
+                                                En attente d'initialisation
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
