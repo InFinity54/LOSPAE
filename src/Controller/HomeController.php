@@ -44,7 +44,7 @@ class HomeController extends AbstractController
 
             return $this->render('pages/logged_in/index_teacher.html.twig', [
                 "studentsCount" => count($students),
-                "studentsAverageNote" => $studentsNotesSum / count($students),
+                "studentsAverageNote" => (count($students) > 0) ? $studentsNotesSum / count($students) : 20,
                 "studentsNotesChangeEventsCount" => 0
             ]);
         }
