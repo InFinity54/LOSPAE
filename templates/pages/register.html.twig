@@ -17,7 +17,7 @@
                     <h1 class="auth-title">Inscription</h1>
                     <p class="auth-subtitle mb-5">Créez votre compte pour accéder à LOSPAÉ.</p>
 
-                    <form class="form" data-parsley-validate action="/register" method="post">
+                    <form class="form" data-parsley-validate action="{{ path("register") }}" method="post">
                         <div class="form-group position-relative has-icon-left mb-4">
                             <input id="lastname" name="lastname" type="text" class="form-control form-control-xl" placeholder="Nom" data-parsley-required="true" data-parsley-error-message="Vous devez saisir votre nom.">
                             <div class="form-control-icon">
