@@ -2,6 +2,10 @@ body {
     background-color: var(--bs-body-bg)
 }
 
+.logo {
+    margin-right: 10px;
+}
+
 #auth {
     height: 100vh;
     overflow-x: hidden

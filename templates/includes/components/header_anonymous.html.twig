@@ -1,0 +1,11 @@
+<div id="header" class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-start align-items-center">
+        <div class="logo">
+            <a href="{{ path("login") }}">LOSPAÉ</a>
+        </div>
+        <div class="version">
+            V{{ lospae_version }} <span class="badge bg-danger">BETA</span>
+        </div>
+    </div>
+    {% include "includes/components/theme_toggle.html.twig" %}
+</div>
