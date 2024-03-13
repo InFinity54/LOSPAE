@@ -1,0 +1,7 @@
+.number-code div input:not(:last-child) {
+    margin-right: 5px;
+}
+
+.code-input {
+    font-size: 80px !important;
+}
