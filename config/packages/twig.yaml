@@ -2,6 +2,8 @@ twig:
     file_name_pattern: '*.twig'
     globals:
         lospae_version: '%env(LOSPAE_VERSION)%'
+    paths:
+        '%kernel.project_dir%/public/assets': assets
 
 when@test:
     twig:

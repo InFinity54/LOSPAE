@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,6 +51,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: NoteChange::class, mappedBy: 'student', orphanRemoval: true)]
     private Collection $noteChanges;
+
+    #[ORM\Column(length: 6, nullable: true)]
+    private ?string $recoveryCode = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $recoveryCodeExpireAt = null;
 
     public function __construct()
     {
@@ -227,6 +234,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $noteChange->setStudent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRecoveryCode(): ?string
+    {
+        return $this->recoveryCode;
+    }
+
+    public function setRecoveryCode(?string $recoveryCode): static
+    {
+        $this->recoveryCode = $recoveryCode;
+
+        return $this;
+    }
+
+    public function getRecoveryCodeExpireAt(): ?\DateTimeInterface
+    {
+        return $this->recoveryCodeExpireAt;
+    }
+
+    public function setRecoveryCodeExpireAt(?\DateTimeInterface $recoveryCodeExpireAt): static
+    {
+        $this->recoveryCodeExpireAt = $recoveryCodeExpireAt;
 
         return $this;
     }
