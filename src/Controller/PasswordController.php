@@ -130,7 +130,7 @@ class PasswordController extends AbstractController
             }
 
             if (!is_null($user) && !is_null($user->getRecoveryCode()) && !is_null($user->getRecoveryCodeExpireAt()) && new DateTime("now") < $user->getRecoveryCodeExpireAt()) {
-                $emailSender->sendPasswordRecoveryCode($user, $recoveryCode);
+                $emailSender->sendPasswordRecoveryCode($user, $user->getRecoveryCode());
             }
 
             return new JsonResponse([], 200);
