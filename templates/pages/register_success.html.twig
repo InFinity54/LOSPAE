@@ -12,12 +12,7 @@
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
-                    <div id="header" class="d-flex justify-content-between align-items-center">
-                        <div class="logo">
-                            <a href="{{ path("login") }}">LOSPAÉ</a>
-                        </div>
-                        {% include "includes/components/theme_toggle.html.twig" %}
-                    </div>
+                    {% include "includes/components/header_anonymous.html.twig" %}
 
                     <h1 class="auth-title">Inscription</h1>
                     <p class="auth-subtitle mb-5">Votre compte a été créé avec succès. Veuillez cependant noter qu'il devra être activé manuellement par votre enseignant avant que vous puissiez vous y connecter.</p>
