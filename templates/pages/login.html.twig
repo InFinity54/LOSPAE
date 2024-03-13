@@ -23,7 +23,7 @@
                         </div>
                     {% endif %}
 
-                    <form class="form" data-parsley-validate action="/login" method="post">
+                    <form class="form" data-parsley-validate action="{{ path("login") }}" method="post">
                         <div class="form-group position-relative has-icon-left mb-4">
                             <input id="username" name="_username" type="text" class="form-control form-control-xl" placeholder="Adresse e-mail" value="{{ lastUsername }}" data-parsley-required="true" data-parsley-error-message="Vous devez saisir une adresse e-mail valide.">
                             <div class="form-control-icon">
