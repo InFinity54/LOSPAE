@@ -1,8 +1,14 @@
 # LOSPAÉ - Logiciel de Suivi de la Participation des Étudiants
 
+## Introduction
+
+Le LOgiciel de Suivi de la Participation des Étudiants est une application Web permettant de gérer une note de participation (comme son nom l'indique) pour des étudiants.
+
+Cette application était à l'origine un logiciel disponible uniquement sous Windows, puis est devenu un site Web accessible depuis n'importe quel périphérique à la sortie de sa version 2.0.0.
+
 ## Objectif de l'application
 
-L'application permet de gérer une liste d'étudiants, et de leur ajouter ou retirer des points en fonction des critères de notation de la note de participation. Elle permet également un historique des ajouts et retraits, et d'afficher le détail pour chaque étudiant.
+L'application permet de gérer une liste d'étudiants, et de leur ajouter ou retirer des points en fonction des critères de notation de la note de participation. Elle permet également un historique des ajouts et retraits de points, et d'afficher le détail pour chaque étudiant.
 
 ## Fonctionnalités
 
