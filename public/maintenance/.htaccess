@@ -1,0 +1,18 @@
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/$
+RewriteCond %{REQUEST_URI} !^/template/compiled/css/app\.css$
+RewriteCond %{REQUEST_URI} !^/template/compiled/css/app-dark\.css$
+RewriteCond %{REQUEST_URI} !^/assets/css/global\.css$
+RewriteCond %{REQUEST_URI} !^/assets/css/pages/auth\.css$
+RewriteCond %{REQUEST_URI} !^/assets/img/pages/login_background\.jpg$
+RewriteCond %{REQUEST_URI} !^/template/static/js/components/dark\.js$
+RewriteCond %{REQUEST_URI} !^/template/extensions/perfect-scrollbar/perfect-scrollbar\.min\.js$
+RewriteCond %{REQUEST_URI} !^/template/compiled/js/app\.js$
+RewriteCond %{REQUEST_URI} !^/template/extensions/jquery/jquery\.min\.js$
+RewriteCond %{REQUEST_URI} !^/template/static/js/initTheme\.js$
+RewriteCond %{REQUEST_URI} !^/template/static/fonts/Iconly---Bold\.(eot|svg|ttf|woff)$ [NC]
+RewriteCond %{REQUEST_URI} !^/template/compiled/css/fonts/nunito-latin-700-normal\.woff2$
+RewriteCond %{REQUEST_URI} !^/template/compiled/css/fonts/nunito-latin-400-normal\.woff2$
+RewriteCond %{REQUEST_URI} !^/template/compiled/css/fonts/nunito-latin-700-normal\.woff$
+RewriteCond %{REQUEST_URI} !^/template/compiled/css/fonts/nunito-latin-400-normal\.woff$
+RewriteRule ^ / [R=302,L]
