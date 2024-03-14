@@ -6,19 +6,12 @@ L'application permet de gérer une liste d'étudiants, et de leur ajouter ou ret
 
 ## Fonctionnalités
 
-* Modifier la note d'un étudiant (choisi via une liste déroulante), en fonction du comportement de ce dernier en cours
-* Afficher l'historique des opérations apportées aux étudiants
-* Annuler une opération apportée à la note d'un étudiant
-* Afficher les notes actuelles de l'ensemble des étudiants
-* Importer une nouvelle liste d'étudiants (via fichier CSV)
-
-### Fichier CSV d'importation
-
-Pour importer une nouvelle liste d'étudiants, le fichier CSV devra respecter le format suivant.
-
-| Nom  | Prenom    | Spec |
-|------|-----------|------|
-| UN   | Étudiant  | SISR |
-| DEUX | Étudiante | SLAM |
-
-ATTENTION : Importer une nouvelle liste d'étudiants supprimera toutes les données de l'application. Les étudiants précédemment enregistrés, ainsi que le suivi de leur note, sera définitivement supprimé.
+* Authentification des utilisateurs
+  * Chaque utilisateur dispose de ces propres droits d'accès : étudiant, enseignant, administrateur
+  * Les droits d'enseignant et d'administrateur sont cumulables
+  * Un administrateur peut gérer les utilisateurs et les critères de notation
+* Suivi des notes des étudiants : écran permettant d'afficher les notes actuelles de chacun des étudiants gérés par l'enseignant
+* Historique des modifications des notes
+  * Les étudiants accèdent à l'historique de leur note exclusivement
+  * Les enseignants accèdent à l'historique de leurs étudiants exclusivement
+  * Un enseignant peut annuler une opération s'il le souhaite
