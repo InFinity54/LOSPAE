@@ -70,7 +70,7 @@ class StudentsNotesController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash("success", "La note de l'étudiant sélectionné a bien été modifiée.");
-            return $this->redirectToRoute("teacher_notes");
+            return $this->redirectToRoute("teacher_notechange");
         }
 
         $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
