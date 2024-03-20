@@ -81,4 +81,67 @@ class StudentsNotesController extends AbstractController
             "criterias" => $criterias
         ]);
     }
+
+    #[Route('/notes/change/multiple', name: 'teacher_notemultiplechange')]
+    public function noteMultipleChange(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+        }
+
+        if ($request->request->count() > 0) {
+            if ($request->request->has("criterias")) {
+                $selectedCriterias = [];
+                $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
+
+                foreach ($request->request->all()["criterias"] as $criteriaId) {
+                    $selectedCriterias[] = $entityManager->getRepository(Criteria::class)->find($criteriaId);
+                }
+
+                return $this->render('pages/logged_in/teacher/notechange_multiple_step2.html.twig', [
+                    "selectedCriterias" => $selectedCriterias,
+                    "students" => $students
+                ]);
+            } else {
+                foreach ($request->request->keys() as $noteChangeId) {
+                    $noteChangeData = explode("_", $noteChangeId);
+                    $student = $entityManager->getRepository(User::class)->find($noteChangeData[0]);
+                    $criteria = $entityManager->getRepository(Criteria::class)->find($noteChangeData[1]);
+
+                    if ($criteria->getImpact() < 0) {
+                        $student->getNote()->setCurrentNote($student->getNote()->getCurrentNote() - ($criteria->getImpact() * -1));
+                    } else {
+                        $student->getNote()->setCurrentNote($student->getNote()->getCurrentNote() + $criteria->getImpact());
+                    }
+
+                    $noteChange = new NoteChange();
+                    $noteChange->setStudent($student);
+                    $noteChange->setCriteria($criteria);
+                    $noteChange->setImpact($criteria->getImpact());
+                    $noteChange->setOccuredAt(new DateTime("now"));
+                    $entityManager->persist($noteChange);
+                    $entityManager->flush();
+                }
+
+                $this->addFlash("success", "Les notes des étudiants sélectionnés ont été modifiées.");
+                return $this->redirectToRoute("teacher_history");
+            }
+        } else if ($request->isMethod("POST") && $request->request->count() === 0) {
+            $this->addFlash("danger", "Vous devez sélectionner au moins un critère");
+        }
+
+        $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
+
+        return $this->render('pages/logged_in/teacher/notechange_multiple_step1.html.twig', [
+            "criterias" => $criterias
+        ]);
+    }
 }
