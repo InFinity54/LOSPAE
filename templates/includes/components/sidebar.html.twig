@@ -94,11 +94,20 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item {% if app.current_route in ["teacher_notechange"] %}active{% endif %}">
-                        <a href="{{ path("teacher_notechange") }}" class='sidebar-link'>
+                    <li class="sidebar-item {% if app.current_route in ["teacher_notechange", "teacher_notemultiplechange"] %}active{% endif %} has-sub">
+                        <a href="#" class='sidebar-link'>
                             <i class="fas fa-exchange-alt fa-rotate-90"></i>
-                            <span>Modifier une note</span>
+                            <span>Modifier les notes</span>
                         </a>
+
+                        <ul class="submenu {% if app.current_route in ["teacher_notechange", "teacher_notemultiplechange"] %}active{% endif %}">
+                            <li class="submenu-item {% if app.current_route is same as("teacher_notechange") %}active{% endif %}">
+                                <a href="{{ path("teacher_notechange") }}" class="submenu-link">Modifier une seule note</a>
+                            </li>
+                            <li class="submenu-item {% if app.current_route is same as("teacher_notemultiplechange") %}active{% endif %}">
+                                <a href="{{ path("teacher_notemultiplechange") }}" class="submenu-link">Modifier plusieurs notes à la fois</a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li class="sidebar-item {% if app.current_route in ["teacher_history"] %}active{% endif %}">

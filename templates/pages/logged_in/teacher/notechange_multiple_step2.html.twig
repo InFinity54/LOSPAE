@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Modification de la note de plusieurs étudiants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Modification de la note de plusieurs étudiants</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="{{ path("teacher_notemultiplechange") }}" method="POST">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Sélection des actions à opérer</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Cochez les actions à prendre en compte pour chaque étudiant, en fonction des critères sélectionnés précédemment, puis validez votre sélection pour lancer la modification des notes concernées.
+                                    </p>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table-hover table-responsive table-striped">
+                                                <thead>
+                                                    <th></th>
+                                                    {% for criteria in selectedCriterias %}
+                                                        <th>{{ criteria.name }}</th>
+                                                    {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                {% for student in students %}
+                                                    <tr>
+                                                        <td>{{ student.firstName }} {{ student.lastName }}</td>
+                                                        {% for criteria in selectedCriterias %}
+                                                            <td class="text-center">
+                                                                <input type="checkbox" id="{{ student.id }}_{{ criteria.id }}" name="{{ student.id }}_{{ criteria.id }}" value="{{ criteria.impact }}" class="form-check-input">
+                                                            </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Sauvegarder la sélection</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
