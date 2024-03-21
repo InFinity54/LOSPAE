@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Page introuvable{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/pages/error.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="error">
+        <div class="error-page container">
+            <div class="col-md-8 col-12 offset-md-2">
+                <div class="text-center">
+                    <img class="img-error" src="/assets/img/errors/404.svg" alt="" />
+                    <h1 class="error-title">Page introuvable</h1>
+                    <p class='fs-5 text-gray-600'>La page demandée n'a pas été trouvée.</p>
+                    <a href="{{ path("homepage") }}" class="btn btn-lg btn-outline-primary mt-3">Revenir à LOSPAÉ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
