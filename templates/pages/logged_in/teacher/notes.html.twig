@@ -19,7 +19,14 @@
 
             <div class="page-heading">
                 <h3>Suivi des notes des étudiants</h3>
-                <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants. Les notes affichées ci-dessous ont été mises à jour pour la dernière fois le {{ "now"|date("d/m/Y") }} à {{ "now"|date("H:i")|replace({':': 'h'}) }}.</p>
+
+                {% if app.request.query.has("sort") and app.request.query.get("sort") is same as("name") %}
+                <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants, en temps réel, par ordre alphabétique des étudiants.</p>
+                <a href="{{ path("teacher_notes") }}" class="btn btn-primary">Trier par note</a>
+                {% else %}
+                <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants, en temps réel, de la plus grande à la plus petite.</p>
+                <a href="{{ path("teacher_notes", { sort: "name" }) }}" class="btn btn-primary">Trier par nom</a>
+                {% endif %}
             </div>
 
             <div class="row">

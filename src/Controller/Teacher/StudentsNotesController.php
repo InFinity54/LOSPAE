@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class StudentsNotesController extends AbstractController
 {
     #[Route('/notes', name: 'teacher_notes')]
-    public function notes(EntityManagerInterface $entityManager): Response
+    public function notes(Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -29,7 +29,11 @@ class StudentsNotesController extends AbstractController
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
         }
 
-        $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
+        if ($request->query->has("sort") && $request->query->get("sort") === "name") {
+            $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
+        } else {
+            $students = $entityManager->getRepository(User::class)->findUsersByRoleOrderedByNote("ROLE_STUDENT");
+        }
 
         return $this->render('pages/logged_in/teacher/notes.html.twig', [
             "students" => $students

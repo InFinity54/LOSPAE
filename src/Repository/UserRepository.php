@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -40,7 +41,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function findUsersByRole($role){
+    public function findUsersByRole($role) {
         $qb = $this->createQueryBuilder('u');
         $qb->select('u')
             ->where('u.roles LIKE :roles')
@@ -48,6 +49,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.isActivated = 1')
             ->orderBy("u.lastName", "ASC")
             ->addOrderBy("u.firstName", "ASC");
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findUsersByRoleOrderedByNote($role) {
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u')
+            ->innerJoin('u.note', 'sn', Join::WITH, 'sn.student = u.id')
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%')
+            ->andWhere('u.isActivated = 1')
+            ->orderBy('sn.currentNote', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
