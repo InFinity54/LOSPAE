@@ -6,15 +6,21 @@ use App\Entity\NoteChange;
 use App\Entity\StudentNote;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Settings;
+use PhpOffice\PhpWord\TemplateProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class UsersController extends AbstractController
 {
     #[Route('/admin/users', name: 'admin_users')]
-    public function users(EntityManagerInterface $entityManager): Response
+    public function users(Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -30,10 +36,137 @@ class UsersController extends AbstractController
         }
 
         $users = $entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"]);
+        $generatedLetters = [];
+
+        if (count($request->query->all()) > 0 && in_array("generatedLetters", array_keys($request->query->all()))) {
+            $generatedLetters = $request->query->all()["generatedLetters"];
+        }
 
         return $this->render('pages/logged_in/admin/users.html.twig', [
-            "users" => $users
+            "users" => $users,
+            "generatedLetters" => $generatedLetters
         ]);
+    }
+
+    #[Route('/admin/users/import', name: 'admin_users_import')]
+    public function usersImport(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        if ($request->isMethod("POST")) {
+            $newUsers = [];
+            $generatedLetters = [];
+            $rowNo = 1;
+
+            if (($fp = fopen($request->files->get("csvfile")->getPathName(), "r")) !== FALSE) {
+                while (($row = fgetcsv($fp, 1000, ";")) !== FALSE) {
+                    if ($rowNo > 1) {
+                        $userLastName = $row[0];
+                        $userFirstName = $row[1];
+                        $userEmail = $row[2];
+                        $userType = $row[3];
+
+                        if (is_null($entityManager->getRepository(User::class)->findOneBy(["email" => $userEmail]))) {
+                            $authorizedSpecialChars = ["#", "@", ".", "/", "!", ",", ":", ";", "?", "%", "*", "-", "+"];
+                            $userPassword = ucfirst(strtolower(substr($userLastName, 0, 3)));
+                            $userPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
+                            $userPassword .= ucfirst(strtolower(substr($userFirstName, 0, 3)));
+                            $userPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
+                            $userPassword .= rand(10, 99);
+
+                            $user = new User();
+                            $user->setLastName($userLastName);
+                            $user->setFirstName($userFirstName);
+                            $user->setEmail($userEmail);
+                            $user->setPassword($passwordHasher->hashPassword($user, $userPassword));
+                            $user->setIsActivated(false);
+
+                            switch ($userType) {
+                                case "Enseignant":
+                                    $user->setRoles(["ROLE_TEACHER"]);
+                                    break;
+                                default:
+                                    $user->setRoles(["ROLE_STUDENT"]);
+                                    break;
+                            }
+
+                            $entityManager->persist($user);
+                            $entityManager->flush();
+
+                            $newUsers[] = [
+                                "lastName" => $userLastName,
+                                "firstName" => $userFirstName,
+                                "email" => $userEmail,
+                                "type" => $userType,
+                                "temporaryPassword" => $userPassword
+                            ];
+                        } else {
+                            $this->addFlash("warning", "Un compte existe déjà pour cette adresse e-mail.");
+                        }
+                    }
+
+                    $rowNo++;
+                }
+
+                fclose($fp);
+            }
+
+            if (count($newUsers) > 1) {
+                $this->addFlash("success", count($newUsers)." utilisateurs ont été importés.");
+            } else if (count($newUsers) === 1) {
+                $this->addFlash("success", "Un utilisateur a été importé.");
+            } else {
+                $this->addFlash("warning", "Aucun utilisateur n'a été importé. Il y a peut-être eu un problème durant l'importation.");
+            }
+
+            if (count($newUsers) > 0) {
+                try {
+                    $templateFile = $this->getParameter("kernel.project_dir")."/public/files/users_import_letter_model_student.docx";
+
+                    foreach ($newUsers as $newUser) {
+                        $fileNameWithoutExt = "LOSPAE_NewUserLetter_".$newUser["lastName"]."_".$newUser["firstName"]."_".date("Ymd");
+                        $pathToSave = $this->getParameter("kernel.project_dir")."/var/";
+
+                        $templateProcessor = new TemplateProcessor($templateFile);
+                        $templateProcessor->setValue("firstname", $newUser["firstName"]);
+                        $templateProcessor->setValue("lastname", $newUser["lastName"]);
+                        $templateProcessor->setValue("email", $newUser["email"]);
+                        $templateProcessor->setValue("password", $newUser["temporaryPassword"]);
+                        $templateProcessor->saveAs($pathToSave.$fileNameWithoutExt.".docx");
+
+                        Settings::setPdfRendererName(Settings::PDF_RENDERER_MPDF);
+                        Settings::setPdfRendererPath($this->getParameter("kernel.project_dir").'/vendor/mpdf/mpdf');
+
+                        $reader = IOFactory::load($pathToSave.$fileNameWithoutExt.".docx");
+
+                        $writer = IOFactory::createWriter($reader, 'PDF');
+                        $writer->save($pathToSave.$fileNameWithoutExt.".pdf");
+
+                        unlink($pathToSave.$fileNameWithoutExt.".docx");
+                        $generatedLetters[] = $fileNameWithoutExt.".pdf";
+                    }
+                } catch (Exception $e) {
+                    $this->addFlash("danger", "Il n'a pas été possible de générer certaines lettres de notification des utilisateurs.");
+                }
+            }
+
+            return $this->redirectToRoute("admin_users", [
+                "generatedLetters" => $generatedLetters
+            ]);
+        }
+
+        return $this->render('pages/logged_in/admin/users_import.html.twig');
     }
 
     #[Route('/admin/users/configure/{id}', name: 'admin_user_configure')]

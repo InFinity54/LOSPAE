@@ -23,11 +23,38 @@
             </div>
 
             <div class="page-content">
+                {% if generatedLetters|length > 0 %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Lettres générées pendant l'importation</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Des lettres ont été générées pour les comptes utilisateurs importés il y a quelques secondes. Vous pouvez les télécharger si vous le souhaitez pour les fournir aux étudiants concernés.
+                                        <br />
+                                        ATTENTION : Ce sera votre seule opportunité de les télécharger. Ces documents ne vous seront pas représentés par la suite et seront supprimés de LOSPAÉ dans une dizaine de minutes.
+                                    </p>
+
+                                    <ul>
+                                        {% for generatedLetter in generatedLetters %}
+                                            <li><a href="{{ path("admin_download_notificationletter", {filename: generatedLetter}) }}" target="_blank">{{ generatedLetter }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between">
                                 <h4 class="card-title">Liste des utilisateurs</h4>
+                                <a href="{{ path("admin_users_import") }}" class="btn btn-primary">Importer des utilisateurs</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
