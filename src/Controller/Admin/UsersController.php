@@ -275,10 +275,10 @@ class UsersController extends AbstractController
             $note->setCurrentNote(20);
             $entityManager->persist($note);
             $entityManager->flush();
+            $user->setNote($note);
         }
 
         $user->setIsActivated(true);
-        $user->setNote($note);
         $entityManager->flush();
 
         $this->addFlash("success", "Le compte utilisateur ciblé a été activé.");
