@@ -35,6 +35,7 @@ class HomeController extends AbstractController
         if (in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
             $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
             $studentsNotesSum = 0;
+            $noteChanges = $entityManager->getRepository(NoteChange::class)->findAll();
 
             foreach ($students as $student) {
                 if (!is_null($student->getNote())) {
@@ -45,7 +46,7 @@ class HomeController extends AbstractController
             return $this->render('pages/logged_in/index_teacher.html.twig', [
                 "studentsCount" => count($students),
                 "studentsAverageNote" => (count($students) > 0) ? $studentsNotesSum / count($students) : 20,
-                "studentsNotesChangeEventsCount" => 0
+                "studentsNotesChangeEventsCount" => count($noteChanges)
             ]);
         }
 
