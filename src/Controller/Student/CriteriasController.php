@@ -21,6 +21,11 @@ class CriteriasController extends AbstractController
             return $this->redirectToRoute("login");
         }
 
+        if (!in_array("ROLE_STUDENT", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
         $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["impact" => "ASC"]);
 
         return $this->render('pages/logged_in/student/criterias.html.twig', [

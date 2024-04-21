@@ -24,8 +24,9 @@ class NoteChangeHistoryController extends AbstractController
 
         if (!in_array("ROLE_STUDENT", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
         }
-
+        
         $student = $entityManager->getRepository(User::class)->findOneBy(["email" => $this->getUser()->getUserIdentifier()]);
         $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student->getId()], ["occuredAt" => "DESC"]);
 
