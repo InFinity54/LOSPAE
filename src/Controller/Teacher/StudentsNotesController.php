@@ -27,6 +27,7 @@ class StudentsNotesController extends AbstractController
 
         if (!in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
         }
 
         if ($request->query->has("sort") && $request->query->get("sort") === "name") {
@@ -53,6 +54,7 @@ class StudentsNotesController extends AbstractController
 
         if (!in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
         }
 
         if ($request->isMethod("POST")) {
@@ -99,6 +101,7 @@ class StudentsNotesController extends AbstractController
 
         if (!in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
         }
 
         if ($request->request->count() > 0) {

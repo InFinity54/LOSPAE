@@ -24,6 +24,7 @@ class NoteChangeHistoryController extends AbstractController
 
         if (!in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
         }
 
         $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy([], ["occuredAt" => "DESC"]);
@@ -46,6 +47,7 @@ class NoteChangeHistoryController extends AbstractController
 
         if (!in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
         }
 
         $noteChange = $entityManager->getRepository(NoteChange::class)->find($id);
@@ -68,6 +70,7 @@ class NoteChangeHistoryController extends AbstractController
 
         if (!in_array("ROLE_TEACHER", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
         }
 
         $noteChange = $entityManager->getRepository(NoteChange::class)->find($id);
