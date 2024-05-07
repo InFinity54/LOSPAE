@@ -69,6 +69,7 @@
                                 <h4 class="card-title">Modifications récentes de ma note</h4>
                             </div>
                             <div class="card-body">
+                                {% if recentNoteChanges|length > 0 %}
                                 <div class="table-responsive">
                                     <table class="table table-striped mb-0">
                                         <thead>
@@ -95,6 +96,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {% else %}
+                                <center><p>Votre note n'a pas encore été modifiée.</p></center>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
