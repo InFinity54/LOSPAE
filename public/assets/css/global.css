@@ -1,3 +1,7 @@
 #auth #auth-left .auth-title {
     font-size: 4rem;
 }
+
+.accordion-button {
+    gap: 5px;
+}
