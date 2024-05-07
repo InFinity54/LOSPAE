@@ -78,9 +78,7 @@
                             <span>Mon bilan</span>
                         </a>
                     </li>
-                {% endif %}
 
-                {% if "ROLE_STUDENT" in app.user.roles %}
                     <li class="sidebar-title">Informations générales</li>
 
                     <li class="sidebar-item {% if app.current_route is same as("student_criterias") %}active{% endif %}">
@@ -121,6 +119,13 @@
                         <a href="{{ path("teacher_history") }}" class='sidebar-link'>
                             <i class="fas fa-history"></i>
                             <span>Historique des modifications</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {% if app.current_route is same as("teacher_details") %}active{% endif %}">
+                        <a href="{{ path("teacher_details") }}" class='sidebar-link'>
+                            <i class="fas fa-calculator"></i>
+                            <span>Bilan de la classe</span>
                         </a>
                     </li>
                 {% endif %}
