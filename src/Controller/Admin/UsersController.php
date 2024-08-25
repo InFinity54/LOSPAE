@@ -218,8 +218,8 @@ class UsersController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/users/enable/{id}', name: 'admin_user_enable')]
-    public function userEnable(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/admin/users/enable/{ids}', name: 'admin_user_enable')]
+    public function userEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -234,20 +234,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $users = [];
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $user;
+            }
+        }
+
+        if (count($users) < count(explode(",", $id))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
             return $this->redirectToRoute("admin_users");
         }
 
         return $this->render('pages/logged_in/admin/user_enabling_confirm.html.twig', [
-            "user" => $user
+            "users" => $users,
+            "usersIds" => $ids
         ]);
     }
 
-    #[Route('/admin/users/enable/{id}/do', name: 'admin_user_doenable')]
-    public function userDoEnable(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/admin/users/enable/{ids}/do', name: 'admin_user_doenable')]
+    public function userDoEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -262,26 +271,34 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $users = [];
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $id;
+
+                if (in_array("ROLE_STUDENT", $user->getRoles()) && is_null($user->getNote())) {
+                    $note = new StudentNote();
+                    $note->setStudent($user);
+                    $note->setCurrentNote(20);
+                    $entityManager->persist($note);
+                    $entityManager->flush();
+                    $user->setNote($note);
+                }
+
+                $user->setIsActivated(true);
+                $entityManager->flush();
+            }
+        }
+
+        if (count($users) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu être activés car ils sont introuvables.");
             return $this->redirectToRoute("admin_users");
         }
 
-        if (in_array("ROLE_STUDENT", $user->getRoles()) && is_null($user->getNote())) {
-            $note = new StudentNote();
-            $note->setStudent($user);
-            $note->setCurrentNote(20);
-            $entityManager->persist($note);
-            $entityManager->flush();
-            $user->setNote($note);
-        }
-
-        $user->setIsActivated(true);
-        $entityManager->flush();
-
-        $this->addFlash("success", "Le compte utilisateur ciblé a été activé.");
+        $this->addFlash("success", "Les comptes utilisateurs sélectionnés ont été activés.");
         return $this->redirectToRoute("admin_users");
     }
 
