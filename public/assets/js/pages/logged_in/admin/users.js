@@ -6,6 +6,10 @@ $("#disable_selected_users").on("click", () => {
     handleAction("disable");
 });
 
+$("#delete_selected_users").on("click", () => {
+    handleAction("remove");
+});
+
 function handleAction(actionName) {
     let ids = [];
 

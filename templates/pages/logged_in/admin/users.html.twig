@@ -116,7 +116,7 @@
                                                                 </a>
                                                             {% endif %}
 
-                                                            <a href="{{ path("admin_user_remove", { id: user.id }) }}" class="btn btn-dark" title="Supprimer le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                            <a href="{{ path("admin_user_remove", { ids: user.id }) }}" class="btn btn-dark" title="Supprimer le compte de {{ user.firstName }} {{ user.lastName }}">
                                                                 <i class="fas fa-user-slash"></i>
                                                             </a>
                                                         {% else %}

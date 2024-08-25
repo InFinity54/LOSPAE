@@ -376,8 +376,8 @@ class UsersController extends AbstractController
         return $this->redirectToRoute("admin_users");
     }
 
-    #[Route('/admin/users/remove/{id}', name: 'admin_user_remove')]
-    public function userRemove(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/admin/users/remove/{ids}', name: 'admin_user_remove')]
+    public function userRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -392,20 +392,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $users = [];
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $user;
+            }
+        }
+
+        if (count($users) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
             return $this->redirectToRoute("admin_users");
         }
 
         return $this->render('pages/logged_in/admin/user_removing_confirm.html.twig', [
-            "user" => $user
+            "users" => $users,
+            "usersIds" => $ids
         ]);
     }
 
-    #[Route('/admin/users/remove/{id}/do', name: 'admin_user_doremove')]
-    public function userDoRemove(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/admin/users/remove/{ids}/do', name: 'admin_user_doremove')]
+    public function userDoRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -420,33 +429,40 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $users = [];
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
-            return $this->redirectToRoute("admin_users");
-        }
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
 
-        $note = $entityManager->getRepository(StudentNote::class)->findOneBy(["student" => $id]);
+            if (!is_null($user)) {
+                $users[] = $id;
+                $note = $entityManager->getRepository(StudentNote::class)->findOneBy(["student" => $id]);
 
-        if (!is_null($note)) {
-            $entityManager->remove($note);
-            $entityManager->flush();
-        }
+                if (!is_null($note)) {
+                    $entityManager->remove($note);
+                    $entityManager->flush();
+                }
 
-        $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $id]);
+                $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $id]);
 
-        if (!is_null($noteChanges) && count($noteChanges) > 0) {
-            foreach ($noteChanges as $noteChange) {
-                $entityManager->remove($noteChange);
+                if (!is_null($noteChanges) && count($noteChanges) > 0) {
+                    foreach ($noteChanges as $noteChange) {
+                        $entityManager->remove($noteChange);
+                        $entityManager->flush();
+                    }
+                }
+
+                $entityManager->remove($user);
                 $entityManager->flush();
             }
         }
 
-        $entityManager->remove($user);
-        $entityManager->flush();
+        if (count($users) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_users");
+        }
 
-        $this->addFlash("success", "Le compte utilisateur ciblé a été définitivement supprimé.");
+        $this->addFlash("success", "Les comptes utilisateurs sélectionnés ont été désactivés.");
         return $this->redirectToRoute("admin_users");
     }
 }
