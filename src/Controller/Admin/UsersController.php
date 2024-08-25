@@ -302,8 +302,8 @@ class UsersController extends AbstractController
         return $this->redirectToRoute("admin_users");
     }
 
-    #[Route('/admin/users/disable/{id}', name: 'admin_user_disable')]
-    public function userDisable(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/admin/users/disable/{ids}', name: 'admin_user_disable')]
+    public function userDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -318,20 +318,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $users = [];
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $user;
+            }
+        }
+
+        if (count($users) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
             return $this->redirectToRoute("admin_users");
         }
 
         return $this->render('pages/logged_in/admin/user_disabling_confirm.html.twig', [
-            "user" => $user
+            "users" => $users,
+            "usersIds" => $ids
         ]);
     }
 
-    #[Route('/admin/users/disable/{id}/do', name: 'admin_user_dodisable')]
-    public function userDoDisable(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/admin/users/disable/{ids}/do', name: 'admin_user_dodisable')]
+    public function userDoDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -346,17 +355,24 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $users = [];
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $id;
+                $user->setIsActivated(false);
+                $entityManager->flush();
+            }
+        }
+
+        if (count($users) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
             return $this->redirectToRoute("admin_users");
         }
 
-        $user->setIsActivated(false);
-        $entityManager->flush();
-
-        $this->addFlash("success", "Le compte utilisateur ciblé a été désactivé.");
+        $this->addFlash("success", "Les comptes utilisateurs sélectionnés ont été désactivés.");
         return $this->redirectToRoute("admin_users");
     }
 
