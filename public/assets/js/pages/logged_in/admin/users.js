@@ -1,3 +1,11 @@
+$("#userglobalselection").change((event) => {
+    if($("#userglobalselection").is(":checked")) {
+        $(".userselection").prop("checked", true);
+    } else {
+        $(".userselection").prop("checked", false);
+    }
+})
+
 $("#enable_selected_users").on("click", () => {
     handleAction("enable");
 });
