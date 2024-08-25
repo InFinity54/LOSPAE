@@ -54,13 +54,27 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <h4 class="card-title">Liste des utilisateurs</h4>
-                                <a href="{{ path("admin_users_import") }}" class="btn btn-primary">Importer des utilisateurs</a>
+
+                                <div>
+                                    <button id="disable_selected_users" class="btn btn-danger" title="Désactiver les comptes sélectionnés">
+                                        <i class="fas fa-user-times"></i>
+                                    </button>
+                                    <button id="enable_selected_users" class="btn btn-success" title="Activer les comptes sélectionnés">
+                                        <i class="fas fa-user-check"></i>
+                                    </button>
+                                    <button id="delete_selected_users" class="btn btn-dark" title="Supprimer les comptes sélectionnés">
+                                        <i class="fas fa-user-slash"></i>
+                                    </button>
+                                    <a href="{{ path("admin_users_import") }}" class="btn btn-primary">Importer des utilisateurs</a>
+                                </div>
                             </div>
+
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped mb-0">
                                         <thead>
                                             <tr>
+                                                <th></th>
                                                 <th class="text-center">NOM</th>
                                                 <th class="text-center">PRÉNOM</th>
                                                 <th class="text-center">ADRESSE E-MAIL</th>
@@ -71,6 +85,11 @@
                                         <tbody>
                                             {% for user in users %}
                                                 <tr>
+                                                    <td>
+                                                        {% if user.email is not same as(app.user.email) %}
+                                                            <input type="checkbox" id="userselected_{{ user.id }}" data-user="{{ user.id }}" />
+                                                        {% endif %}
+                                                    </td>
                                                     <td class="text-center">{{ user.lastName }}</td>
                                                     <td class="text-center">{{ user.firstName }}</td>
                                                     <td class="text-center">{{ user.email }}</td>
