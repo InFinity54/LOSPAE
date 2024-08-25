@@ -56,11 +56,11 @@
                                 <h4 class="card-title">Liste des utilisateurs</h4>
 
                                 <div>
-                                    <button id="disable_selected_users" class="btn btn-danger" title="Désactiver les comptes sélectionnés">
-                                        <i class="fas fa-user-times"></i>
-                                    </button>
                                     <button id="enable_selected_users" class="btn btn-success" title="Activer les comptes sélectionnés">
                                         <i class="fas fa-user-check"></i>
+                                    </button>
+                                    <button id="disable_selected_users" class="btn btn-danger" title="Désactiver les comptes sélectionnés">
+                                        <i class="fas fa-user-times"></i>
                                     </button>
                                     <button id="delete_selected_users" class="btn btn-dark" title="Supprimer les comptes sélectionnés">
                                         <i class="fas fa-user-slash"></i>
@@ -87,7 +87,7 @@
                                                 <tr>
                                                     <td>
                                                         {% if user.email is not same as(app.user.email) %}
-                                                            <input type="checkbox" id="userselected_{{ user.id }}" data-user="{{ user.id }}" />
+                                                            <input type="checkbox" class="userselection" id="userselected_{{ user.id }}" data-user="{{ user.id }}" />
                                                         {% endif %}
                                                     </td>
                                                     <td class="text-center">{{ user.lastName }}</td>
@@ -111,7 +111,7 @@
                                                                     <i class="fas fa-user-times"></i>
                                                                 </a>
                                                             {% else %}
-                                                                <a href="{{ path("admin_user_enable", { id: user.id }) }}" class="btn btn-success" title="Activer le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                                <a href="{{ path("admin_user_enable", { ids: user.id }) }}" class="btn btn-success" title="Activer le compte de {{ user.firstName }} {{ user.lastName }}">
                                                                     <i class="fas fa-user-check"></i>
                                                                 </a>
                                                             {% endif %}
@@ -140,4 +140,5 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="/assets/js/pages/logged_in/admin/users.js"></script>
 {% endblock %}
