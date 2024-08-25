@@ -29,38 +29,80 @@
                                 <h4 class="card-title">Confirmation de l'opération</h4>
                             </div>
                             <div class="card-body">
-                                <p>Vous êtes sur le point de désactiver le compte utilisateur suivant :</p>
 
-                                <div class="card">
-                                    <div class="card-body py-3 px-3">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-xl">
-                                                <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                {% if users|length > 1 %}
+                                    <p>Vous êtes sur le point de désactiver les {{ users|length }} comptes utilisateurs suivants :</p>
+
+                                    <div class="row">
+                                        {% for user in users %}
+                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                                <div class="card">
+                                                    <div class="card-body py-4 px-4">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar avatar-xl">
+                                                                <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                                            </div>
+
+                                                            <div class="ms-3 name">
+                                                                <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
+                                                                <h6 class="text-muted mb-0">
+                                                                    {% if "ROLE_TEACHER" in user.roles %}
+                                                                        Enseignant
+                                                                    {% elseif "ROLE_STUDENT" in user.roles %}
+                                                                        Étudiant
+                                                                    {% endif %}
+
+                                                                    {% if "ROLE_ADMIN" in user.roles %}
+                                                                        <span class="badge bg-secondary">Admin</span>
+                                                                    {% endif %}
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        {% endfor %}
+                                    </div>
 
-                                            <div class="ms-3 name">
-                                                <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
-                                                <h6 class="text-muted mb-0">
-                                                    {% if "ROLE_TEACHER" in user.roles %}
-                                                        Enseignant
-                                                    {% elseif "ROLE_STUDENT" in user.roles %}
-                                                        Étudiant
-                                                    {% endif %}
+                                    <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
+                                    <p>
+                                        <a href="{{ path("admin_user_dodisable", { ids: usersIds }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
+                                        <a href="{{ path("admin_users") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
+                                    </p>
+                                {% else %}
+                                    <p>Vous êtes sur le point de désactiver le compte utilisateur suivant :</p>
 
-                                                    {% if "ROLE_ADMIN" in user.roles %}
-                                                        <span class="badge bg-secondary">Admin</span>
-                                                    {% endif %}
-                                                </h6>
+                                    <div class="card">
+                                        <div class="card-body py-3 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-xl">
+                                                    <img src="/assets/img/avatars/{{ users[0].avatar }}" alt="Photo de profil de {{ users[0].firstName }} {{ users[0].lastName }}" />
+                                                </div>
+
+                                                <div class="ms-3 name">
+                                                    <h5 class="font-bold">{{ users[0].firstName }} {{ users[0].lastName }}</h5>
+                                                    <h6 class="text-muted mb-0">
+                                                        {% if "ROLE_TEACHER" in users[0].roles %}
+                                                            Enseignant
+                                                        {% elseif "ROLE_STUDENT" in users[0].roles %}
+                                                            Étudiant
+                                                        {% endif %}
+
+                                                        {% if "ROLE_ADMIN" in users[0].roles %}
+                                                            <span class="badge bg-secondary">Admin</span>
+                                                        {% endif %}
+                                                    </h6>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                     <p>
-                                        <a href="{{ path("admin_user_dodisable", { id: user.id }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
+                                        <a href="{{ path("admin_user_dodisable", { ids: users[0].id }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
                                         <a href="{{ path("admin_users") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
                                     </p>
-                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

@@ -107,7 +107,7 @@
                                                             </a>
 
                                                             {% if user.isActivated %}
-                                                                <a href="{{ path("admin_user_disable", { id: user.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                                <a href="{{ path("admin_user_disable", { ids: user.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ user.firstName }} {{ user.lastName }}">
                                                                     <i class="fas fa-user-times"></i>
                                                                 </a>
                                                             {% else %}
