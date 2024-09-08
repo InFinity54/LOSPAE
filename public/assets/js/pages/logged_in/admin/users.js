@@ -6,6 +6,10 @@ $("#userglobalselection").change((event) => {
     }
 })
 
+$("#reset_selected_users").on("click", () => {
+    handleAction("reset");
+});
+
 $("#enable_selected_users").on("click", () => {
     handleAction("enable");
 });

@@ -56,6 +56,9 @@
                                 <h4 class="card-title">Liste des utilisateurs</h4>
 
                                 <div>
+                                    <button id="reset_selected_users" class="btn btn-info" title="Réinitialiser la note des comptes sélectionnés">
+                                        <i class="fas fa-list-ol"></i>
+                                    </button>
                                     <button id="enable_selected_users" class="btn btn-success" title="Activer les comptes sélectionnés">
                                         <i class="fas fa-user-check"></i>
                                     </button>
@@ -107,6 +110,9 @@
                                                             </a>
 
                                                             {% if user.isActivated %}
+                                                                <a href="{{ path("admin_user_reset", { ids: user.id }) }}" class="btn btn-info" title="Réinitialiser la note de {{ user.firstName }} {{ user.lastName }}">
+                                                                    <i class="fas fa-list-ol"></i>
+                                                                </a>
                                                                 <a href="{{ path("admin_user_disable", { ids: user.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ user.firstName }} {{ user.lastName }}">
                                                                     <i class="fas fa-user-times"></i>
                                                                 </a>

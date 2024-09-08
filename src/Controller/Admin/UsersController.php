@@ -465,4 +465,91 @@ class UsersController extends AbstractController
         $this->addFlash("success", "Les comptes utilisateurs sélectionnés ont été désactivés.");
         return $this->redirectToRoute("admin_users");
     }
+
+    #[Route('/admin/users/reset/{ids}', name: 'admin_user_reset')]
+    public function userReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $users = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $user;
+            }
+        }
+
+        if (count($users) < count(explode(",", $id))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_users");
+        }
+
+        return $this->render('pages/logged_in/admin/user_reset_confirm.html.twig', [
+            "users" => $users,
+            "usersIds" => $ids
+        ]);
+    }
+
+    #[Route('/admin/users/reset/{ids}/do', name: 'admin_user_doreset')]
+    public function userDoReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $users = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $id;
+
+                if (in_array("ROLE_STUDENT", $user->getRoles())) {
+                    $note = $user->getNote();
+                    $note->setCurrentNote(20);
+                    $entityManager->persist($note);
+                    $entityManager->flush();
+                    $user->setNote($note);
+
+                    foreach ($user->getNoteChanges() as $noteChange) {
+                        $entityManager->remove($noteChange);
+                        $entityManager->flush();
+                    }
+                }
+
+                $entityManager->flush();
+            }
+        }
+
+        if (count($users) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu voir leurs notes être réinitialisées car ils sont introuvables.");
+            return $this->redirectToRoute("admin_users");
+        }
+
+        $this->addFlash("success", "Les notes des comptes utilisateurs sélectionnés ont été réinitialisées.");
+        return $this->redirectToRoute("admin_users");
+    }
 }
