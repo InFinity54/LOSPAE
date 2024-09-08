@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\NoteChange;
 use App\Entity\StudentNote;
 use App\Entity\User;
+use App\Services\StringHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PhpOffice\PhpWord\IOFactory;
@@ -79,9 +80,9 @@ class UsersController extends AbstractController
 
                         if (is_null($entityManager->getRepository(User::class)->findOneBy(["email" => $userEmail]))) {
                             $authorizedSpecialChars = ["#", "@", ".", "/", "!", ",", ":", ";", "?", "%", "*", "-", "+"];
-                            $userPassword = ucfirst(strtolower(substr($userLastName, 0, 3)));
+                            $userPassword = ucfirst(strtolower(substr(StringHandler::remove_accents($userLastName), 0, 3)));
                             $userPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
-                            $userPassword .= ucfirst(strtolower(substr($userFirstName, 0, 3)));
+                            $userPassword .= ucfirst(strtolower(substr(StringHandler::remove_accents($userFirstName), 0, 3)));
                             $userPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
                             $userPassword .= rand(10, 99);
 
