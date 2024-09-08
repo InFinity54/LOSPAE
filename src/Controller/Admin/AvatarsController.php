@@ -86,7 +86,10 @@ class AvatarsController extends AbstractController
         }
 
         $userAvatarFullPath = $avatarUpload->getTargetDirectory().$user->getAvatar();
-        unlink($userAvatarFullPath);
+
+        if (file_exists($userAvatarFullPath)) {
+            unlink($userAvatarFullPath);
+        }
 
         $user->setAvatar("default_avatar.svg");
         $entityManager->flush();
