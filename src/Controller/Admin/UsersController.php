@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\NoteChange;
 use App\Entity\StudentNote;
 use App\Entity\User;
+use App\Services\FileUpload\UserAvatarUpload;
 use App\Services\StringHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -415,7 +416,7 @@ class UsersController extends AbstractController
     }
 
     #[Route('/admin/users/remove/{ids}/do', name: 'admin_user_doremove')]
-    public function userDoRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    public function userDoRemove(Request $request, EntityManagerInterface $entityManager, UserAvatarUpload $avatarUpload, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -450,6 +451,14 @@ class UsersController extends AbstractController
                     foreach ($noteChanges as $noteChange) {
                         $entityManager->remove($noteChange);
                         $entityManager->flush();
+                    }
+                }
+
+                if ($user->getAvatar() !== "default_avatar.svg") {
+                    $userAvatarFullPath = $avatarUpload->getTargetDirectory().$user->getAvatar();
+
+                    if (file_exists($userAvatarFullPath)) {
+                        unlink($userAvatarFullPath);
                     }
                 }
 
