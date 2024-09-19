@@ -1,0 +1,75 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Promotions{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Gestion des promotions</h3>
+                <p class="text-muted">Cette page permet de gérer les promotions d'étudiants enregistrées dans LOSPAÉ. Il est possible de créer de nouvelles promotions ou d'en supprimer.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h4 class="card-title">Liste des promotions</h4>
+
+                                <div>
+                                    <a href="{{ path("admin_promo_add") }}" class="btn btn-primary">Ajouter une nouvelle promotion</a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">ÉTABLISSEMENT CONCERNÉ</th>
+                                                <th class="text-center">NOM DE LA PROMOTION</th>
+                                                <th class="text-center">NOMBRE D'ÉTUDIANTS</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for promo in promos %}
+                                                <tr>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center">{{ promo.students }}</td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-dark" title="Supprimer la promotion {{ promo.data.name }} de l'établissement">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}
