@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\School;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,10 +28,51 @@ class SchoolsController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $schools = $entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]);
+        $schools = [];
+
+        foreach ($entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]) as $school) {
+            $schools[] = [
+                "data" => $school,
+                "promos" => $school->getPromos()->count(),
+                "students" => 0
+            ];
+        }
 
         return $this->render('pages/logged_in/admin/schools.html.twig', [
             "schools" => $schools
         ]);
+    }
+
+    #[Route('/admin/schools/add', name: 'admin_school_add')]
+    public function schoolAdd(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        if ($request->request->count() > 0) {
+            $school = new School();
+            $school->setName($request->request->get("name"));
+            $school->setAddress($request->request->get("address"));
+            $school->setAddressExtension($request->request->get("addressExtension"));
+            $school->setPostalCode($request->request->get("postalCode"));
+            $school->setCity($request->request->get("city"));
+            $entityManager->persist($school);
+            $entityManager->flush();
+
+            $this->addFlash("success", "L'établissement scolaire a été enregistré.");
+            return $this->redirectToRoute("admin_schools");
+        }
+
+        return $this->render('pages/logged_in/admin/school_add.html.twig');
     }
 }
