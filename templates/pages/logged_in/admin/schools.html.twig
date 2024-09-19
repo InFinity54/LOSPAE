@@ -30,7 +30,7 @@
                                 <h4 class="card-title">Liste des établissements</h4>
 
                                 <div>
-                                    <a href="#" class="btn btn-primary">Ajouter un nouvel établissement</a>
+                                    <a href="{{ path("admin_school_add") }}" class="btn btn-primary">Ajouter un nouvel établissement</a>
                                 </div>
                             </div>
 
@@ -41,21 +41,25 @@
                                             <tr>
                                                 <th class="text-center">NOM DE L'ÉTABLISSEMENT</th>
                                                 <th class="text-center">ADRESSE POSTALE</th>
+                                                <th class="text-center">NOMBRE DE PROMOTIONS</th>
+                                                <th class="text-center">NOMBRE D'ÉTUDIANTS</th>
                                                 <th>ACTIONS</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for school in schools %}
                                                 <tr>
-                                                    <td class="text-center">{{ school.name }}</td>
+                                                    <td class="text-center">{{ school.data.name }}</td>
                                                     <td class="text-center">
-                                                        {{ school.address }}
-                                                        {% if school.addressExtension is not null %}<br />{{ school.addressExtension }}{% endif %}
-                                                        <br />{{ school.postalCode }}
-                                                        <br />{{ school.city }}
+                                                        {{ school.data.address }}
+                                                        {% if school.data.addressExtension is not null and school.data.addressExtension is not same as("") %}<br />{{ school.data.addressExtension }}{% endif %}
+                                                        <br />{{ school.data.postalCode }}
+                                                        <br />{{ school.data.city }}
                                                     </td>
+                                                    <td class="text-center">{{ school.promos }}</td>
+                                                    <td class="text-center">{{ school.students }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-dark" title="Supprimer l'établissement {{ school.name }}">
+                                                        <a href="#" class="btn btn-dark" title="Supprimer l'établissement {{ school.data.name }}">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </a>
                                                     </td>
@@ -75,6 +79,4 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    <script src="/assets/js/pages/logged_in/admin/users.js"></script>
-{% endblock %}
+{% block javascripts %}{% endblock %}
