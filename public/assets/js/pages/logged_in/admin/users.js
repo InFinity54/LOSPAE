@@ -10,6 +10,10 @@ $("#reset_selected_users").on("click", () => {
     handleAction("reset");
 });
 
+$("#edit_selected_users").on("click", () => {
+    handleAction("edit");
+});
+
 $("#enable_selected_users").on("click", () => {
     handleAction("enable");
 });
