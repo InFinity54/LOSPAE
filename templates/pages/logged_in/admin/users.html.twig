@@ -118,6 +118,10 @@
                                                                 <i class="fas fa-user-cog"></i>
                                                             </a>
 
+                                                            <a href="{{ path("admin_user_edit", { ids: user.id }) }}" class="btn btn-primary" title="Modifier le compte de {{ user.firstName }} {{ user.lastName }}">
+                                                                <i class="fas fa-user-edit"></i>
+                                                            </a>
+
                                                             {% if user.isActivated %}
                                                                 <a href="{{ path("admin_user_reset", { ids: user.id }) }}" class="btn btn-info" title="Réinitialiser la note de {{ user.firstName }} {{ user.lastName }}">
                                                                     <i class="fas fa-list-ol"></i>

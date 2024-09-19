@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\NoteChange;
+use App\Entity\Promo;
+use App\Entity\School;
 use App\Entity\User;
 use App\Services\FileUpload\UserAvatarUpload;
 use App\Services\StringHandler;
@@ -216,6 +218,44 @@ class UsersController extends AbstractController
 
         return $this->render('pages/logged_in/admin/user_configuration.html.twig', [
             "user" => $user
+        ]);
+    }
+
+    #[Route('/admin/users/edit/{ids}', name: 'admin_user_edit')]
+    public function userEdit(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $user = $entityManager->getRepository(User::class)->find($ids);
+
+        if (is_null($user)) {
+            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
+            return $this->redirectToRoute("admin_users");
+        }
+
+        if ($request->isMethod("POST")) {
+            $user->setPromo($entityManager->getRepository(Promo::class)->find($request->request->get("promo")));
+            $entityManager->flush();
+            $this->addFlash("success", "L'affectation de l'utilisateur ciblé a été modifiée.");
+            return $this->redirectToRoute("admin_users");
+        }
+
+        $schools = $entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]);
+
+        return $this->render('pages/logged_in/admin/user_edit.html.twig', [
+            "user" => $user,
+            "schools" => $schools
         ]);
     }
 
