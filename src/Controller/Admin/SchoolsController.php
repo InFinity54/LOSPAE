@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\School;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,5 +75,37 @@ class SchoolsController extends AbstractController
         }
 
         return $this->render('pages/logged_in/admin/school_add.html.twig');
+    }
+
+    #[Route('/admin/school/{id}/promos', name: 'admin_school_promoslist')]
+    public function schoolPromosList(EntityManagerInterface $entityManager, string $id): JsonResponse
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return new JsonResponse([], 403);
+        }
+
+        if (is_null($this->getUser())) {
+            return new JsonResponse([], 403);
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            return new JsonResponse([], 403);
+        }
+
+        $school = $entityManager->getRepository(School::class)->find($id);
+        $promos = [];
+
+        if (!is_null($school)) {
+            foreach ($school->getPromos() as $promo) {
+                $promos[] = [
+                    "id" => $promo->getId(),
+                    "name" => $promo->getName()
+                ];
+            }
+
+            return new JsonResponse($promos, 200);
+        }
+
+        return new JsonResponse([], 404);
     }
 }
