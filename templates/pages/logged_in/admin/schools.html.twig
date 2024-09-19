@@ -1,0 +1,80 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Établissements scolaires{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Gestion des établissements scolaires</h3>
+                <p class="text-muted">Cette page permet de gérer les établissements scolaires utilisables dans LOSPAÉ. Il est possible de créer de nouveaux établissements ou d'en supprimer.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h4 class="card-title">Liste des établissements</h4>
+
+                                <div>
+                                    <a href="#" class="btn btn-primary">Ajouter un nouvel établissement</a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">NOM DE L'ÉTABLISSEMENT</th>
+                                                <th class="text-center">ADRESSE POSTALE</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for school in schools %}
+                                                <tr>
+                                                    <td class="text-center">{{ school.name }}</td>
+                                                    <td class="text-center">
+                                                        {{ school.address }}
+                                                        {% if school.addressExtension is not null %}<br />{{ school.addressExtension }}{% endif %}
+                                                        <br />{{ school.postalCode }}
+                                                        <br />{{ school.city }}
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-dark" title="Supprimer l'établissement {{ school.name }}">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/assets/js/pages/logged_in/admin/users.js"></script>
+{% endblock %}
