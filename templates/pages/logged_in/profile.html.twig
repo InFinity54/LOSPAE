@@ -44,6 +44,51 @@
                     </div>
                 </div>
 
+                {% if "ROLE_STUDENT" in app.user.roles %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <h4 class="card-title">Affectation</h4>
+
+                                    <div class="form-group row align-items-center">
+                                        <div class="col-lg-2 col-3">
+                                            <label class="col-form-label">Établissement scolaire</label>
+                                        </div>
+
+                                        <div class="col-lg-10 col-9">
+                                            {% if app.user.promo is not null %}
+                                                {{ app.user.promo.school.name }}
+                                                <br />{{ app.user.promo.school.data.address }}
+                                                {% if app.user.promo.school.data.addressExtension is not null and app.user.promo.school.data.addressExtension is not same as("") %}<br />{{ app.user.promo.school.data.addressExtension }}{% endif %}
+                                                <br />{{ app.user.promo.school.data.postalCode }}
+                                                <br />{{ app.user.promo.school.data.city }}
+                                            {% else %}
+                                                Aucun établissement affecté
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row align-items-center">
+                                        <div class="col-lg-2 col-3">
+                                            <label class="col-form-label">Promotion</label>
+                                        </div>
+
+                                        <div class="col-lg-10 col-9">
+                                            {% if app.user.promo is not null %}
+                                                {{ app.user.promo.name }}
+                                            {% else %}
+                                                Aucune promotion affecté
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="row">
                     <div class="col-sm-12">
                         <form action="{{ path("profile") }}" method="POST" class="form form-horizontal">
