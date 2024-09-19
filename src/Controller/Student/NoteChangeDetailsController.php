@@ -32,8 +32,12 @@ class NoteChangeDetailsController extends AbstractController
         $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
         $criteriasCount = [];
         $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student->getId()], ["occuredAt" => "DESC"]);
+        $lastNoteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student->getId()], ["occuredAt" => "DESC"], 10);
+        $noteChangeAvg = "eq";
         $totalAddedPoints = 0.0;
         $totalRemovedPoints = 0.0;
+        $lastNotesAddedPoints = 0.0;
+        $lastNotesRemovedPoints = 0.0;
 
         foreach ($criterias as $criteria) {
             $criteriasCount[$criteria->getId()] = 0;
@@ -49,9 +53,24 @@ class NoteChangeDetailsController extends AbstractController
             }
         }
 
+        foreach ($lastNoteChanges as $noteChange) {
+            if ($noteChange->getImpact() > 0) {
+                $lastNotesAddedPoints += $noteChange->getImpact();
+            } else {
+                $lastNotesRemovedPoints += ($noteChange->getImpact() * -1);
+            }
+        }
+
+        if ($lastNotesAddedPoints > $lastNotesRemovedPoints) {
+            $noteChangeAvg = "inc";
+        } else if ($lastNotesRemovedPoints > $lastNotesAddedPoints) {
+            $noteChangeAvg = "dec";
+        }
+
         return $this->render('pages/logged_in/student/details.html.twig', [
             "totalAddedPoints" => $totalAddedPoints,
             "totalRemovedPoints" => $totalRemovedPoints,
+            "noteChangeAvg" => $noteChangeAvg,
             "criterias" => $criterias,
             "criteriasCount" => $criteriasCount
         ]);
