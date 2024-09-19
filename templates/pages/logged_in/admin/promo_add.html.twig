@@ -1,0 +1,82 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Promotions{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Ajout d'une nouvelle promotion</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="{{ path("admin_promo_add") }}" method="POST" data-parsley-validate>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Informations sur la nouvelle promotion</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Remplissez les champs ci-dessous pour définir la nouvelle promotion disponible sur LOSPAÉ, puis cliquez sur le bouton pour l'enregistrer et le rendre utilisable.
+                                    </p>
+
+                                    <div class="form-group row align-items-center">
+                                        <div class="col-lg-2 col-3">
+                                            <label class="col-form-label" for="name">Nom de la promotion</label>
+                                        </div>
+
+                                        <div class="col-lg-10 col-9">
+                                            <input id="name" name="name" type="text" class="form-control" placeholder="Nom de la promotion" data-parsley-required="true" data-parsley-error-message="Vous devez saisir le nom de la promotion." data-parsley-maxlength="500">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row align-items-center">
+                                        <div class="col-lg-2 col-3">
+                                            <label class="col-form-label" for="school">Établissement scolaire concerné</label>
+                                        </div>
+
+                                        <div class="col-lg-10 col-9">
+                                            <select class="form-select" id="school" name="school" required data-parsley-required="true" data-parsley-error-message="Vous devez sélectionner un établissement scolaire.">
+                                                <option value="" selected hidden>Sélectionnez un établissement scolaire...</option>
+                                                {% for school in schools %}
+                                                    <option value="{{ school.id }}">{{ school.name }} ({{ school.city }})</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer le critère de notation</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/template/extensions/parsleyjs/parsley.min.js"></script>
+    <script src="/template/extensions/parsleyjs/i18n/fr.js"></script>
+    <script src="/template/static/js/pages/parsley.js"></script>
+{% endblock %}
