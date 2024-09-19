@@ -48,8 +48,8 @@
                                         <tbody>
                                             {% for promo in promos %}
                                                 <tr>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
+                                                    <td class="text-center">{{ promo.data.school.name }} ({{ promo.data.school.city }})</td>
+                                                    <td class="text-center">{{ promo.data.name }}</td>
                                                     <td class="text-center">{{ promo.students }}</td>
                                                     <td>
                                                         <a href="#" class="btn btn-dark" title="Supprimer la promotion {{ promo.data.name }} de l'établissement">
