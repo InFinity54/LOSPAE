@@ -46,8 +46,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActivated = null;
 
-    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
-    private ?StudentNote $note = null;
+    #[ORM\Column(nullable: true)]
+    private ?float $currentNote = null;
 
     #[ORM\OneToMany(targetEntity: NoteChange::class, mappedBy: 'student', orphanRemoval: true)]
     private Collection $noteChanges;
@@ -186,24 +186,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNote(): ?StudentNote
+    public function getCurrentNote(): ?float
     {
-        return $this->note;
+        return $this->currentNote;
     }
 
-    public function setNote(?StudentNote $note): static
+    public function setCurrentNote(?float $currentNote): static
     {
-        // unset the owning side of the relation if necessary
-        if ($note === null && $this->note !== null) {
-            $this->note->setStudent(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($note !== null && $note->getStudent() !== $this) {
-            $note->setStudent($this);
-        }
-
-        $this->note = $note;
+        $this->currentNote = $currentNote;
 
         return $this;
     }

@@ -41,8 +41,8 @@
                                     <div class="ms-3 name">
                                         <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }}</h5>
                                         <h6 class="text-muted mb-0">
-                                            {% if student.note is not null %}
-                                                {{ student.note.currentNote|number_format(2) }} / 20
+                                            {% if student.currentNote is not null %}
+                                                {{ student.currentNote|number_format(2) }} / 20
                                             {% else %}
                                                 En attente d'initialisation
                                             {% endif %}

@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\NoteChange;
-use App\Entity\StudentNote;
 use App\Entity\User;
 use App\Services\FileUpload\UserAvatarUpload;
 use App\Services\StringHandler;
@@ -281,13 +280,8 @@ class UsersController extends AbstractController
             if (!is_null($user)) {
                 $users[] = $id;
 
-                if (in_array("ROLE_STUDENT", $user->getRoles()) && is_null($user->getNote())) {
-                    $note = new StudentNote();
-                    $note->setStudent($user);
-                    $note->setCurrentNote(20);
-                    $entityManager->persist($note);
-                    $entityManager->flush();
-                    $user->setNote($note);
+                if (in_array("ROLE_STUDENT", $user->getRoles()) && is_null($user->getCurrentNote())) {
+                    $user->setCurrentNote(20);
                 }
 
                 $user->setIsActivated(true);
@@ -438,13 +432,6 @@ class UsersController extends AbstractController
 
             if (!is_null($user)) {
                 $users[] = $id;
-                $note = $entityManager->getRepository(StudentNote::class)->findOneBy(["student" => $id]);
-
-                if (!is_null($note)) {
-                    $entityManager->remove($note);
-                    $entityManager->flush();
-                }
-
                 $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $id]);
 
                 if (!is_null($noteChanges) && count($noteChanges) > 0) {
@@ -538,11 +525,7 @@ class UsersController extends AbstractController
                 $users[] = $id;
 
                 if (in_array("ROLE_STUDENT", $user->getRoles())) {
-                    $note = $user->getNote();
-                    $note->setCurrentNote(20);
-                    $entityManager->persist($note);
-                    $entityManager->flush();
-                    $user->setNote($note);
+                    $user->setCurrentNote(20);
 
                     foreach ($user->getNoteChanges() as $noteChange) {
                         $entityManager->remove($noteChange);

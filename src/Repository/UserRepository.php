@@ -56,11 +56,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findUsersByRoleOrderedByNote($role) {
         $qb = $this->createQueryBuilder('u');
         $qb->select('u')
-            ->innerJoin('u.note', 'sn', Join::WITH, 'sn.student = u.id')
             ->where('u.roles LIKE :roles')
             ->setParameter('roles', '%"'.$role.'"%')
             ->andWhere('u.isActivated = 1')
-            ->orderBy('sn.currentNote', 'DESC');
+            ->orderBy('u.currentNote', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
