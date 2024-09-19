@@ -23,27 +23,6 @@
             </div>
 
             <div class="page-content">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <form action="{{ path("profile") }}" method="POST" enctype="multipart/form-data">
-                            <div class="card">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <h4 class="card-title mb-5">Changer ma photo de profil</h4>
-                                        <p class="card-text">
-                                            <input type="file" name="avatar" id="avatar" data-allowed-file-extensions="jpg jpeg png gif" data-min-height="60" data-min-width="60" data-height="300" required />
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="card-footer d-flex justify-content-end">
-                                    <button class="btn btn-light-primary" type="submit">Enregistrer la nouvelle photo</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
                 {% if "ROLE_STUDENT" in app.user.roles %}
                 <div class="row">
                     <div class="col-sm-12">
@@ -157,6 +136,27 @@
 
                                 <div class="card-footer d-flex justify-content-end">
                                     <button class="btn btn-light-primary" type="submit">Enregistrer les modifications</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form action="{{ path("profile") }}" method="POST" enctype="multipart/form-data">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-5">Changer ma photo de profil</h4>
+                                        <p class="card-text">
+                                            <input type="file" name="avatar" id="avatar" data-allowed-file-extensions="jpg jpeg png gif" data-min-height="60" data-min-width="60" data-height="300" required />
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer la nouvelle photo</button>
                                 </div>
                             </div>
                         </form>
