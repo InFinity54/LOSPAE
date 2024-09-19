@@ -24,39 +24,74 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ path("admin_user_edit", { ids: user.id }) }}" method="POST">
+                        <form action="{{ path("admin_user_edit", { ids: usersIds }) }}" method="POST">
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Choix de l'affectation</h4>
                                 </div>
 
                                 <div class="card-body">
-                                    <div class="card">
-                                        <div class="card-body py-3 px-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="avatar avatar-xl">
-                                                    <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                    {% if users|length > 1 %}
+                                        <p>Vous êtes sur le point de modifier l'affectation des utilisateurs ci-dessous. Sélectionnez l'établissement scolaire et la promotion à affecter aux étudiants sélectionnés, puis cliquez sur le bouton pour enregistrer les modifications.</p>
+
+                                        <div class="row">
+                                            {% for user in users %}
+                                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                                    <div class="card">
+                                                        <div class="card-body py-4 px-4">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar avatar-xl">
+                                                                    <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                                                </div>
+
+                                                                <div class="ms-3 name">
+                                                                    <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
+                                                                    <h6 class="text-muted mb-0">
+                                                                        {% if "ROLE_TEACHER" in user.roles %}
+                                                                            Enseignant
+                                                                        {% elseif "ROLE_STUDENT" in user.roles %}
+                                                                            Étudiant
+                                                                        {% endif %}
+
+                                                                        {% if "ROLE_ADMIN" in user.roles %}
+                                                                            <span class="badge bg-secondary">Admin</span>
+                                                                        {% endif %}
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <p>Vous êtes sur le point de modifier l'affectation de l'utilisateur ci-dessous. Sélectionnez l'établissement scolaire et la promotion à affecter à l'étudiant sélectionné, puis cliquez sur le bouton pour enregistrer les modifications.</p>
 
-                                                <div class="ms-3 name">
-                                                    <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
-                                                    <h6 class="text-muted mb-0">
-                                                        {% if "ROLE_TEACHER" in user.roles %}
-                                                            Enseignant
-                                                        {% elseif "ROLE_STUDENT" in user.roles %}
-                                                            Étudiant
-                                                        {% endif %}
+                                        <div class="card">
+                                            <div class="card-body py-3 px-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-xl">
+                                                        <img src="/assets/img/avatars/{{ users[0].avatar }}" alt="Photo de profil de {{ users[0].firstName }} {{ users[0].lastName }}" />
+                                                    </div>
 
-                                                        {% if "ROLE_ADMIN" in user.roles %}
-                                                            <span class="badge bg-secondary">Admin</span>
-                                                        {% endif %}
-                                                    </h6>
+                                                    <div class="ms-3 name">
+                                                        <h5 class="font-bold">{{ users[0].firstName }} {{ users[0].lastName }}</h5>
+                                                        <h6 class="text-muted mb-0">
+                                                            {% if "ROLE_TEACHER" in users[0].roles %}
+                                                                Enseignant
+                                                            {% elseif "ROLE_STUDENT" in users[0].roles %}
+                                                                Étudiant
+                                                            {% endif %}
+
+                                                            {% if "ROLE_ADMIN" in users[0].roles %}
+                                                                <span class="badge bg-secondary">Admin</span>
+                                                            {% endif %}
+                                                        </h6>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <p class="text-muted">Sélectionnez l'établissement scolaire et la promotion à affecter à l'étudiant sélectionné, puis cliquez sur le bouton pour enregistrer les modifications.</p>
+                                    {% endif %}
 
                                     <div class="form-group row align-items-center">
                                         <div class="col-lg-2 col-3">
