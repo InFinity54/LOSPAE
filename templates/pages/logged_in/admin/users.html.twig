@@ -81,6 +81,8 @@
                                                 <th class="text-center">NOM</th>
                                                 <th class="text-center">PRÉNOM</th>
                                                 <th class="text-center">ADRESSE E-MAIL</th>
+                                                <th class="text-center">ÉTABLISSEMENT</th>
+                                                <th class="text-center">PROMOTION</th>
                                                 <th class="text-center">ÉTAT DU COMPTE</th>
                                                 <th>ACTIONS</th>
                                             </tr>
@@ -96,6 +98,13 @@
                                                     <td class="text-center">{{ user.lastName }}</td>
                                                     <td class="text-center">{{ user.firstName }}</td>
                                                     <td class="text-center">{{ user.email }}</td>
+                                                    {% if user.promo is not null %}
+                                                    <td class="text-center">{{ user.promo.school.name }} ({{ user.promo.school.city }})</td>
+                                                    <td class="text-center">{{ user.promo.name }}</td>
+                                                    {% else %}
+                                                    <td class="text-center">Aucun</td>
+                                                    <td class="text-center">Aucune</td>
+                                                    {% endif %}
                                                     <td class="text-center">
                                                         {% if user.isActivated %}
                                                             <i class="fas fa-check"></i>
