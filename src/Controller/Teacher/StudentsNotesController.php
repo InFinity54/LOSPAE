@@ -62,9 +62,9 @@ class StudentsNotesController extends AbstractController
             $criteria = $entityManager->getRepository(Criteria::class)->find($request->request->get("criteria"));
 
             if ($criteria->getImpact() < 0) {
-                $student->getNote()->setCurrentNote($student->getNote()->getCurrentNote() - ($criteria->getImpact() * -1));
+                $student->setCurrentNote($student->getCurrentNote() - ($criteria->getImpact() * -1));
             } else {
-                $student->getNote()->setCurrentNote($student->getNote()->getCurrentNote() + $criteria->getImpact());
+                $student->setCurrentNote($student->getCurrentNote() + $criteria->getImpact());
             }
 
             $noteChange = new NoteChange();
@@ -124,9 +124,9 @@ class StudentsNotesController extends AbstractController
                     $criteria = $entityManager->getRepository(Criteria::class)->find($noteChangeData[1]);
 
                     if ($criteria->getImpact() < 0) {
-                        $student->getNote()->setCurrentNote($student->getNote()->getCurrentNote() - ($criteria->getImpact() * -1));
+                        $student->setCurrentNote($student->getCurrentNote() - ($criteria->getImpact() * -1));
                     } else {
-                        $student->getNote()->setCurrentNote($student->getNote()->getCurrentNote() + $criteria->getImpact());
+                        $student->setCurrentNote($student->getCurrentNote() + $criteria->getImpact());
                     }
 
                     $noteChange = new NoteChange();
