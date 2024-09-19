@@ -53,8 +53,7 @@
                                                     <td class="text-center">
                                                         {{ school.data.address }}
                                                         {% if school.data.addressExtension is not null and school.data.addressExtension is not same as("") %}<br />{{ school.data.addressExtension }}{% endif %}
-                                                        <br />{{ school.data.postalCode }}
-                                                        <br />{{ school.data.city }}
+                                                        <br />{{ school.data.postalCode }} {{ school.data.city }}
                                                     </td>
                                                     <td class="text-center">{{ school.promos }}</td>
                                                     <td class="text-center">{{ school.students }}</td>
