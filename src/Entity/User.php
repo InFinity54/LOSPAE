@@ -58,6 +58,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $recoveryCodeExpireAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'students')]
+    private ?Promo $promo = null;
+
     public function __construct()
     {
         $this->noteChanges = new ArrayCollection();
@@ -248,6 +251,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRecoveryCodeExpireAt(?\DateTimeInterface $recoveryCodeExpireAt): static
     {
         $this->recoveryCodeExpireAt = $recoveryCodeExpireAt;
+
+        return $this;
+    }
+
+    public function getPromo(): ?Promo
+    {
+        return $this->promo;
+    }
+
+    public function setPromo(?Promo $promo): static
+    {
+        $this->promo = $promo;
 
         return $this;
     }
