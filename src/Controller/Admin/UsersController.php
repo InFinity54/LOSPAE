@@ -237,24 +237,35 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($ids);
+        $schools = $entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]);
+        $users = [];
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
+        foreach (explode(",", $ids) as $id) {
+            $user = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($user)) {
+                $users[] = $user;
+            }
+        }
+
+        if (count($users) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
             return $this->redirectToRoute("admin_users");
         }
 
         if ($request->isMethod("POST")) {
-            $user->setPromo($entityManager->getRepository(Promo::class)->find($request->request->get("promo")));
-            $entityManager->flush();
-            $this->addFlash("success", "L'affectation de l'utilisateur ciblé a été modifiée.");
+            foreach ($users as $user) {
+                $user->setPromo($entityManager->getRepository(Promo::class)->find($request->request->get("promo")));
+                $entityManager->flush();
+            }
+
+            $this->addFlash("success", "L'affectation des utilisateurs ciblés ont été modifiées.");
             return $this->redirectToRoute("admin_users");
         }
 
-        $schools = $entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]);
-
         return $this->render('pages/logged_in/admin/user_edit.html.twig', [
-            "user" => $user,
+            "users" => $users,
+            "usersIds" => $ids,
             "schools" => $schools
         ]);
     }
