@@ -33,7 +33,7 @@ class PromosController extends AbstractController
         foreach ($entityManager->getRepository(Promo::class)->findBy([], ["name" => "ASC"]) as $promo) {
             $promos[] = [
                 "data" => $promo,
-                "students" => 0
+                "students" => $promo->getStudents()->count()
             ];
         }
 

@@ -32,10 +32,16 @@ class SchoolsController extends AbstractController
         $schools = [];
 
         foreach ($entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]) as $school) {
+            $studentsCount = 0;
+
+            foreach ($school->getPromos() as $promo) {
+                $studentsCount += $promo->getStudents()->count();
+            }
+
             $schools[] = [
                 "data" => $school,
                 "promos" => $school->getPromos()->count(),
-                "students" => 0
+                "students" => $studentsCount
             ];
         }
 
