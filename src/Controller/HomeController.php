@@ -38,8 +38,8 @@ class HomeController extends AbstractController
             $noteChanges = $entityManager->getRepository(NoteChange::class)->findAll();
 
             foreach ($students as $student) {
-                if (!is_null($student->getNote())) {
-                    $studentsNotesSum += $student->getNote()->getCurrentNote();
+                if (!is_null($student->getCurrentNote())) {
+                    $studentsNotesSum += $student->getCurrentNote();
                 }
             }
 
