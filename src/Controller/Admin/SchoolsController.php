@@ -30,8 +30,10 @@ class SchoolsController extends AbstractController
         }
 
         $schools = [];
+        $schoolsCount = $entityManager->getRepository(School::class)->count();
+        $pageNumber = !is_null($request->query->get("page")) ? $request->query->get("page") : 0;
 
-        foreach ($entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]) as $school) {
+        foreach ($entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"], 20, $pageNumber * 20) as $school) {
             $studentsCount = 0;
 
             foreach ($school->getPromos() as $promo) {
@@ -46,7 +48,9 @@ class SchoolsController extends AbstractController
         }
 
         return $this->render('pages/logged_in/admin/schools.html.twig', [
-            "schools" => $schools
+            "schools" => $schools,
+            "totalElements" => $schoolsCount,
+            "currentPage" => $pageNumber
         ]);
     }
 
