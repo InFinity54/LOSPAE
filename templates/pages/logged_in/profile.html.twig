@@ -40,7 +40,6 @@
                                             {% if app.user.promo is not null %}
                                                 {{ app.user.promo.school.name }}
                                                 <br />{{ app.user.promo.school.address }}
-                                                {% if app.user.promo.school.addressExtension is not null and app.user.promo.school.addressExtension is not same as("") %}<br />{{ app.user.promo.school.addressExtension }}{% endif %}
                                                 <br />{{ app.user.promo.school.postalCode }} {{ app.user.promo.school.city }}
                                             {% else %}
                                                 Aucun établissement affecté

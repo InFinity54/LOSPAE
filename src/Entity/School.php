@@ -21,9 +21,6 @@ class School
     #[ORM\Column(length: 500)]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $addressExtension = null;
-
     #[ORM\Column]
     private ?int $postalCode = null;
 
@@ -35,6 +32,12 @@ class School
      */
     #[ORM\OneToMany(targetEntity: Promo::class, mappedBy: 'school')]
     private Collection $promos;
+
+    #[ORM\Column(length: 50)]
+    private ?string $uai = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $academy = null;
 
     public function __construct()
     {
@@ -66,18 +69,6 @@ class School
     public function setAddress(string $address): static
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    public function getAddressExtension(): ?string
-    {
-        return $this->addressExtension;
-    }
-
-    public function setAddressExtension(?string $addressExtension): static
-    {
-        $this->addressExtension = $addressExtension;
 
         return $this;
     }
@@ -132,6 +123,30 @@ class School
                 $promo->setSchool(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUai(): ?string
+    {
+        return $this->uai;
+    }
+
+    public function setUai(string $uai): static
+    {
+        $this->uai = $uai;
+
+        return $this;
+    }
+
+    public function getAcademy(): ?string
+    {
+        return $this->academy;
+    }
+
+    public function setAcademy(string $academy): static
+    {
+        $this->academy = $academy;
 
         return $this;
     }
