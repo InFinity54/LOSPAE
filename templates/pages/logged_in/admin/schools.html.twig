@@ -66,6 +66,32 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <nav class="mx-auto mt-4">
+                                    <ul class="pagination">
+                                        {% set totalPages = (totalElements / 20) | round(0, 'ceil') %}
+                                        {% if currentPage > 0 %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ path("admin_schools") }}?page={{ currentPage - 1 }}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                                <span class="sr-only">Précédent</span>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% set range = 6 %}
+                                        {% for page in (currentPage - range > 0 ? currentPage - range : 0)..(currentPage + range < totalPages ? currentPage + range : totalPages) %}
+                                        <li class="page-item {{ currentPage == page ? 'active' : '' }}"><a class="page-link" href="{{ path("admin_schools") }}?page={{ page }}">{{ page + 1 }}</a></li>
+                                        {% endfor %}
+                                        {% if currentPage < totalPages %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ path("admin_schools") }}?page={{ currentPage + 1 }}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                                <span class="sr-only">Suivant</span>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
