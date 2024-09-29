@@ -27,7 +27,13 @@ class AvatarsController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = $entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"]);
+        $users = [];
+
+        foreach ($entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"]) as $user) {
+            if ($user->getAvatar() !== "default_avatar.svg") {
+                $users[] = $user;
+            }
+        }
 
         return $this->render('pages/logged_in/admin/avatars.html.twig', [
             "users" => $users
