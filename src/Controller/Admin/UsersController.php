@@ -11,7 +11,6 @@ use App\Services\StringHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,16 +37,24 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = $entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"]);
         $generatedLetters = [];
+        $users = [];
+        $usersCount = $entityManager->getRepository(User::class)->count();
+        $pageNumber = !is_null($request->query->get("page")) ? $request->query->get("page") : 0;
 
         if (count($request->query->all()) > 0 && in_array("generatedLetters", array_keys($request->query->all()))) {
             $generatedLetters = $request->query->all()["generatedLetters"];
         }
 
+        foreach ($entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"], 20, $pageNumber * 20) as $user) {
+            $users[] = $user;
+        }
+
         return $this->render('pages/logged_in/admin/users.html.twig', [
+            "generatedLetters" => $generatedLetters,
             "users" => $users,
-            "generatedLetters" => $generatedLetters
+            "totalElements" => $usersCount,
+            "currentPage" => $pageNumber
         ]);
     }
 
