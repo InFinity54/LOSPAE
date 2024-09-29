@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Promo;
 use App\Entity\School;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -117,5 +118,91 @@ class SchoolsController extends AbstractController
         }
 
         return new JsonResponse([], 404);
+    }
+
+    #[Route('/admin/schools/remove/{ids}', name: 'admin_school_remove')]
+    public function schoolRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $schools = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $school = $entityManager->getRepository(School::class)->find($id);
+
+            if (!is_null($school)) {
+                $schools[] = $school;
+            }
+        }
+
+        if (count($schools) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs établissements parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_schools");
+        }
+
+        return $this->render('pages/logged_in/admin/school_removing_confirm.html.twig', [
+            "schools" => $schools,
+            "schoolsIds" => $ids
+        ]);
+    }
+
+    #[Route('/admin/schools/remove/{ids}/do', name: 'admin_school_doremove')]
+    public function schoolDoRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $schools = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $school = $entityManager->getRepository(School::class)->find($id);
+
+            if (!is_null($school)) {
+                $schools[] = $id;
+                $promos = $entityManager->getRepository(Promo::class)->findBy(["school" => $id]);
+
+                foreach ($promos as $promo) {
+                    foreach ($promo->getStudents() as $student) {
+                        $entityManager->remove($student);
+                        $entityManager->flush();
+                    }
+
+                    $entityManager->remove($promo);
+                    $entityManager->flush();
+                }
+
+                $entityManager->remove($school);
+                $entityManager->flush();
+            }
+        }
+
+        if (count($schools) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs établissements parmis ceux demandés n'ont pas pu être supprimés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_schools");
+        }
+
+        $this->addFlash("success", "Les établissements sélectionnés, ainsi que les promotions et les étudiants rattachés, ont été supprimés.");
+        return $this->redirectToRoute("admin_schools");
     }
 }

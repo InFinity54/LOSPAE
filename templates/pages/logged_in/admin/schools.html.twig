@@ -30,6 +30,9 @@
                                 <h4 class="card-title">Liste des établissements</h4>
 
                                 <div>
+                                    <button id="delete_selected_schools" class="btn btn-dark" title="Supprimer les établissements sélectionnés">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
                                     <a href="{{ path("admin_school_add") }}" class="btn btn-primary">Ajouter un nouvel établissement</a>
                                 </div>
                             </div>
@@ -39,6 +42,7 @@
                                     <table class="table table-striped mb-0">
                                         <thead>
                                             <tr>
+                                                <th><input type="checkbox" id="schoolglobalselection" /></th>
                                                 <th class="text-center">NOM DE L'ÉTABLISSEMENT</th>
                                                 <th class="text-center">ADRESSE POSTALE</th>
                                                 <th class="text-center">NOMBRE DE PROMOTIONS</th>
@@ -49,6 +53,9 @@
                                         <tbody>
                                             {% for school in schools %}
                                                 <tr>
+                                                    <td>
+                                                        <input type="checkbox" class="schoolselection" id="schoolselected_{{ school.data.id }}" data-school="{{ school.data.id }}" />
+                                                    </td>
                                                     <td class="text-center">{{ school.data.name }}</td>
                                                     <td class="text-center">
                                                         {{ school.data.address }}
@@ -103,4 +110,6 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+    <script src="/assets/js/pages/logged_in/admin/schools.js"></script>
+{% endblock %}
