@@ -46,9 +46,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActivated = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $currentNote = null;
-
     #[ORM\OneToMany(targetEntity: NoteChange::class, mappedBy: 'student', orphanRemoval: true)]
     private Collection $noteChanges;
 
@@ -61,9 +58,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'students')]
     private ?Promo $promo = null;
 
+    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    private ?CurrentNote $currentNote = null;
+
+    /**
+     * @var Collection<int, CurrentNote>
+     */
+    #[ORM\OneToMany(targetEntity: CurrentNote::class, mappedBy: 'teacher')]
+    private Collection $studentsNotes;
+
     public function __construct()
     {
         $this->noteChanges = new ArrayCollection();
+        $this->studentsNotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,18 +196,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCurrentNote(): ?float
-    {
-        return $this->currentNote;
-    }
-
-    public function setCurrentNote(?float $currentNote): static
-    {
-        $this->currentNote = $currentNote;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, NoteChange>
      */
@@ -263,6 +258,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPromo(?Promo $promo): static
     {
         $this->promo = $promo;
+
+        return $this;
+    }
+
+    public function getCurrentNote(): ?CurrentNote
+    {
+        return $this->currentNote;
+    }
+
+    public function setCurrentNote(CurrentNote $currentNote): static
+    {
+        // set the owning side of the relation if necessary
+        if ($currentNote->getStudent() !== $this) {
+            $currentNote->setStudent($this);
+        }
+
+        $this->currentNote = $currentNote;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CurrentNote>
+     */
+    public function getStudentsNotes(): Collection
+    {
+        return $this->studentsNotes;
+    }
+
+    public function addStudentsNote(CurrentNote $studentsNote): static
+    {
+        if (!$this->studentsNotes->contains($studentsNote)) {
+            $this->studentsNotes->add($studentsNote);
+            $studentsNote->setTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudentsNote(CurrentNote $studentsNote): static
+    {
+        if ($this->studentsNotes->removeElement($studentsNote)) {
+            // set the owning side to null (unless already changed)
+            if ($studentsNote->getTeacher() === $this) {
+                $studentsNote->setTeacher(null);
+            }
+        }
 
         return $this;
     }

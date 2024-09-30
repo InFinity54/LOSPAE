@@ -27,6 +27,10 @@ class NoteChange
     #[ORM\Column]
     private ?\DateTime $occuredAt = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $teacher = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +80,18 @@ class NoteChange
     public function setOccuredAt(\DateTime $occuredAt): static
     {
         $this->occuredAt = $occuredAt;
+
+        return $this;
+    }
+
+    public function getTeacher(): ?User
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(?User $teacher): static
+    {
+        $this->teacher = $teacher;
 
         return $this;
     }
