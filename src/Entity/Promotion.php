@@ -2,30 +2,30 @@
 
 namespace App\Entity;
 
-use App\Repository\PromoRepository;
+use App\Repository\PromotionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PromoRepository::class)]
-class Promo
+#[ORM\Entity(repositoryClass: PromotionRepository::class)]
+class Promotion
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    #[ORM\ManyToOne(inversedBy: 'promos')]
+    #[ORM\ManyToOne(inversedBy: 'promotions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?School $school = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'promo')]
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'promotion')]
     private Collection $students;
 
     public function __construct()
@@ -38,18 +38,6 @@ class Promo
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getSchool(): ?School
     {
         return $this->school;
@@ -58,6 +46,18 @@ class Promo
     public function setSchool(?School $school): static
     {
         $this->school = $school;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
@@ -74,7 +74,7 @@ class Promo
     {
         if (!$this->students->contains($student)) {
             $this->students->add($student);
-            $student->setPromo($this);
+            $student->setPromotion($this);
         }
 
         return $this;
@@ -84,8 +84,8 @@ class Promo
     {
         if ($this->students->removeElement($student)) {
             // set the owning side to null (unless already changed)
-            if ($student->getPromo() === $this) {
-                $student->setPromo(null);
+            if ($student->getPromotion() === $this) {
+                $student->setPromotion(null);
             }
         }
 
