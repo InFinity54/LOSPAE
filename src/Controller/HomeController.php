@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

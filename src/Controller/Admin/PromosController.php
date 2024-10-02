@@ -15,7 +15,7 @@ class PromosController extends AbstractController
     #[Route('/admin/promos', name: 'admin_promos')]
     public function promos(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -45,7 +45,7 @@ class PromosController extends AbstractController
     #[Route('/admin/promos/add', name: 'admin_promo_add')]
     public function promoAdd(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

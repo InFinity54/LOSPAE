@@ -15,7 +15,7 @@ class AdminController extends AbstractController
     #[Route('/admin', name: 'admin_homepage')]
     public function adminIndex(): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -33,7 +33,7 @@ class AdminController extends AbstractController
     #[Route('/admin/filedownload/notificationletter/{filename}', name: 'admin_download_notificationletter')]
     public function adminDownloadNotificationLetter(string $filename): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

@@ -14,7 +14,7 @@ class AvatarsController extends AbstractController
     #[Route('/admin/avatars', name: 'admin_avatars')]
     public function avatars(EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -43,7 +43,7 @@ class AvatarsController extends AbstractController
     #[Route('/admin/avatars/remove/{id}', name: 'admin_avatar_remove')]
     public function avatarRemove(string $id, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -71,7 +71,7 @@ class AvatarsController extends AbstractController
     #[Route('/admin/avatars/remove/{id}/do', name: 'admin_avatar_doremove')]
     public function avatarDoRemove(string $id, EntityManagerInterface $entityManager, UserAvatarUpload $avatarUpload): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

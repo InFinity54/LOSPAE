@@ -17,7 +17,7 @@ class SchoolsController extends AbstractController
     #[Route('/admin/schools', name: 'admin_schools')]
     public function schools(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -58,7 +58,7 @@ class SchoolsController extends AbstractController
     #[Route('/admin/schools/add', name: 'admin_school_add')]
     public function schoolAdd(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -91,7 +91,7 @@ class SchoolsController extends AbstractController
     #[Route('/admin/school/{id}/promos', name: 'admin_school_promoslist')]
     public function schoolPromosList(EntityManagerInterface $entityManager, string $id): JsonResponse
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return new JsonResponse([], 403);
         }
 
@@ -123,7 +123,7 @@ class SchoolsController extends AbstractController
     #[Route('/admin/schools/remove/{ids}', name: 'admin_school_remove')]
     public function schoolRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -160,7 +160,7 @@ class SchoolsController extends AbstractController
     #[Route('/admin/schools/remove/{ids}/do', name: 'admin_school_doremove')]
     public function schoolDoRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

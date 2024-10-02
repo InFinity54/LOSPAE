@@ -29,7 +29,7 @@ class LoginController extends AbstractController
     #[Route('/deactivated', name: 'deactivated')]
     public function deactivated(Request $request): Response
     {
-        if (!is_null($this->getUser()) && $this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && $this->getUser()->isActivated()) {
             return $this->redirectToRoute("homepage");
         }
 

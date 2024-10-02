@@ -14,7 +14,7 @@ class CriteriasController extends AbstractController
     #[Route('/admin/criterias', name: 'admin_criterias')]
     public function criterias(EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -37,7 +37,7 @@ class CriteriasController extends AbstractController
     #[Route('/admin/criterias/add', name: 'admin_criteria_add')]
     public function criteriaAdd(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -72,7 +72,7 @@ class CriteriasController extends AbstractController
     #[Route('/admin/criterias/edit/{id}', name: 'admin_criteria_edit')]
     public function criteriaEdit(string $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -110,7 +110,7 @@ class CriteriasController extends AbstractController
     #[Route('/admin/criterias/remove/{id}', name: 'admin_criteria_remove')]
     public function criteriaRemove(string $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -138,7 +138,7 @@ class CriteriasController extends AbstractController
     #[Route('/admin/criterias/remove/{id}/do', name: 'admin_criteria_doremove')]
     public function criteriaDoRemove(string $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

@@ -24,7 +24,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users', name: 'admin_users')]
     public function users(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -61,7 +61,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/import', name: 'admin_users_import')]
     public function usersImport(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -182,7 +182,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/configure/{id}', name: 'admin_user_configure')]
     public function userConfigure(Request $request, EntityManagerInterface $entityManager, string $id): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -231,7 +231,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/edit/{ids}', name: 'admin_user_edit')]
     public function userEdit(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -280,7 +280,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/enable/{ids}', name: 'admin_user_enable')]
     public function userEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -317,7 +317,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/enable/{ids}/do', name: 'admin_user_doenable')]
     public function userDoEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -359,7 +359,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/disable/{ids}', name: 'admin_user_disable')]
     public function userDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -396,7 +396,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/disable/{ids}/do', name: 'admin_user_dodisable')]
     public function userDoDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -433,7 +433,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/remove/{ids}', name: 'admin_user_remove')]
     public function userRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -470,7 +470,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/remove/{ids}/do', name: 'admin_user_doremove')]
     public function userDoRemove(Request $request, EntityManagerInterface $entityManager, UserAvatarUpload $avatarUpload, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -524,7 +524,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/reset/{ids}', name: 'admin_user_reset')]
     public function userReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -561,7 +561,7 @@ class UsersController extends AbstractController
     #[Route('/admin/users/reset/{ids}/do', name: 'admin_user_doreset')]
     public function userDoReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

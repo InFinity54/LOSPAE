@@ -13,7 +13,7 @@ class CriteriasController extends AbstractController
     #[Route('/criterias', name: 'student_criterias')]
     public function criterias(EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
