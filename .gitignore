@@ -22,3 +22,7 @@
 ###> jetbrains/phpstorm ###
 .idea/
 ###< jetbrains/phpstorm ###
+
+###> tmp ###
+/import/*
+###< tmp ###

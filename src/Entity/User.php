@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -52,6 +54,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'students')]
     private ?Promotion $promotion = null;
+
+    /**
+     * @var Collection<int, CurrentNote>
+     */
+    #[ORM\OneToMany(targetEntity: CurrentNote::class, mappedBy: 'student')]
+    private Collection $currentNotes;
+
+    /**
+     * @var Collection<int, NoteChange>
+     */
+    #[ORM\OneToMany(targetEntity: NoteChange::class, mappedBy: 'student')]
+    private Collection $noteChanges;
+
+    public function __construct()
+    {
+        $this->currentNotes = new ArrayCollection();
+        $this->noteChanges = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -208,6 +228,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPromotion(?Promotion $promotion): static
     {
         $this->promotion = $promotion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CurrentNote>
+     */
+    public function getCurrentNotes(): Collection
+    {
+        return $this->currentNotes;
+    }
+
+    public function addCurrentNote(CurrentNote $currentNote): static
+    {
+        if (!$this->currentNotes->contains($currentNote)) {
+            $this->currentNotes->add($currentNote);
+            $currentNote->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurrentNote(CurrentNote $currentNote): static
+    {
+        if ($this->currentNotes->removeElement($currentNote)) {
+            // set the owning side to null (unless already changed)
+            if ($currentNote->getStudent() === $this) {
+                $currentNote->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NoteChange>
+     */
+    public function getNoteChanges(): Collection
+    {
+        return $this->noteChanges;
+    }
+
+    public function addNoteChange(NoteChange $noteChange): static
+    {
+        if (!$this->noteChanges->contains($noteChange)) {
+            $this->noteChanges->add($noteChange);
+            $noteChange->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNoteChange(NoteChange $noteChange): static
+    {
+        if ($this->noteChanges->removeElement($noteChange)) {
+            // set the owning side to null (unless already changed)
+            if ($noteChange->getStudent() === $this) {
+                $noteChange->setStudent(null);
+            }
+        }
 
         return $this;
     }
