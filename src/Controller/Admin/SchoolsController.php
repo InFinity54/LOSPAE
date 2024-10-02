@@ -25,6 +25,14 @@ class SchoolsController extends AbstractController
             return $this->redirectToRoute("login");
         }
 
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
         if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
             return $this->redirectToRoute("homepage");
@@ -66,6 +74,14 @@ class SchoolsController extends AbstractController
             return $this->redirectToRoute("login");
         }
 
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
         if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
             return $this->redirectToRoute("homepage");
@@ -99,6 +115,14 @@ class SchoolsController extends AbstractController
             return new JsonResponse([], 403);
         }
 
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return new JsonResponse([], 403);
+        }
+
         if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
             return new JsonResponse([], 403);
         }
@@ -129,6 +153,14 @@ class SchoolsController extends AbstractController
 
         if (is_null($this->getUser())) {
             return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
         }
 
         if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
@@ -166,6 +198,14 @@ class SchoolsController extends AbstractController
 
         if (is_null($this->getUser())) {
             return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
         }
 
         if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {

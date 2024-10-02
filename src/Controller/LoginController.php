@@ -29,7 +29,13 @@ class LoginController extends AbstractController
     #[Route('/deactivated', name: 'deactivated')]
     public function deactivated(Request $request): Response
     {
-        if (!is_null($this->getUser()) && $this->getUser()->isActivated()) {
+        if (!is_null($this->getUser()) && $this->getUser()->isActivated()
+            && (
+                in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+                || in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+                || in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+            )
+        ) {
             return $this->redirectToRoute("homepage");
         }
 
@@ -38,5 +44,25 @@ class LoginController extends AbstractController
         }
 
         return $this->render('pages/deactivated.html.twig');
+    }
+
+    #[Route('/unconfigured', name: 'unconfigured')]
+    public function unconfigured(Request $request): Response
+    {
+        if (!is_null($this->getUser()) && $this->getUser()->isActivated()
+            && (
+                in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+                || in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+                || in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+            )
+        ) {
+            return $this->redirectToRoute("homepage");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        return $this->render('pages/unconfigured.html.twig');
     }
 }
