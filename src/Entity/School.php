@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SchoolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SchoolRepository::class)]
@@ -15,10 +16,13 @@ class School
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 500)]
+    #[ORM\Column(length: 8)]
+    private ?string $uai = null;
+
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 500)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 
     #[ORM\Column]
@@ -27,26 +31,35 @@ class School
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    /**
-     * @var Collection<int, Promo>
-     */
-    #[ORM\OneToMany(targetEntity: Promo::class, mappedBy: 'school')]
-    private Collection $promos;
-
-    #[ORM\Column(length: 50)]
-    private ?string $uai = null;
-
     #[ORM\Column(length: 255)]
     private ?string $academy = null;
 
+    /**
+     * @var Collection<int, Promotion>
+     */
+    #[ORM\OneToMany(targetEntity: Promotion::class, mappedBy: 'school')]
+    private Collection $promotions;
+
     public function __construct()
     {
-        $this->promos = new ArrayCollection();
+        $this->promotions = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUai(): ?string
+    {
+        return $this->uai;
+    }
+
+    public function setUai(string $uai): static
+    {
+        $this->uai = $uai;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -97,48 +110,6 @@ class School
         return $this;
     }
 
-    /**
-     * @return Collection<int, Promo>
-     */
-    public function getPromos(): Collection
-    {
-        return $this->promos;
-    }
-
-    public function addPromo(Promo $promo): static
-    {
-        if (!$this->promos->contains($promo)) {
-            $this->promos->add($promo);
-            $promo->setSchool($this);
-        }
-
-        return $this;
-    }
-
-    public function removePromo(Promo $promo): static
-    {
-        if ($this->promos->removeElement($promo)) {
-            // set the owning side to null (unless already changed)
-            if ($promo->getSchool() === $this) {
-                $promo->setSchool(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getUai(): ?string
-    {
-        return $this->uai;
-    }
-
-    public function setUai(string $uai): static
-    {
-        $this->uai = $uai;
-
-        return $this;
-    }
-
     public function getAcademy(): ?string
     {
         return $this->academy;
@@ -147,6 +118,36 @@ class School
     public function setAcademy(string $academy): static
     {
         $this->academy = $academy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Promotion>
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
+    }
+
+    public function addPromotion(Promotion $promotion): static
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions->add($promotion);
+            $promotion->setSchool($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): static
+    {
+        if ($this->promotions->removeElement($promotion)) {
+            // set the owning side to null (unless already changed)
+            if ($promotion->getSchool() === $this) {
+                $promotion->setSchool(null);
+            }
+        }
 
         return $this;
     }

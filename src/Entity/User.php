@@ -3,15 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,7 +17,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 180)]
     private ?string $email = null;
 
     /**
@@ -44,34 +42,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $avatar = "default_avatar.svg";
 
     #[ORM\Column]
-    private ?bool $isActivated = null;
-
-    #[ORM\OneToMany(targetEntity: NoteChange::class, mappedBy: 'student', orphanRemoval: true)]
-    private Collection $noteChanges;
-
-    #[ORM\Column(length: 6, nullable: true)]
-    private ?string $recoveryCode = null;
+    private ?bool $isActivated = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $recoveryCodeExpireAt = null;
+    private ?\DateTimeInterface $lastLogin = null;
+
+    #[ORM\ManyToOne]
+    private ?School $school = null;
 
     #[ORM\ManyToOne(inversedBy: 'students')]
-    private ?Promo $promo = null;
-
-    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
-    private ?CurrentNote $currentNote = null;
-
-    /**
-     * @var Collection<int, CurrentNote>
-     */
-    #[ORM\OneToMany(targetEntity: CurrentNote::class, mappedBy: 'teacher')]
-    private Collection $studentsNotes;
-
-    public function __construct()
-    {
-        $this->noteChanges = new ArrayCollection();
-        $this->studentsNotes = new ArrayCollection();
-    }
+    private ?Promotion $promotion = null;
 
     public function getId(): ?int
     {
@@ -127,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -184,127 +164,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isIsActivated(): ?bool
+    public function isActivated(): ?bool
     {
         return $this->isActivated;
     }
 
-    public function setIsActivated(bool $isActivated): static
+    public function setActivated(bool $isActivated): static
     {
         $this->isActivated = $isActivated;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, NoteChange>
-     */
-    public function getNoteChanges(): Collection
+    public function getLastLogin(): ?\DateTimeInterface
     {
-        return $this->noteChanges;
+        return $this->lastLogin;
     }
 
-    public function addNoteChange(NoteChange $noteChange): static
+    public function setLastLogin(?\DateTimeInterface $lastLogin): static
     {
-        if (!$this->noteChanges->contains($noteChange)) {
-            $this->noteChanges->add($noteChange);
-            $noteChange->setStudent($this);
-        }
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }
 
-    public function removeNoteChange(NoteChange $noteChange): static
+    public function getSchool(): ?School
     {
-        if ($this->noteChanges->removeElement($noteChange)) {
-            // set the owning side to null (unless already changed)
-            if ($noteChange->getStudent() === $this) {
-                $noteChange->setStudent(null);
-            }
-        }
+        return $this->school;
+    }
+
+    public function setSchool(?School $school): static
+    {
+        $this->school = $school;
 
         return $this;
     }
 
-    public function getRecoveryCode(): ?string
+    public function getPromotion(): ?Promotion
     {
-        return $this->recoveryCode;
+        return $this->promotion;
     }
 
-    public function setRecoveryCode(?string $recoveryCode): static
+    public function setPromotion(?Promotion $promotion): static
     {
-        $this->recoveryCode = $recoveryCode;
-
-        return $this;
-    }
-
-    public function getRecoveryCodeExpireAt(): ?\DateTimeInterface
-    {
-        return $this->recoveryCodeExpireAt;
-    }
-
-    public function setRecoveryCodeExpireAt(?\DateTimeInterface $recoveryCodeExpireAt): static
-    {
-        $this->recoveryCodeExpireAt = $recoveryCodeExpireAt;
-
-        return $this;
-    }
-
-    public function getPromo(): ?Promo
-    {
-        return $this->promo;
-    }
-
-    public function setPromo(?Promo $promo): static
-    {
-        $this->promo = $promo;
-
-        return $this;
-    }
-
-    public function getCurrentNote(): ?CurrentNote
-    {
-        return $this->currentNote;
-    }
-
-    public function setCurrentNote(CurrentNote $currentNote): static
-    {
-        // set the owning side of the relation if necessary
-        if ($currentNote->getStudent() !== $this) {
-            $currentNote->setStudent($this);
-        }
-
-        $this->currentNote = $currentNote;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CurrentNote>
-     */
-    public function getStudentsNotes(): Collection
-    {
-        return $this->studentsNotes;
-    }
-
-    public function addStudentsNote(CurrentNote $studentsNote): static
-    {
-        if (!$this->studentsNotes->contains($studentsNote)) {
-            $this->studentsNotes->add($studentsNote);
-            $studentsNote->setTeacher($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStudentsNote(CurrentNote $studentsNote): static
-    {
-        if ($this->studentsNotes->removeElement($studentsNote)) {
-            // set the owning side to null (unless already changed)
-            if ($studentsNote->getTeacher() === $this) {
-                $studentsNote->setTeacher(null);
-            }
-        }
+        $this->promotion = $promotion;
 
         return $this;
     }
