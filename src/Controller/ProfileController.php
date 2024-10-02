@@ -24,6 +24,14 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute("login");
         }
 
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
         if ($request->files->count() > 0 && $request->files->get("avatar")) {
             $user = $entityManager->getRepository(User::class)->findOneBy(["email" => $this->getUser()->getUserIdentifier()]);
             $newAvatar = $avatarUploader->upload($request->files->get("avatar"), $user);

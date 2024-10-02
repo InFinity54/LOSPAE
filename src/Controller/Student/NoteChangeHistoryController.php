@@ -22,6 +22,14 @@ class NoteChangeHistoryController extends AbstractController
             return $this->redirectToRoute("login");
         }
 
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
         if (!in_array("ROLE_STUDENT", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
             return $this->redirectToRoute("homepage");
