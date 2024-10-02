@@ -17,7 +17,7 @@ class StudentsNotesController extends AbstractController
     #[Route('/notes', name: 'teacher_notes')]
     public function notes(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -44,7 +44,7 @@ class StudentsNotesController extends AbstractController
     #[Route('/notes/change', name: 'teacher_notechange')]
     public function noteChange(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -91,7 +91,7 @@ class StudentsNotesController extends AbstractController
     #[Route('/notes/change/multiple', name: 'teacher_notemultiplechange')]
     public function noteMultipleChange(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

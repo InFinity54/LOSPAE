@@ -14,7 +14,7 @@ class NoteChangeHistoryController extends AbstractController
     #[Route('/notes/history', name: 'teacher_history')]
     public function history(EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -37,7 +37,7 @@ class NoteChangeHistoryController extends AbstractController
     #[Route('/notes/history/cancel/{id}', name: 'teacher_history_cancel')]
     public function historyCancel(string $id, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
@@ -60,7 +60,7 @@ class NoteChangeHistoryController extends AbstractController
     #[Route('/notes/history/cancel/{id}/do', name: 'teacher_history_docancel')]
     public function historyDoCancel(string $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 

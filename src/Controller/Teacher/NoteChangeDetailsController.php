@@ -15,7 +15,7 @@ class NoteChangeDetailsController extends AbstractController
     #[Route('/notes/details', name: 'teacher_details')]
     public function details(EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()) && !$this->getUser()->isIsActivated()) {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
         }
 
