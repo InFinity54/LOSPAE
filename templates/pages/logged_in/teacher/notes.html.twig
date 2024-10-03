@@ -20,39 +20,45 @@
             <div class="page-heading">
                 <h3>Suivi des notes des étudiants</h3>
 
-                {% if app.request.query.has("sort") and app.request.query.get("sort") is same as("name") %}
-                <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants, en temps réel, par ordre alphabétique des étudiants.</p>
-                <a href="{{ path("teacher_notes") }}" class="btn btn-primary">Trier par note</a>
-                {% else %}
-                <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants, en temps réel, de la plus grande à la plus petite.</p>
-                <a href="{{ path("teacher_notes", { sort: "name" }) }}" class="btn btn-primary">Trier par nom</a>
+                {% if students|length > 0 %}
+                    {% if app.request.query.has("sort") and app.request.query.get("sort") is same as("name") %}
+                        <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants, en temps réel, par ordre alphabétique des étudiants.</p>
+                        <a href="{{ path("teacher_notes") }}" class="btn btn-primary">Trier par note</a>
+                    {% else %}
+                        <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants, en temps réel, de la plus grande à la plus petite.</p>
+                        <a href="{{ path("teacher_notes", { sort: "name" }) }}" class="btn btn-primary">Trier par nom</a>
+                    {% endif %}
                 {% endif %}
             </div>
 
             <div class="row">
-                {% for student in students %}
-                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                        <div class="card">
-                            <div class="card-body py-4 px-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-xl">
-                                        <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
-                                    </div>
-                                    <div class="ms-3 name">
-                                        <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }}</h5>
-                                        <h6 class="text-muted mb-0">
-                                            {% if student.currentNote is not null %}
-                                                {{ student.currentNote|number_format(2) }} / 20
-                                            {% else %}
-                                                En attente d'initialisation
-                                            {% endif %}
-                                        </h6>
+                {% if students|length > 0 %}
+                    {% for student in students %}
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                            <div class="card">
+                                <div class="card-body py-4 px-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-xl">
+                                            <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
+                                        </div>
+                                        <div class="ms-3 name">
+                                            <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }} ({{ student.promotion.name }})</h5>
+                                            <h6 class="text-muted mb-0">
+                                                {% if student.currentNote is not null %}
+                                                    {{ student.currentNote|number_format(2) }} / 20
+                                                {% else %}
+                                                    En attente d'initialisation
+                                                {% endif %}
+                                            </h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">Aucun étudiant ne vous a actuellement été affecté.</div>
+                {% endif %}
             </div>
 
             {% include "includes/components/footer.html.twig" %}

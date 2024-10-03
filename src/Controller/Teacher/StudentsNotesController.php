@@ -4,6 +4,7 @@ namespace App\Controller\Teacher;
 
 use App\Entity\Criteria;
 use App\Entity\NoteChange;
+use App\Entity\TeacherPromotion;
 use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,10 +39,56 @@ class StudentsNotesController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
+        $teacherPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $this->getUser()]);
+        $students = [];
+
+        foreach ($teacherPromotions as $teacherPromotion) {
+            foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
+                $students[] = $student;
+            }
+        }
+
         if ($request->query->has("sort") && $request->query->get("sort") === "name") {
-            $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
+            usort($students, function($a, $b) {
+                $lastNameComparison = strcmp($a->getLastName(), $b->getLastName());
+
+                if ($lastNameComparison === 0) {
+                    return strcmp($a->getFirstName(), $b->getFirstName());
+                }
+
+                return $lastNameComparison;
+            });
         } else {
-            $students = $entityManager->getRepository(User::class)->findUsersByRoleOrderedByNote("ROLE_STUDENT");
+            usort($students, function($a, $b) {
+                $aNote = null;
+                $bNote = null;
+
+                foreach ($a->getCurrentNotes() as $currentNote) {
+                    if ($currentNote->getTeacher() === $this->getUser()) {
+                        $aNote = $currentNote;
+                    }
+                }
+
+                foreach ($b->getCurrentNotes() as $currentNote) {
+                    if ($currentNote->getTeacher() === $this->getUser()) {
+                        $bNote = $currentNote;
+                    }
+                }
+
+                if ($aNote->getNote() != $bNote->getNote()) {
+                    return $bNote <=> $aNote; // Ordre décroissant par les notes
+                }
+
+                // Comparaison par nom de famille
+                $lastNameComparison = strcmp($a->getLastName(), $b->getLastName());
+
+                // Si les noms de famille sont identiques, comparer par prénom
+                if ($lastNameComparison === 0) {
+                    return strcmp($a->getFirstName(), $b->getFirstName());
+                }
+
+                return $lastNameComparison;
+            });
         }
 
         return $this->render('pages/logged_in/teacher/notes.html.twig', [
