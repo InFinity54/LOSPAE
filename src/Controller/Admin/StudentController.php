@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\NoteChange;
 use App\Entity\Promo;
+use App\Entity\Promotion;
 use App\Entity\School;
 use App\Entity\User;
 use App\Services\FileUpload\UserAvatarUpload;
@@ -19,10 +20,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-class UsersController extends AbstractController
+class StudentController extends AbstractController
 {
-    #[Route('/admin/users', name: 'admin_users')]
-    public function users(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/admin/students', name: 'admin_students')]
+    public function students(Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -46,28 +47,30 @@ class UsersController extends AbstractController
         }
 
         $generatedLetters = [];
-        $users = [];
-        $usersCount = $entityManager->getRepository(User::class)->count();
+        $students = [];
+        $studentsCount = $entityManager->getRepository(User::class)->count();
         $pageNumber = !is_null($request->query->get("page")) ? $request->query->get("page") : 0;
 
         if (count($request->query->all()) > 0 && in_array("generatedLetters", array_keys($request->query->all()))) {
             $generatedLetters = $request->query->all()["generatedLetters"];
         }
 
-        foreach ($entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"], 20, $pageNumber * 20) as $user) {
-            $users[] = $user;
+        foreach ($entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"], 20, $pageNumber * 20) as $student) {
+            if (in_array("ROLE_STUDENT", $student->getRoles())) {
+                $students[] = $student;
+            }
         }
 
-        return $this->render('pages/logged_in/admin/users.html.twig', [
+        return $this->render('pages/logged_in/admin/students.html.twig', [
             "generatedLetters" => $generatedLetters,
-            "users" => $users,
-            "totalElements" => $usersCount,
+            "students" => $students,
+            "totalElements" => $studentsCount,
             "currentPage" => $pageNumber
         ]);
     }
 
-    #[Route('/admin/users/import', name: 'admin_users_import')]
-    public function usersImport(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/admin/students/import', name: 'admin_students_import')]
+    public function studentsImport(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -91,51 +94,51 @@ class UsersController extends AbstractController
         }
 
         if ($request->isMethod("POST")) {
-            $newUsers = [];
+            $newStudents = [];
             $generatedLetters = [];
             $rowNo = 1;
 
             if (($fp = fopen($request->files->get("csvfile")->getPathName(), "r")) !== FALSE) {
                 while (($row = fgetcsv($fp, 1000, ";")) !== FALSE) {
                     if ($rowNo > 1) {
-                        $userLastName = $row[0];
-                        $userFirstName = $row[1];
-                        $userEmail = $row[2];
-                        $userType = $row[3];
+                        $studentLastName = $row[0];
+                        $studentFirstName = $row[1];
+                        $studentEmail = $row[2];
+                        $studentType = $row[3];
 
-                        if (is_null($entityManager->getRepository(User::class)->findOneBy(["email" => $userEmail]))) {
+                        if (is_null($entityManager->getRepository(User::class)->findOneBy(["email" => $studentEmail]))) {
                             $authorizedSpecialChars = ["#", "@", ".", "/", "!", ",", ":", ";", "?", "%", "*", "-", "+"];
-                            $userPassword = ucfirst(strtolower(substr(StringHandler::remove_accents($userLastName), 0, 3)));
-                            $userPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
-                            $userPassword .= ucfirst(strtolower(substr(StringHandler::remove_accents($userFirstName), 0, 3)));
-                            $userPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
-                            $userPassword .= rand(10, 99);
+                            $studentPassword = ucfirst(strtolower(substr(StringHandler::remove_accents($studentLastName), 0, 3)));
+                            $studentPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
+                            $studentPassword .= ucfirst(strtolower(substr(StringHandler::remove_accents($studentFirstName), 0, 3)));
+                            $studentPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
+                            $studentPassword .= rand(10, 99);
 
-                            $user = new User();
-                            $user->setLastName($userLastName);
-                            $user->setFirstName($userFirstName);
-                            $user->setEmail($userEmail);
-                            $user->setPassword($passwordHasher->hashPassword($user, $userPassword));
-                            $user->setIsActivated(false);
+                            $student = new User();
+                            $student->setLastName($studentLastName);
+                            $student->setFirstName($studentFirstName);
+                            $student->setEmail($studentEmail);
+                            $student->setPassword($passwordHasher->hashPassword($student, $studentPassword));
+                            $student->setIsActivated(false);
 
-                            switch ($userType) {
+                            switch ($studentType) {
                                 case "Enseignant":
-                                    $user->setRoles(["ROLE_TEACHER"]);
+                                    $student->setRoles(["ROLE_TEACHER"]);
                                     break;
                                 default:
-                                    $user->setRoles(["ROLE_STUDENT"]);
+                                    $student->setRoles(["ROLE_STUDENT"]);
                                     break;
                             }
 
-                            $entityManager->persist($user);
+                            $entityManager->persist($student);
                             $entityManager->flush();
 
-                            $newUsers[] = [
-                                "lastName" => $userLastName,
-                                "firstName" => $userFirstName,
-                                "email" => $userEmail,
-                                "type" => $userType,
-                                "temporaryPassword" => $userPassword
+                            $newStudents[] = [
+                                "lastName" => $studentLastName,
+                                "firstName" => $studentFirstName,
+                                "email" => $studentEmail,
+                                "type" => $studentType,
+                                "temporaryPassword" => $studentPassword
                             ];
                         } else {
                             $this->addFlash("warning", "Un compte existe déjà pour cette adresse e-mail.");
@@ -148,27 +151,27 @@ class UsersController extends AbstractController
                 fclose($fp);
             }
 
-            if (count($newUsers) > 1) {
-                $this->addFlash("success", count($newUsers)." utilisateurs ont été importés.");
-            } else if (count($newUsers) === 1) {
-                $this->addFlash("success", "Un utilisateur a été importé.");
+            if (count($newStudents) > 1) {
+                $this->addFlash("success", count($newStudents)." étudiants ont été importés.");
+            } else if (count($newStudents) === 1) {
+                $this->addFlash("success", "Un étudiant a été importé.");
             } else {
-                $this->addFlash("warning", "Aucun utilisateur n'a été importé. Il y a peut-être eu un problème durant l'importation.");
+                $this->addFlash("warning", "Aucun étudiant n'a été importé. Il y a peut-être eu un problème durant l'importation.");
             }
 
-            if (count($newUsers) > 0) {
+            if (count($newStudents) > 0) {
                 try {
                     $templateFile = $this->getParameter("kernel.project_dir")."/public/files/users_import_letter_model_student.docx";
 
-                    foreach ($newUsers as $newUser) {
-                        $fileNameWithoutExt = "LOSPAE_NewUserLetter_".$newUser["lastName"]."_".$newUser["firstName"]."_".date("Ymd");
+                    foreach ($newStudents as $newStudent) {
+                        $fileNameWithoutExt = "LOSPAE_NewUserLetter_".$newStudent["lastName"]."_".$newStudent["firstName"]."_".date("Ymd");
                         $pathToSave = $this->getParameter("kernel.project_dir")."/var/";
 
                         $templateProcessor = new TemplateProcessor($templateFile);
-                        $templateProcessor->setValue("firstname", $newUser["firstName"]);
-                        $templateProcessor->setValue("lastname", $newUser["lastName"]);
-                        $templateProcessor->setValue("email", $newUser["email"]);
-                        $templateProcessor->setValue("password", $newUser["temporaryPassword"]);
+                        $templateProcessor->setValue("firstname", $newStudent["firstName"]);
+                        $templateProcessor->setValue("lastname", $newStudent["lastName"]);
+                        $templateProcessor->setValue("email", $newStudent["email"]);
+                        $templateProcessor->setValue("password", $newStudent["temporaryPassword"]);
                         $templateProcessor->saveAs($pathToSave.$fileNameWithoutExt.".docx");
 
                         Settings::setPdfRendererName(Settings::PDF_RENDERER_MPDF);
@@ -183,20 +186,20 @@ class UsersController extends AbstractController
                         $generatedLetters[] = $fileNameWithoutExt.".pdf";
                     }
                 } catch (Exception $e) {
-                    $this->addFlash("danger", "Il n'a pas été possible de générer certaines lettres de notification des utilisateurs.");
+                    $this->addFlash("danger", "Il n'a pas été possible de générer certaines lettres de notification des étudiants.");
                 }
             }
 
-            return $this->redirectToRoute("admin_users", [
+            return $this->redirectToRoute("admin_students", [
                 "generatedLetters" => $generatedLetters
             ]);
         }
 
-        return $this->render('pages/logged_in/admin/users_import.html.twig');
+        return $this->render('pages/logged_in/admin/students_import.html.twig');
     }
 
-    #[Route('/admin/users/configure/{id}', name: 'admin_user_configure')]
-    public function userConfigure(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/admin/students/configure/{id}', name: 'admin_student_configure')]
+    public function studentConfigure(Request $request, EntityManagerInterface $entityManager, string $id): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -219,11 +222,11 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $student = $entityManager->getRepository(User::class)->find($id);
 
-        if (is_null($user)) {
-            $this->addFlash("danger", "L'utilisateur demandé est introuvable.");
-            return $this->redirectToRoute("admin_users");
+        if (is_null($student)) {
+            $this->addFlash("danger", "L'étudiant demandé est introuvable.");
+            return $this->redirectToRoute("admin_students");
         }
 
         if ($request->isMethod("POST")) {
@@ -241,19 +244,19 @@ class UsersController extends AbstractController
                 $roles[] = "ROLE_ADMIN";
             }
 
-            $user->setRoles($roles);
+            $student->setRoles($roles);
             $entityManager->flush();
-            $this->addFlash("success", "Les rôles de l'utilisateur ciblé ont été modifiés.");
-            return $this->redirectToRoute("admin_users");
+            $this->addFlash("success", "Les rôles de l'étudiant ciblé ont été modifiés.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        return $this->render('pages/logged_in/admin/user_configuration.html.twig', [
-            "user" => $user
+        return $this->render('pages/logged_in/admin/student_configuration.html.twig', [
+            "student" => $student
         ]);
     }
 
-    #[Route('/admin/users/edit/{ids}', name: 'admin_user_edit')]
-    public function userEdit(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/edit/{ids}', name: 'admin_student_edit')]
+    public function studentEdit(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -277,40 +280,40 @@ class UsersController extends AbstractController
         }
 
         $schools = $entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]);
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $user;
+            if (!is_null($student)) {
+                $students[] = $student;
             }
         }
 
-        if (count($users) < count(explode(",", $ids))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
         if ($request->isMethod("POST")) {
-            foreach ($users as $user) {
-                $user->setPromo($entityManager->getRepository(Promo::class)->find($request->request->get("promo")));
+            foreach ($students as $student) {
+                $student->setPromotion($entityManager->getRepository(Promotion::class)->find($request->request->get("promo")));
                 $entityManager->flush();
             }
 
-            $this->addFlash("success", "L'affectation des utilisateurs ciblés ont été modifiées.");
-            return $this->redirectToRoute("admin_users");
+            $this->addFlash("success", "L'affectation des étudiants ciblés ont été modifiées.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        return $this->render('pages/logged_in/admin/user_edit.html.twig', [
-            "users" => $users,
-            "usersIds" => $ids,
+        return $this->render('pages/logged_in/admin/student_edit.html.twig', [
+            "students" => $students,
+            "studentsIds" => $ids,
             "schools" => $schools
         ]);
     }
 
-    #[Route('/admin/users/enable/{ids}', name: 'admin_user_enable')]
-    public function userEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/enable/{ids}', name: 'admin_student_enable')]
+    public function studentEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -333,29 +336,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $user;
+            if (!is_null($student)) {
+                $students[] = $student;
             }
         }
 
-        if (count($users) < count(explode(",", $id))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $id))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        return $this->render('pages/logged_in/admin/user_enabling_confirm.html.twig', [
-            "users" => $users,
-            "usersIds" => $ids
+        return $this->render('pages/logged_in/admin/student_enabling_confirm.html.twig', [
+            "students" => $students,
+            "studentsIds" => $ids
         ]);
     }
 
-    #[Route('/admin/users/enable/{ids}/do', name: 'admin_user_doenable')]
-    public function userDoEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/enable/{ids}/do', name: 'admin_student_doenable')]
+    public function studentDoEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -378,34 +381,34 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $id;
+            if (!is_null($student)) {
+                $students[] = $id;
 
-                if (in_array("ROLE_STUDENT", $user->getRoles()) && is_null($user->getCurrentNote())) {
-                    $user->setCurrentNote(20);
+                if (in_array("ROLE_STUDENT", $student->getRoles()) && is_null($student->getCurrentNote())) {
+                    $student->setCurrentNote(20);
                 }
 
-                $user->setIsActivated(true);
+                $student->setIsActivated(true);
                 $entityManager->flush();
             }
         }
 
-        if (count($users) < count(explode(",", $ids))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu être activés car ils sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés n'ont pas pu être activés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        $this->addFlash("success", "Les comptes utilisateurs sélectionnés ont été activés.");
-        return $this->redirectToRoute("admin_users");
+        $this->addFlash("success", "Les comptes étudiants sélectionnés ont été activés.");
+        return $this->redirectToRoute("admin_students");
     }
 
-    #[Route('/admin/users/disable/{ids}', name: 'admin_user_disable')]
-    public function userDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/disable/{ids}', name: 'admin_student_disable')]
+    public function studentDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -428,29 +431,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $user;
+            if (!is_null($student)) {
+                $students[] = $student;
             }
         }
 
-        if (count($users) < count(explode(",", $ids))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        return $this->render('pages/logged_in/admin/user_disabling_confirm.html.twig', [
-            "users" => $users,
-            "usersIds" => $ids
+        return $this->render('pages/logged_in/admin/student_disabling_confirm.html.twig', [
+            "students" => $students,
+            "studentsIds" => $ids
         ]);
     }
 
-    #[Route('/admin/users/disable/{ids}/do', name: 'admin_user_dodisable')]
-    public function userDoDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/disable/{ids}/do', name: 'admin_student_dodisable')]
+    public function studentDoDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -473,29 +476,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $id;
-                $user->setIsActivated(false);
+            if (!is_null($student)) {
+                $students[] = $id;
+                $student->setIsActivated(false);
                 $entityManager->flush();
             }
         }
 
-        if (count($users) < count(explode(",", $ids))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        $this->addFlash("success", "Les comptes utilisateurs sélectionnés ont été désactivés.");
-        return $this->redirectToRoute("admin_users");
+        $this->addFlash("success", "Les comptes étudiants sélectionnés ont été désactivés.");
+        return $this->redirectToRoute("admin_students");
     }
 
-    #[Route('/admin/users/remove/{ids}', name: 'admin_user_remove')]
-    public function userRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/remove/{ids}', name: 'admin_student_remove')]
+    public function studentRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -518,29 +521,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $user;
+            if (!is_null($student)) {
+                $students[] = $student;
             }
         }
 
-        if (count($users) < count(explode(",", $ids))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        return $this->render('pages/logged_in/admin/user_removing_confirm.html.twig', [
-            "users" => $users,
-            "usersIds" => $ids
+        return $this->render('pages/logged_in/admin/student_removing_confirm.html.twig', [
+            "students" => $students,
+            "studentsIds" => $ids
         ]);
     }
 
-    #[Route('/admin/users/remove/{ids}/do', name: 'admin_user_doremove')]
-    public function userDoRemove(Request $request, EntityManagerInterface $entityManager, UserAvatarUpload $avatarUpload, string $ids): Response
+    #[Route('/admin/students/remove/{ids}/do', name: 'admin_student_doremove')]
+    public function studentDoRemove(Request $request, EntityManagerInterface $entityManager, UserAvatarUpload $avatarUpload, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -563,13 +566,13 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $id;
+            if (!is_null($student)) {
+                $students[] = $id;
                 $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $id]);
 
                 if (!is_null($noteChanges) && count($noteChanges) > 0) {
@@ -579,30 +582,30 @@ class UsersController extends AbstractController
                     }
                 }
 
-                if ($user->getAvatar() !== "default_avatar.svg") {
-                    $userAvatarFullPath = $avatarUpload->getTargetDirectory().$user->getAvatar();
+                if ($student->getAvatar() !== "default_avatar.svg") {
+                    $studentAvatarFullPath = $avatarUpload->getTargetDirectory().$student->getAvatar();
 
-                    if (file_exists($userAvatarFullPath)) {
-                        unlink($userAvatarFullPath);
+                    if (file_exists($studentAvatarFullPath)) {
+                        unlink($studentAvatarFullPath);
                     }
                 }
 
-                $entityManager->remove($user);
+                $entityManager->remove($student);
                 $entityManager->flush();
             }
         }
 
-        if (count($users) < count(explode(",", $ids))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        $this->addFlash("success", "Les comptes utilisateurs sélectionnés ont été désactivés.");
-        return $this->redirectToRoute("admin_users");
+        $this->addFlash("success", "Les comptes étudiants sélectionnés ont été désactivés.");
+        return $this->redirectToRoute("admin_students");
     }
 
-    #[Route('/admin/users/reset/{ids}', name: 'admin_user_reset')]
-    public function userReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/reset/{ids}', name: 'admin_student_reset')]
+    public function studentReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -625,29 +628,29 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $user;
+            if (!is_null($student)) {
+                $students[] = $student;
             }
         }
 
-        if (count($users) < count(explode(",", $id))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $id))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        return $this->render('pages/logged_in/admin/user_reset_confirm.html.twig', [
-            "users" => $users,
-            "usersIds" => $ids
+        return $this->render('pages/logged_in/admin/student_reset_confirm.html.twig', [
+            "students" => $students,
+            "studentsIds" => $ids
         ]);
     }
 
-    #[Route('/admin/users/reset/{ids}/do', name: 'admin_user_doreset')]
-    public function userDoReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    #[Route('/admin/students/reset/{ids}/do', name: 'admin_student_doreset')]
+    public function studentDoReset(Request $request, EntityManagerInterface $entityManager, string $ids): Response
     {
         if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
             return $this->redirectToRoute("deactivated");
@@ -665,23 +668,23 @@ class UsersController extends AbstractController
             return $this->redirectToRoute("unconfigured");
         }
 
-        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+        if (!in_array("ROLE_ADMIN", $this->getStudent()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
             return $this->redirectToRoute("homepage");
         }
 
-        $users = [];
+        $students = [];
 
         foreach (explode(",", $ids) as $id) {
-            $user = $entityManager->getRepository(User::class)->find($id);
+            $student = $entityManager->getRepository(User::class)->find($id);
 
-            if (!is_null($user)) {
-                $users[] = $id;
+            if (!is_null($student)) {
+                $students[] = $id;
 
-                if (in_array("ROLE_STUDENT", $user->getRoles())) {
-                    $user->setCurrentNote(20);
+                if (in_array("ROLE_STUDENT", $student->getRoles())) {
+                    $student->setCurrentNote(20);
 
-                    foreach ($user->getNoteChanges() as $noteChange) {
+                    foreach ($student->getNoteChanges() as $noteChange) {
                         $entityManager->remove($noteChange);
                         $entityManager->flush();
                     }
@@ -691,12 +694,12 @@ class UsersController extends AbstractController
             }
         }
 
-        if (count($users) < count(explode(",", $ids))) {
-            $this->addFlash("danger", "Un ou plusieurs utilisateurs parmis ceux demandés n'ont pas pu voir leurs notes être réinitialisées car ils sont introuvables.");
-            return $this->redirectToRoute("admin_users");
+        if (count($students) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs étudiants parmis ceux demandés n'ont pas pu voir leurs notes être réinitialisées car ils sont introuvables.");
+            return $this->redirectToRoute("admin_students");
         }
 
-        $this->addFlash("success", "Les notes des comptes utilisateurs sélectionnés ont été réinitialisées.");
-        return $this->redirectToRoute("admin_users");
+        $this->addFlash("success", "Les notes des comptes étudiants sélectionnés ont été réinitialisées.");
+        return $this->redirectToRoute("admin_students");
     }
 }

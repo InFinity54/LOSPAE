@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Administration > Utilisateurs{% endblock %}
+{% block title %}Administration > Gestion des étudiants{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
@@ -18,8 +18,8 @@
             </header>
 
             <div class="page-heading">
-                <h3>Gestion des utilisateurs</h3>
-                <p class="text-muted">Cette page permet de gérer les utilisateurs de LOSPAÉ. Il est possible d'activer les comptes en attente, de les désactiver, d'attribuer des droits d'accès particuliers ou même de les supprimer définitivement.</p>
+                <h3>Gestion des étudiants</h3>
+                <p class="text-muted">Cette page permet de gérer les étudiants inscrits dans la base de données de LOSPAÉ. Il est possible d'activer les comptes en attente, de les désactiver, d'attribuer des droits d'accès particuliers ou même de les supprimer définitivement.</p>
             </div>
 
             <div class="page-content">
@@ -33,9 +33,9 @@
 
                                 <div class="card-body">
                                     <p class="text-muted">
-                                        Des lettres ont été générées pour les comptes utilisateurs importés il y a quelques secondes. Vous pouvez les télécharger si vous le souhaitez pour les fournir aux étudiants concernés.
+                                        Des lettres ont été générées pour les comptes étudiants importés il y a quelques secondes. Vous pouvez les télécharger si vous le souhaitez pour les fournir aux étudiants concernés.
                                         <br />
-                                        ATTENTION : Ce sera votre seule opportunité de les télécharger. Ces documents ne vous seront pas représentés par la suite et seront supprimés de LOSPAÉ dans une dizaine de minutes.
+                                        ATTENTION : Ce sera votre seule opportunité de les télécharger. Ces documents ne vous seront pas représentés par la suite et seront supprimés de LOSPAÉ dans quelques heures.
                                     </p>
 
                                     <ul>
@@ -53,25 +53,25 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h4 class="card-title">Liste des utilisateurs</h4>
+                                <h4 class="card-title">Liste des étudiants</h4>
 
                                 <div>
-                                    <button id="reset_selected_users" class="btn btn-info" title="Réinitialiser la note des comptes sélectionnés">
+                                    <button id="reset_selected_students" class="btn btn-info" title="Réinitialiser la note des comptes sélectionnés">
                                         <i class="fas fa-list-ol"></i>
                                     </button>
-                                    <button id="edit_selected_users" class="btn btn-primary" title="Modifier les comptes sélectionnés">
+                                    <button id="edit_selected_students" class="btn btn-primary" title="Modifier les comptes sélectionnés">
                                         <i class="fas fa-user-edit"></i>
                                     </button>
-                                    <button id="enable_selected_users" class="btn btn-success" title="Activer les comptes sélectionnés">
+                                    <button id="enable_selected_students" class="btn btn-success" title="Activer les comptes sélectionnés">
                                         <i class="fas fa-user-check"></i>
                                     </button>
-                                    <button id="disable_selected_users" class="btn btn-danger" title="Désactiver les comptes sélectionnés">
+                                    <button id="disable_selected_students" class="btn btn-danger" title="Désactiver les comptes sélectionnés">
                                         <i class="fas fa-user-times"></i>
                                     </button>
-                                    <button id="delete_selected_users" class="btn btn-dark" title="Supprimer les comptes sélectionnés">
+                                    <button id="delete_selected_students" class="btn btn-dark" title="Supprimer les comptes sélectionnés">
                                         <i class="fas fa-user-slash"></i>
                                     </button>
-                                    <a href="{{ path("admin_users_import") }}" class="btn btn-primary">Importer des utilisateurs</a>
+                                    <a href="{{ path("admin_students_import") }}" class="btn btn-primary">Importer des étudiants</a>
                                 </div>
                             </div>
 
@@ -80,7 +80,7 @@
                                     <table class="table table-striped mb-0">
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox" id="userglobalselection" /></th>
+                                                <th><input type="checkbox" id="studentglobalselection" /></th>
                                                 <th class="text-center">NOM</th>
                                                 <th class="text-center">PRÉNOM</th>
                                                 <th class="text-center">ADRESSE E-MAIL</th>
@@ -91,59 +91,55 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for user in users %}
+                                            {% for student in students %}
                                                 <tr>
                                                     <td>
-                                                        {% if user.email is not same as(app.user.email) %}
-                                                            <input type="checkbox" class="userselection" id="userselected_{{ user.id }}" data-user="{{ user.id }}" />
+                                                        {% if student.email is not same as(app.user.email) %}
+                                                            <input type="checkbox" class="studentselection" id="studentselected_{{ student.id }}" data-user="{{ student.id }}" />
                                                         {% endif %}
                                                     </td>
-                                                    <td class="text-center">{{ user.lastName }}</td>
-                                                    <td class="text-center">{{ user.firstName }}</td>
-                                                    <td class="text-center">{{ user.email }}</td>
-                                                    {% if user.promo is not null %}
-                                                    <td class="text-center">{{ user.promo.school.name }} ({{ user.promo.school.city }})</td>
-                                                    <td class="text-center">{{ user.promo.name }}</td>
+                                                    <td class="text-center">{{ student.lastName }}</td>
+                                                    <td class="text-center">{{ student.firstName }}</td>
+                                                    <td class="text-center">{{ student.email }}</td>
+                                                    {% if student.promotion is not null %}
+                                                    <td class="text-center">{{ student.promotion.school.name }} ({{ student.promotion.school.city }})</td>
+                                                    <td class="text-center">{{ student.promotion.name }}</td>
                                                     {% else %}
                                                     <td class="text-center">Aucun</td>
                                                     <td class="text-center">Aucune</td>
                                                     {% endif %}
                                                     <td class="text-center">
-                                                        {% if user.isActivated %}
-                                                            <i class="fas fa-check"></i>
+                                                        {% if student.isActivated %}
+                                                            <i class="fas fa-check" title="Compte activé"></i>
                                                         {% else %}
-                                                            <i class="fas fa-times"></i>
+                                                            <i class="fas fa-times" title="Compte désactivé"></i>
                                                         {% endif %}
                                                     </td>
                                                     <td>
-                                                        {% if user.email is not same as(app.user.email) %}
-                                                            <a href="{{ path("admin_user_configure", { id: user.id }) }}" class="btn btn-primary" title="Configurer le compte de {{ user.firstName }} {{ user.lastName }}">
-                                                                <i class="fas fa-user-cog"></i>
+                                                        <a href="{{ path("admin_student_configure", { id: student.id }) }}" class="btn btn-primary" title="Configurer le compte de {{ student.firstName }} {{ student.lastName }}">
+                                                            <i class="fas fa-user-cog"></i>
+                                                        </a>
+
+                                                        <a href="{{ path("admin_student_edit", { ids: student.id }) }}" class="btn btn-primary" title="Modifier le compte de {{ student.firstName }} {{ student.lastName }}">
+                                                            <i class="fas fa-user-edit"></i>
+                                                        </a>
+
+                                                        {% if student.isActivated %}
+                                                            <a href="{{ path("admin_student_reset", { ids: student.id }) }}" class="btn btn-info" title="Réinitialiser la note de {{ student.firstName }} {{ student.lastName }}">
+                                                                <i class="fas fa-list-ol"></i>
                                                             </a>
-
-                                                            <a href="{{ path("admin_user_edit", { ids: user.id }) }}" class="btn btn-primary" title="Modifier le compte de {{ user.firstName }} {{ user.lastName }}">
-                                                                <i class="fas fa-user-edit"></i>
-                                                            </a>
-
-                                                            {% if user.isActivated %}
-                                                                <a href="{{ path("admin_user_reset", { ids: user.id }) }}" class="btn btn-info" title="Réinitialiser la note de {{ user.firstName }} {{ user.lastName }}">
-                                                                    <i class="fas fa-list-ol"></i>
-                                                                </a>
-                                                                <a href="{{ path("admin_user_disable", { ids: user.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ user.firstName }} {{ user.lastName }}">
-                                                                    <i class="fas fa-user-times"></i>
-                                                                </a>
-                                                            {% else %}
-                                                                <a href="{{ path("admin_user_enable", { ids: user.id }) }}" class="btn btn-success" title="Activer le compte de {{ user.firstName }} {{ user.lastName }}">
-                                                                    <i class="fas fa-user-check"></i>
-                                                                </a>
-                                                            {% endif %}
-
-                                                            <a href="{{ path("admin_user_remove", { ids: user.id }) }}" class="btn btn-dark" title="Supprimer le compte de {{ user.firstName }} {{ user.lastName }}">
-                                                                <i class="fas fa-user-slash"></i>
+                                                            <a href="{{ path("admin_student_disable", { ids: student.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ student.firstName }} {{ student.lastName }}">
+                                                                <i class="fas fa-user-times"></i>
                                                             </a>
                                                         {% else %}
-                                                            Aucune action possible pour votre propre compte.
+                                                            <a href="{{ path("admin_student_enable", { ids: student.id }) }}" class="btn btn-success" title="Activer le compte de {{ student.firstName }} {{ student.lastName }}">
+                                                                <i class="fas fa-user-check"></i>
+                                                            </a>
                                                         {% endif %}
+
+                                                        <a href="{{ path("admin_student_remove", { ids: student.id }) }}" class="btn btn-dark" title="Supprimer le compte de {{ student.firstName }} {{ student.lastName }}">
+                                                            <i class="fas fa-user-slash"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -156,7 +152,7 @@
                                         {% set totalPages = totalElements > 20 ? (totalElements / 20) | round(0, 'floor') : 0 %}
                                         {% if currentPage > 0 %}
                                             <li class="page-item">
-                                                <a class="page-link" href="{{ path("admin_users") }}?page={{ currentPage - 1 }}" aria-label="Previous">
+                                                <a class="page-link" href="{{ path("admin_students") }}?page={{ currentPage - 1 }}" aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
                                                     <span class="sr-only">Précédent</span>
                                                 </a>
@@ -164,11 +160,11 @@
                                         {% endif %}
                                         {% set range = 6 %}
                                         {% for page in (currentPage - range > 0 ? currentPage - range : 0)..(currentPage + range < totalPages ? currentPage + range : totalPages) %}
-                                            <li class="page-item {{ currentPage == page ? 'active' : '' }}"><a class="page-link" href="{{ path("admin_users") }}?page={{ page }}">{{ page + 1 }}</a></li>
+                                            <li class="page-item {{ currentPage == page ? 'active' : '' }}"><a class="page-link" href="{{ path("admin_students") }}?page={{ page }}">{{ page + 1 }}</a></li>
                                         {% endfor %}
                                         {% if currentPage < totalPages %}
                                             <li class="page-item">
-                                                <a class="page-link" href="{{ path("admin_users") }}?page={{ currentPage + 1 }}" aria-label="Next">
+                                                <a class="page-link" href="{{ path("admin_students") }}?page={{ currentPage + 1 }}" aria-label="Next">
                                                     <span aria-hidden="true">&raquo;</span>
                                                     <span class="sr-only">Suivant</span>
                                                 </a>
@@ -188,5 +184,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="/assets/js/pages/logged_in/admin/users.js"></script>
+    <script src="/assets/js/pages/logged_in/admin/students.js"></script>
 {% endblock %}

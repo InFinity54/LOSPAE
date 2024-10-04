@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Administration > Utilisateurs{% endblock %}
+{% block title %}Administration > Gestion des étudiants{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
@@ -19,8 +19,8 @@
             </header>
 
             <div class="page-heading">
-                <h3>Importation d'utilisateurs</h3>
-                <p class="text-muted">Cette page permet de d'importer de nouveaux utilisateurs sur LOSPAÉ. Les comptes importés sont désactivés par défaut.</p>
+                <h3>Importation d'étudiants</h3>
+                <p class="text-muted">Cette page permet de d'importer de nouveaux étudiants sur LOSPAÉ. Les comptes importés sont désactivés par défaut.</p>
             </div>
 
             <div class="page-content">
@@ -32,61 +32,61 @@
                             </div>
 
                             <div class="card-body">
-                                <p class="text-muted">Un fichier CSV est un fichier texte comportant des différentes données. Une ligne du fichier CSV correspond à une donnée, dont les différentes parties (comme le nom, le prénom ou encore l'adresse e-mail d'un utilisateur) sont séparées par un point-virgule.</p>
-                                <p class="text-muted">Le fichier CSV utilisé pour l'importation doit respecter un formalisme particulier, et comporter un certain nombre de données. <a href="/files/users_import_example.csv">Vous pouvez télécharger un exemple en cliquant ici</a>.</p>
+                                <p class="text-muted">Un fichier CSV est un fichier texte comportant des différentes données. Une ligne du fichier CSV correspond à une donnée, dont les différentes parties (comme le nom, le prénom ou encore l'adresse e-mail d'un étudiant) sont séparées par un point-virgule.</p>
+                                <p class="text-muted">Le fichier CSV utilisé pour l'importation doit respecter un formalisme particulier, et comporter un certain nombre de données. <a href="/files/students_import_example.csv">Vous pouvez télécharger un exemple en cliquant ici</a>.</p>
                                 <p class="text-muted">Pour plus d'informations sur les informations à saisir dans le fichier CSV, consultez les rubriques ci-dessous.</p>
 
-                                <div class="accordion" id="usersImportAccordion">
+                                <div class="accordion" id="studentsImportAccordion">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usersImportAccordionName" aria-expanded="true" aria-controls="usersImportAccordionName">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#studentsImportAccordionName" aria-expanded="true" aria-controls="studentsImportAccordionName">
                                                 Nom
                                             </button>
                                         </h2>
                                         
-                                        <div id="usersImportAccordionName" class="accordion-collapse collapse" data-bs-parent="#usersImportAccordion">
+                                        <div id="studentsImportAccordionName" class="accordion-collapse collapse" data-bs-parent="#studentsImportAccordion">
                                             <div class="accordion-body">
-                                                Le nom de famille de l'utilisateur. Pas de formalisme particulier pour cette information.
+                                                Le nom de famille de l'étudiant. Pas de formalisme particulier pour cette information.
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usersImportAccordionPrenom" aria-expanded="false" aria-controls="usersImportAccordionPrenom">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#studentsImportAccordionPrenom" aria-expanded="false" aria-controls="studentsImportAccordionPrenom">
                                                Prénom
                                             </button>
                                         </h2>
 
-                                        <div id="usersImportAccordionPrenom" class="accordion-collapse collapse" data-bs-parent="#usersImportAccordion">
+                                        <div id="studentsImportAccordionPrenom" class="accordion-collapse collapse" data-bs-parent="#studentsImportAccordion">
                                             <div class="accordion-body">
-                                                Le ou les prénoms de l'utilisateur. Pas de formalisme particulier pour cette information.
+                                                Le ou les prénoms de l'étudiant. Pas de formalisme particulier pour cette information.
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usersImportAccordionEmail" aria-expanded="false" aria-controls="usersImportAccordionEmail">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#studentsImportAccordionEmail" aria-expanded="false" aria-controls="studentsImportAccordionEmail">
                                                 Adresse e-mail
                                             </button>
                                         </h2>
 
-                                        <div id="usersImportAccordionEmail" class="accordion-collapse collapse" data-bs-parent="#usersImportAccordion">
+                                        <div id="studentsImportAccordionEmail" class="accordion-collapse collapse" data-bs-parent="#studentsImportAccordion">
                                             <div class="accordion-body">
-                                                L'adresse e-mail de l'utilisateur. L'adresse e-mail saisie doit être valide : elle sera utilisée si ce dernier oublie son mot de passe pour lui permettre de le modifier.
+                                                L'adresse e-mail de l'étudiant. L'adresse e-mail saisie doit être valide : elle sera utilisée si ce dernier oublie son mot de passe pour lui permettre de le modifier.
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usersImportAccordionType" aria-expanded="false" aria-controls="usersImportAccordionType">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#studentsImportAccordionType" aria-expanded="false" aria-controls="studentsImportAccordionType">
                                                 Type de compte
                                             </button>
                                         </h2>
 
-                                        <div id="usersImportAccordionType" class="accordion-collapse collapse" data-bs-parent="#usersImportAccordion">
+                                        <div id="studentsImportAccordionType" class="accordion-collapse collapse" data-bs-parent="#studentsImportAccordion">
                                             <div class="accordion-body">
                                                 Le type de compte peut prendre deux valeurs : Etudiant ou Enseignant. Cette valeur sera utilisée à l'importation pour attribuer les droits d'accès correspondant au compte nouvellement créé. <strong>Veillez donc à bien choisir le type de compte et à le vérifier avant l'importation.</strong>
                                             </div>
@@ -98,7 +98,7 @@
                     </div>
 
                     <div class="col-12">
-                        <form action="{{ path("admin_users_import") }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ path("admin_students_import") }}" method="POST" enctype="multipart/form-data">
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Choix du fichier CSV</h4>
@@ -125,5 +125,5 @@
 
 {% block javascripts %}
     <script src="/template/extensions/dropify/js/dropify.min.js"></script>
-    <script src="/assets/js/pages/logged_in/admin/users_import.js"></script>
+    <script src="/assets/js/pages/logged_in/admin/students_import.js"></script>
 {% endblock %}
