@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Academy;
 use App\Entity\Promo;
 use App\Entity\School;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,11 +90,12 @@ class SchoolsController extends AbstractController
 
         if ($request->request->count() > 0) {
             $school = new School();
+            $school->setUai($request->request->get("uai"));
             $school->setName($request->request->get("name"));
             $school->setAddress($request->request->get("address"));
-            $school->setAddressExtension($request->request->get("addressExtension"));
             $school->setPostalCode($request->request->get("postalCode"));
             $school->setCity($request->request->get("city"));
+            $school->setAcademy($entityManager->getRepository(Academy::class)->find($request->request->get("academy")));
             $entityManager->persist($school);
             $entityManager->flush();
 
@@ -101,7 +103,9 @@ class SchoolsController extends AbstractController
             return $this->redirectToRoute("admin_schools");
         }
 
-        return $this->render('pages/logged_in/admin/school_add.html.twig');
+        return $this->render('pages/logged_in/admin/school_add.html.twig', [
+            "academies" => $entityManager->getRepository(Academy::class)->findAll()
+        ]);
     }
 
     #[Route('/admin/school/{id}/promos', name: 'admin_school_promoslist')]
