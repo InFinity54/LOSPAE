@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Promo;
+use App\Entity\Promotion;
 use App\Entity\School;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +39,7 @@ class PromosController extends AbstractController
 
         $promos = [];
 
-        foreach ($entityManager->getRepository(Promo::class)->findBy([], ["name" => "ASC"]) as $promo) {
+        foreach ($entityManager->getRepository(Promotion::class)->findBy([], ["name" => "ASC"]) as $promo) {
             $promos[] = [
                 "data" => $promo,
                 "students" => $promo->getStudents()->count()
@@ -75,7 +76,7 @@ class PromosController extends AbstractController
         }
 
         if ($request->request->count() > 0) {
-            $promo = new Promo();
+            $promo = new Promotion();
             $promo->setName($request->request->get("name"));
             $promo->setSchool($entityManager->getRepository(School::class)->find($request->request->get("school")));
             $entityManager->persist($promo);
