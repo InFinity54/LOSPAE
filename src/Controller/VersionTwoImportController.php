@@ -42,8 +42,8 @@ class VersionTwoImportController extends AbstractController
                     $user->setAvatar($userAvatar);
                     $user->setActivated($userIsActivated);
 
-                    //$entityManager->persist($user);
-                    //$entityManager->flush();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
 
                     $originalUsers[$row[0]] = $userEmail;
                 }
@@ -68,8 +68,8 @@ class VersionTwoImportController extends AbstractController
                     $criteria->setImpact(floatval($criteriaImpact));
                     $criteria->setModality($criteriaModality != "" ? $criteriaModality : null);
 
-                    //$entityManager->persist($criteria);
-                    //$entityManager->flush();
+                    $entityManager->persist($criteria);
+                    $entityManager->flush();
 
                     $originalCriterias[$row[0]] = $criteriaName;
                 }
@@ -98,8 +98,8 @@ class VersionTwoImportController extends AbstractController
                     $noteChange->setImpact(floatval($noteChangeImpact));
                     $noteChange->setOccuredAt(DateTimeImmutable::createFromFormat("Y-m-d H:i:s", $noteChangeOccuredAt));
 
-                    /*$entityManager->persist($noteChange);
-                    $entityManager->flush();*/
+                    $entityManager->persist($noteChange);
+                    $entityManager->flush();
                 }
 
                 $rowNo++;
@@ -131,6 +131,14 @@ class VersionTwoImportController extends AbstractController
 
             fclose($fp);
         }
+
+        return new JsonResponse([], 200);
+    }
+
+    #[Route('/v3/schools/import', name: 'v3_schools_import')]
+    public function ImportSchoolsInLospaeV3(EntityManagerInterface $entityManager): JsonResponse
+    {
+        $json = json_decode(file_get_contents());
 
         return new JsonResponse([], 200);
     }
