@@ -46,9 +46,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActivated = false;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $lastLogin = null;
-
     #[ORM\ManyToOne]
     private ?School $school = null;
 
@@ -192,18 +189,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActivated(bool $isActivated): static
     {
         $this->isActivated = $isActivated;
-
-        return $this;
-    }
-
-    public function getLastLogin(): ?\DateTimeInterface
-    {
-        return $this->lastLogin;
-    }
-
-    public function setLastLogin(?\DateTimeInterface $lastLogin): static
-    {
-        $this->lastLogin = $lastLogin;
 
         return $this;
     }
