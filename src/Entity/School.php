@@ -31,14 +31,15 @@ class School
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $academy = null;
-
     /**
      * @var Collection<int, Promotion>
      */
     #[ORM\OneToMany(targetEntity: Promotion::class, mappedBy: 'school')]
     private Collection $promotions;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Academy $academy = null;
 
     public function __construct()
     {
@@ -110,18 +111,6 @@ class School
         return $this;
     }
 
-    public function getAcademy(): ?string
-    {
-        return $this->academy;
-    }
-
-    public function setAcademy(string $academy): static
-    {
-        $this->academy = $academy;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Promotion>
      */
@@ -148,6 +137,18 @@ class School
                 $promotion->setSchool(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAcademy(): ?Academy
+    {
+        return $this->academy;
+    }
+
+    public function setAcademy(?Academy $academy): static
+    {
+        $this->academy = $academy;
 
         return $this;
     }
