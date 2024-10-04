@@ -34,14 +34,14 @@
                                         </div>
                                         <div class="ms-3 name">
                                             <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
+                                            {% if user.promotion is not null %}
+                                            <h6 class="text-muted mb-0">{{ user.promotion.school.name }} ({{ user.promotion.school.city }})</h6>
+                                            <h6 class="text-muted mb-0">{{ user.promotion.name }}</h6>
+                                            {% endif %}
                                             <h6 class="text-muted mb-0">
-                                                {% if user.avatar is not same as("default_avatar.svg") %}
-                                                    <a href="{{ path("admin_avatar_remove", { id: user.id }) }}" class="btn btn-danger" title="Supprimer la photo de profil de {{ user.firstName }} {{ user.lastName }}">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </a>
-                                                {% else %}
-                                                    Cet utilisateur n'a pas encore modifié sa photo de profil.
-                                                {% endif %}
+                                                <a href="{{ path("admin_avatar_remove", { id: user.id }) }}" class="btn btn-danger" title="Supprimer la photo de profil de {{ user.firstName }} {{ user.lastName }}">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
                                             </h6>
                                         </div>
                                     </div>
