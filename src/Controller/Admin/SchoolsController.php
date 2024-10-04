@@ -135,7 +135,7 @@ class SchoolsController extends AbstractController
         $promos = [];
 
         if (!is_null($school)) {
-            foreach ($school->getPromos() as $promo) {
+            foreach ($school->getPromotions() as $promo) {
                 $promos[] = [
                     "id" => $promo->getId(),
                     "name" => $promo->getName()

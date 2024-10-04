@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Administration > Utilisateurs{% endblock %}
+{% block title %}Administration > Gestion des étudiants{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
@@ -18,13 +18,13 @@
             </header>
 
             <div class="page-heading">
-                <h3>Configuration d'un utilisateur</h3>
+                <h3>Configuration d'un étudiant</h3>
             </div>
 
             <div class="page-content">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ path("admin_user_configure", { id: user.id }) }}" method="POST">
+                        <form action="{{ path("admin_student_configure", { id: student.id }) }}" method="POST">
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Attribution de rôles</h4>
@@ -35,19 +35,19 @@
                                         <div class="card-body py-3 px-3">
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar avatar-xl">
-                                                    <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                                    <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
                                                 </div>
 
                                                 <div class="ms-3 name">
-                                                    <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
+                                                    <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }}</h5>
                                                     <h6 class="text-muted mb-0">
-                                                        {% if "ROLE_TEACHER" in user.roles %}
+                                                        {% if "ROLE_TEACHER" in student.roles %}
                                                             Enseignant
-                                                        {% elseif "ROLE_STUDENT" in user.roles %}
+                                                        {% elseif "ROLE_STUDENT" in student.roles %}
                                                             Étudiant
                                                         {% endif %}
 
-                                                        {% if "ROLE_ADMIN" in user.roles %}
+                                                        {% if "ROLE_ADMIN" in student.roles %}
                                                             <span class="badge bg-secondary">Admin</span>
                                                         {% endif %}
                                                     </h6>
@@ -56,25 +56,25 @@
                                         </div>
                                     </div>
 
-                                    <p class="text-muted">Sélectionnez ou désélectionnez les rôles à attribuer à l'utilisateur ci-dessus, puis cliquez sur le bouton pour enregistrer les modifications.</p>
+                                    <p class="text-muted">Sélectionnez ou désélectionnez les rôles à attribuer à l'étudiant ci-dessus, puis cliquez sur le bouton pour enregistrer les modifications.</p>
 
                                     <div class="form-check">
                                         <div class="checkbox">
-                                            <input type="checkbox" id="roleTeacher" name="roleTeacher" class="form-check-input" {% if "ROLE_TEACHER" in user.roles %}checked{% endif %} />
+                                            <input type="checkbox" id="roleTeacher" name="roleTeacher" class="form-check-input" {% if "ROLE_TEACHER" in student.roles %}checked{% endif %} />
                                             <label for="roleTeacher">Enseignant</label>
                                         </div>
                                     </div>
 
                                     <div class="form-check">
                                         <div class="checkbox">
-                                            <input type="checkbox" id="roleStudent" name="roleStudent" class="form-check-input" {% if "ROLE_STUDENT" in user.roles %}checked{% endif %} />
+                                            <input type="checkbox" id="roleStudent" name="roleStudent" class="form-check-input" {% if "ROLE_STUDENT" in student.roles %}checked{% endif %} />
                                             <label for="roleStudent">Étudiant</label>
                                         </div>
                                     </div>
 
                                     <div class="form-check">
                                         <div class="checkbox">
-                                            <input type="checkbox" id="roleAdmin" name="roleAdmin" class="form-check-input" {% if "ROLE_ADMIN" in user.roles %}checked{% endif %} {% if "ROLE_ADMIN" not in app.user.roles %}disabled{% endif %} />
+                                            <input type="checkbox" id="roleAdmin" name="roleAdmin" class="form-check-input" {% if "ROLE_ADMIN" in student.roles %}checked{% endif %} {% if "ROLE_ADMIN" not in app.user.roles %}disabled{% endif %} />
                                             <label for="roleAdmin">Administrateur</label>
                                         </div>
                                     </div>

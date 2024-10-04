@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Administration > Utilisateurs{% endblock %}
+{% block title %}Administration > Gestion des étudiants{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
@@ -18,45 +18,49 @@
             </header>
 
             <div class="page-heading">
-                <h3>Édition d'un utilisateur</h3>
+                <h3>Édition d'un étudiant</h3>
             </div>
 
             <div class="page-content">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ path("admin_user_edit", { ids: usersIds }) }}" method="POST">
+                        <form action="{{ path("admin_student_edit", { ids: studentsIds }) }}" method="POST">
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Choix de l'affectation</h4>
                                 </div>
 
                                 <div class="card-body">
-                                    {% if users|length > 1 %}
-                                        <p>Vous êtes sur le point de modifier l'affectation des utilisateurs ci-dessous. Sélectionnez l'établissement scolaire et la promotion à affecter aux étudiants sélectionnés, puis cliquez sur le bouton pour enregistrer les modifications.</p>
+                                    {% if students|length > 1 %}
+                                        <p>Vous êtes sur le point de modifier l'affectation des étudiants ci-dessous. Sélectionnez l'établissement scolaire et la promotion à affecter aux étudiants sélectionnés, puis cliquez sur le bouton pour enregistrer les modifications.</p>
 
                                         <div class="row">
-                                            {% for user in users %}
+                                            {% for student in students %}
                                                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
                                                     <div class="card">
                                                         <div class="card-body py-4 px-4">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="avatar avatar-xl">
-                                                                    <img src="/assets/img/avatars/{{ user.avatar }}" alt="Photo de profil de {{ user.firstName }} {{ user.lastName }}" />
+                                                                    <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
                                                                 </div>
 
                                                                 <div class="ms-3 name">
-                                                                    <h5 class="font-bold">{{ user.firstName }} {{ user.lastName }}</h5>
+                                                                    <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }}</h5>
                                                                     <h6 class="text-muted mb-0">
-                                                                        {% if "ROLE_TEACHER" in user.roles %}
+                                                                        {% if "ROLE_TEACHER" in student.roles %}
                                                                             Enseignant
-                                                                        {% elseif "ROLE_STUDENT" in user.roles %}
+                                                                        {% elseif "ROLE_STUDENT" in student.roles %}
                                                                             Étudiant
                                                                         {% endif %}
 
-                                                                        {% if "ROLE_ADMIN" in user.roles %}
+                                                                        {% if "ROLE_ADMIN" in student.roles %}
                                                                             <span class="badge bg-secondary">Admin</span>
                                                                         {% endif %}
                                                                     </h6>
+                                                                    {% if student.promotion is not null %}
+                                                                    <h6 class="text-muted mb-0">{{ student.promotion.school.name }} ({{ student.promotion.school.city }})</h6>
+                                                                    <h6 class="text-muted mb-0">{{ student.promotion.name }}</h6>
+                                                                    {% endif %}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -65,25 +69,25 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        <p>Vous êtes sur le point de modifier l'affectation de l'utilisateur ci-dessous. Sélectionnez l'établissement scolaire et la promotion à affecter à l'étudiant sélectionné, puis cliquez sur le bouton pour enregistrer les modifications.</p>
+                                        <p>Vous êtes sur le point de modifier l'affectation de l'étudiant ci-dessous. Sélectionnez l'établissement scolaire et la promotion à affecter à l'étudiant sélectionné, puis cliquez sur le bouton pour enregistrer les modifications.</p>
 
                                         <div class="card">
                                             <div class="card-body py-3 px-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-xl">
-                                                        <img src="/assets/img/avatars/{{ users[0].avatar }}" alt="Photo de profil de {{ users[0].firstName }} {{ users[0].lastName }}" />
+                                                        <img src="/assets/img/avatars/{{ students[0].avatar }}" alt="Photo de profil de {{ students[0].firstName }} {{ students[0].lastName }}" />
                                                     </div>
 
                                                     <div class="ms-3 name">
-                                                        <h5 class="font-bold">{{ users[0].firstName }} {{ users[0].lastName }}</h5>
+                                                        <h5 class="font-bold">{{ students[0].firstName }} {{ students[0].lastName }}</h5>
                                                         <h6 class="text-muted mb-0">
-                                                            {% if "ROLE_TEACHER" in users[0].roles %}
+                                                            {% if "ROLE_TEACHER" in students[0].roles %}
                                                                 Enseignant
-                                                            {% elseif "ROLE_STUDENT" in users[0].roles %}
+                                                            {% elseif "ROLE_STUDENT" in students[0].roles %}
                                                                 Étudiant
                                                             {% endif %}
 
-                                                            {% if "ROLE_ADMIN" in users[0].roles %}
+                                                            {% if "ROLE_ADMIN" in students[0].roles %}
                                                                 <span class="badge bg-secondary">Admin</span>
                                                             {% endif %}
                                                         </h6>
@@ -139,5 +143,5 @@
     <script src="/template/extensions/parsleyjs/parsley.min.js"></script>
     <script src="/template/extensions/parsleyjs/i18n/fr.js"></script>
     <script src="/template/static/js/pages/parsley.js"></script>
-    <script src="/assets/js/pages/logged_in/admin/users_edit.js"
+    <script src="/assets/js/pages/logged_in/admin/students_edit.js"
 {% endblock %}
