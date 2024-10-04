@@ -31,35 +31,86 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <p class="text-muted">
-                                        Remplissez les champs ci-dessous pour définir le nouvel établissement scolaire disponible sur LOSPAÉ, puis cliquez sur le bouton pour l'enregistrer et le rendre utilisable.
-                                    </p>
-
-                                    <div class="form-group position-relative has-icon-left mb-4">
-                                        <input id="name" name="name" type="text" class="form-control form-control-xl" placeholder="Nom de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir le nom de l'établissement." data-parsley-maxlength="500">
-                                        <div class="form-control-icon">
-                                            <i class="fas fa-signature"></i>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <p class="text-muted">
+                                                Remplissez les champs ci-dessous pour définir le nouvel établissement scolaire disponible sur LOSPAÉ, puis cliquez sur le bouton pour l'enregistrer et le rendre utilisable.
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <div class="form-group position-relative has-icon-left mb-4">
-                                        <input id="address" name="address" type="text" class="form-control form-control-xl" placeholder="Adresse de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir l'adresse de l'établissement." data-parsley-maxlength="500">
-                                        <div class="form-control-icon">
-                                            <i class="fas fa-map"></i>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="uai">
+                                                    <i class="fas fa-indent"></i>
+                                                </label>
+
+                                                <input id="uai" name="uai" type="text" class="form-control" placeholder="Unité administrative immatriculée" data-parsley-required="true" data-parsley-error-message="Vous devez saisir l'immatriculation de l'unité administrative correspondant à l'établissement." data-parsley-maxlength="8">
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group position-relative has-icon-left mb-4">
-                                        <input id="postalCode" name="postalCode" type="number" class="form-control form-control-xl" placeholder="Code postal de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir le code postal de l'établissement." data-parsley-maxlength="5">
-                                        <div class="form-control-icon">
-                                            <i class="fas fa-map"></i>
+                                    <div class="row mt-2">
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="name">
+                                                    <i class="fas fa-signature"></i>
+                                                </label>
+
+                                                <input id="name" name="name" type="text" class="form-control" placeholder="Nom de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir le nom de l'établissement." data-parsley-maxlength="500">
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group position-relative has-icon-left mb-4">
-                                        <input id="city" name="city" type="text" class="form-control form-control-xl" placeholder="Ville de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir la ville de l'établissement." data-parsley-maxlength="500">
-                                        <div class="form-control-icon">
-                                            <i class="fas fa-map"></i>
+                                    <div class="row mt-2">
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="address">
+                                                    <i class="fas fa-map-marked-alt"></i>
+                                                </label>
+
+                                                <input id="address" name="address" type="text" class="form-control" placeholder="Adresse de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir l'adresse de l'établissement." data-parsley-maxlength="500">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2">
+                                        <div class="col-sm-12 col-md-6">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="postalCode">
+                                                    <i class="fas fa-map-marked-alt"></i>
+                                                </label>
+
+                                                <input id="postalCode" name="postalCode" type="number" class="form-control" placeholder="Code postal de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir le code postal de l'établissement." data-parsley-maxlength="5">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-6">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="city">
+                                                    <i class="fas fa-map-marked-alt"></i>
+                                                </label>
+
+                                                <input id="city" name="city" type="text" class="form-control" placeholder="Ville de l'établissement" data-parsley-required="true" data-parsley-error-message="Vous devez saisir la ville de l'établissement." data-parsley-maxlength="500">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2">
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="academy">
+                                                    <i class="fas fa-map"></i>
+                                                </label>
+
+                                                <select id="academy" name="academy" class="form-select" data-parsley-required="true" data-parsley-error-message="Vous devez sélectionner l'académie de l'établissement.">
+                                                    <option selected disabled hidden>Sélectionnez une académie...</option>
+                                                    {% for academy in academies %}
+                                                    <option value="{{ academy.id }}">{{ academy.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
