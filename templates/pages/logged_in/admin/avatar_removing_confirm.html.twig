@@ -51,6 +51,10 @@
                                                         <span class="badge bg-secondary">Admin</span>
                                                     {% endif %}
                                                 </h6>
+                                                {% if user.promotion is not null %}
+                                                <h6 class="text-muted mb-0">{{ user.promotion.school.name }} ({{ user.promotion.school.city }})</h6>
+                                                <h6 class="text-muted mb-0">{{ user.promotion.name }}</h6>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
