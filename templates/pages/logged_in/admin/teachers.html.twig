@@ -33,7 +33,7 @@
 
                                 <div class="card-body">
                                     <p class="text-muted">
-                                        Des lettres ont été générées pour les comptes enseignant importés il y a quelques secondes. Vous pouvez les télécharger si vous le souhaitez pour les fournir aux étudiants concernés.
+                                        Des lettres ont été générées pour les comptes enseignants importés il y a quelques secondes. Vous pouvez les télécharger si vous le souhaitez pour les fournir aux enseignants concernés.
                                         <br />
                                         ATTENTION : Ce sera votre seule opportunité de les télécharger. Ces documents ne vous seront pas représentés par la suite et seront supprimés de LOSPAÉ dans quelques heures.
                                     </p>
@@ -56,8 +56,8 @@
                                 <h4 class="card-title">Liste des enseignants</h4>
 
                                 <div>
-                                    <button id="edit_selected_teachers" class="btn btn-primary" title="Modifier les comptes sélectionnés">
-                                        <i class="fas fa-user-edit"></i>
+                                    <button id="configure_selected_teachers" class="btn btn-primary" title="Configurer les comptes sélectionnés">
+                                        <i class="fas fa-user-cog"></i>
                                     </button>
                                     <button id="enable_selected_teachers" class="btn btn-success" title="Activer les comptes sélectionnés">
                                         <i class="fas fa-user-check"></i>
@@ -68,7 +68,7 @@
                                     <button id="delete_selected_teachers" class="btn btn-dark" title="Supprimer les comptes sélectionnés">
                                         <i class="fas fa-user-slash"></i>
                                     </button>
-                                    <a href="{# path("admin_teachers_import") #}" class="btn btn-primary">Importer des enseignants</a>
+                                    <a href="{{ path("admin_teachers_import") }}" class="btn btn-primary">Importer des enseignants</a>
                                 </div>
                             </div>
 
@@ -108,23 +108,21 @@
                                                             <i class="fas fa-user-cog"></i>
                                                         </a>
 
-                                                        <a href="{# path("admin_teacher_edit", { ids: teacher.id }) #}" class="btn btn-primary" title="Modifier le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
-                                                            <i class="fas fa-user-edit"></i>
-                                                        </a>
+                                                        {% if teacher.email is not same as(app.user.email) %}
+                                                            {% if teacher.isActivated %}
+                                                                <a href="{# path("admin_teacher_disable", { ids: teacher.id }) #}" class="btn btn-danger" title="Désactiver le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
+                                                                    <i class="fas fa-user-times"></i>
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{# path("admin_teacher_enable", { ids: teacher.id }) #}" class="btn btn-success" title="Activer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
+                                                                    <i class="fas fa-user-check"></i>
+                                                                </a>
+                                                            {% endif %}
 
-                                                        {% if teacher.isActivated %}
-                                                            <a href="{# path("admin_teacher_disable", { ids: teacher.id }) #}" class="btn btn-danger" title="Désactiver le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
-                                                                <i class="fas fa-user-times"></i>
-                                                            </a>
-                                                        {% else %}
-                                                            <a href="{# path("admin_teacher_enable", { ids: teacher.id }) #}" class="btn btn-success" title="Activer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
-                                                                <i class="fas fa-user-check"></i>
+                                                            <a href="{# path("admin_teacher_remove", { ids: teacher.id }) #}" class="btn btn-dark" title="Supprimer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
+                                                                <i class="fas fa-user-slash"></i>
                                                             </a>
                                                         {% endif %}
-
-                                                        <a href="{# path("admin_teacher_remove", { ids: teacher.id }) #}" class="btn btn-dark" title="Supprimer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
-                                                            <i class="fas fa-user-slash"></i>
-                                                        </a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}

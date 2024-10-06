@@ -3,10 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Services\StringHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\Settings;
+use PhpOffice\PhpWord\TemplateProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class TeacherController extends AbstractController
@@ -23,7 +28,7 @@ class TeacherController extends AbstractController
         }
 
         if (
-            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
             && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
             && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
         ) {
@@ -50,5 +55,125 @@ class TeacherController extends AbstractController
             "totalElements" => $teachersCount,
             "currentPage" => $pageNumber
         ]);
+    }
+
+    #[Route('/admin/teachers/import', name: 'admin_teachers_import')]
+    public function teachersImport(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        if ($request->isMethod("POST")) {
+            $newTeachers = [];
+            $generatedLetters = [];
+            $rowNo = 1;
+
+            if (($fp = fopen($request->files->get("csvfile")->getPathName(), "r")) !== FALSE) {
+                while (($row = fgetcsv($fp, 1000, ";")) !== FALSE) {
+                    if ($rowNo > 1) {
+                        $teacherLastName = $row[0];
+                        $teacherFirstName = $row[1];
+                        $teacherEmail = $row[2];
+
+                        if (is_null($entityManager->getRepository(User::class)->findOneBy(["email" => $teacherEmail]))) {
+                            $authorizedSpecialChars = ["#", "@", ".", "/", "!", ",", ":", ";", "?", "%", "*", "-", "+"];
+                            $teacherPassword = ucfirst(strtolower(substr(StringHandler::remove_accents($teacherLastName), 0, 3)));
+                            $teacherPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
+                            $teacherPassword .= ucfirst(strtolower(substr(StringHandler::remove_accents($teacherFirstName), 0, 3)));
+                            $teacherPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
+                            $teacherPassword .= rand(10, 99);
+
+                            $teacher = new User();
+                            $teacher->setLastName($teacherLastName);
+                            $teacher->setFirstName($teacherFirstName);
+                            $teacher->setEmail($teacherEmail);
+                            $teacher->setPassword($passwordHasher->hashPassword($teacher, $teacherPassword));
+                            $teacher->setRoles(["ROLE_TEACHER"]);
+                            $teacher->setActivated(false);
+
+                            $entityManager->persist($teacher);
+                            $entityManager->flush();
+
+                            $newTeachers[] = [
+                                "lastName" => $teacherLastName,
+                                "firstName" => $teacherFirstName,
+                                "email" => $teacherEmail,
+                                "type" => "Enseignant",
+                                "temporaryPassword" => $teacherPassword
+                            ];
+                        } else {
+                            $this->addFlash("warning", "Un compte existe déjà pour l'adresse e-mail suivante : ".$teacherEmail);
+                        }
+                    }
+
+                    $rowNo++;
+                }
+
+                fclose($fp);
+            }
+
+            if (count($newTeachers) > 1) {
+                $this->addFlash("success", count($newTeachers)." enseignants ont été importés.");
+            } else if (count($newTeachers) === 1) {
+                $this->addFlash("success", "Un enseignant a été importé.");
+            } else {
+                $this->addFlash("warning", "Aucun enseignant n'a été importé. Il y a peut-être eu un problème durant l'importation.");
+            }
+
+            if (count($newTeachers) > 0) {
+                try {
+                    $templateFile = $this->getParameter("kernel.project_dir")."/public/files/users_import_letter_model_teacher.docx";
+
+                    foreach ($newTeachers as $newTeacher) {
+                        $fileNameWithoutExt = "LOSPAE_NewUserLetter_Teacher_".$newTeacher["lastName"]."_".$newTeacher["firstName"]."_".date("Ymd");
+                        $pathToSave = $this->getParameter("kernel.project_dir")."/var/";
+
+                        $templateProcessor = new TemplateProcessor($templateFile);
+                        $templateProcessor->setValue("firstname", $newTeacher["firstName"]);
+                        $templateProcessor->setValue("lastname", $newTeacher["lastName"]);
+                        $templateProcessor->setValue("email", $newTeacher["email"]);
+                        $templateProcessor->setValue("password", $newTeacher["temporaryPassword"]);
+                        $templateProcessor->saveAs($pathToSave.$fileNameWithoutExt.".docx");
+
+                        Settings::setPdfRendererName(Settings::PDF_RENDERER_MPDF);
+                        Settings::setPdfRendererPath($this->getParameter("kernel.project_dir").'/vendor/mpdf/mpdf');
+
+                        $reader = IOFactory::load($pathToSave.$fileNameWithoutExt.".docx");
+
+                        $writer = IOFactory::createWriter($reader, 'PDF');
+                        $writer->save($pathToSave.$fileNameWithoutExt.".pdf");
+
+                        unlink($pathToSave.$fileNameWithoutExt.".docx");
+                        $generatedLetters[] = $fileNameWithoutExt.".pdf";
+                    }
+                } catch (Exception $e) {
+                    $this->addFlash("danger", "Il n'a pas été possible de générer certaines lettres de notification des étudiants.");
+                }
+            }
+
+            return $this->redirectToRoute("admin_teachers", [
+                "generatedLetters" => $generatedLetters
+            ]);
+        }
+
+        return $this->render('pages/logged_in/admin/teachers_import.html.twig');
     }
 }

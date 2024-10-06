@@ -1,0 +1,115 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Gestion des enseignants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+    <link rel="stylesheet" type="text/css" href="/template/extensions/dropify/css/dropify.min.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Importation d'enseignants</h3>
+                <p class="text-muted">Cette page permet d'importer de nouveaux enseignants sur LOSPAÉ. Les comptes importés sont désactivés par défaut.</p>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Comment former le fichier CSV d'importation ?</h4>
+                            </div>
+
+                            <div class="card-body">
+                                <p class="text-muted">Un fichier CSV est un fichier texte comportant des différentes données. Une ligne du fichier CSV correspond à une donnée, dont les différentes parties (comme le nom, le prénom ou encore l'adresse e-mail d'un enseignant) sont séparées par un point-virgule.</p>
+                                <p class="text-muted">Le fichier CSV utilisé pour l'importation doit respecter un formalisme particulier, et comporter un certain nombre de données. <a href="/files/teachers_import_example.csv">Vous pouvez télécharger un exemple en cliquant ici</a>.</p>
+                                <p class="text-muted">Pour plus d'informations sur les informations à saisir dans le fichier CSV, consultez les rubriques ci-dessous.</p>
+
+                                <div class="accordion" id="teachersImportAccordion">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#teachersImportAccordionName" aria-expanded="true" aria-controls="teachersImportAccordionName">
+                                                Nom
+                                            </button>
+                                        </h2>
+                                        
+                                        <div id="teachersImportAccordionName" class="accordion-collapse collapse" data-bs-parent="#teachersImportAccordion">
+                                            <div class="accordion-body">
+                                                Le nom de famille de l'enseignant. Pas de formalisme particulier pour cette information.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#teachersImportAccordionPrenom" aria-expanded="false" aria-controls="teachersImportAccordionPrenom">
+                                               Prénom
+                                            </button>
+                                        </h2>
+
+                                        <div id="teachersImportAccordionPrenom" class="accordion-collapse collapse" data-bs-parent="#teachersImportAccordion">
+                                            <div class="accordion-body">
+                                                Le ou les prénoms de l'enseignant. Pas de formalisme particulier pour cette information.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#teachersImportAccordionEmail" aria-expanded="false" aria-controls="teachersImportAccordionEmail">
+                                                Adresse e-mail
+                                            </button>
+                                        </h2>
+
+                                        <div id="teachersImportAccordionEmail" class="accordion-collapse collapse" data-bs-parent="#teachersImportAccordion">
+                                            <div class="accordion-body">
+                                                L'adresse e-mail de l'enseignant. L'adresse e-mail saisie doit être valide : elle sera utilisée si ce dernier oublie son mot de passe pour lui permettre de le modifier.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <form action="{{ path("admin_teachers_import") }}" method="POST" enctype="multipart/form-data">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Choix du fichier CSV</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">Sélectionnez un fichier CSV et validez le formulaire pour lancer l'importation des données.</p>
+                                    <input type="file" name="csvfile" id="csvfile" data-allowed-file-extensions="csv" data-height="200" required />
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Lancer l'importation</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/template/extensions/dropify/js/dropify.min.js"></script>
+    <script src="/assets/js/pages/logged_in/admin/teachers_import.js"></script>
+{% endblock %}
