@@ -38,62 +38,69 @@ class NoteChangeDetailsController extends AbstractController
         }
 
         $teacherPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $this->getUser()]);
-        $students = [];
+        $promotions = [];
 
         foreach ($teacherPromotions as $teacherPromotion) {
+            $students = [];
+
             foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
                 $students[] = $student;
             }
-        }
 
-        $studentsNotesSum = 0;
-        $criterias = [];
-        $criteriasCount = [];
-        $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy([], ["occuredAt" => "DESC"]);
-        $globalAddedPoints = 0.0;
-        $globalRemovedPoints = 0.0;
+            $studentsNotesSum = 0;
+            $criterias = [];
+            $criteriasCount = [];
+            $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy([], ["occuredAt" => "DESC"]);
+            $globalAddedPoints = 0.0;
+            $globalRemovedPoints = 0.0;
 
-        foreach ($students as $student) {
-            foreach ($student->getCurrentNotes() as $currentNote) {
-                if ($currentNote->getTeacher() === $this->getUser()) {
-                    $studentsNotesSum += $currentNote->getNote();
+            foreach ($students as $student) {
+                foreach ($student->getCurrentNotes() as $currentNote) {
+                    if ($currentNote->getTeacher() === $this->getUser()) {
+                        $studentsNotesSum += $currentNote->getNote();
+                    }
                 }
             }
-        }
 
-        foreach ($entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]) as $criteria) {
-            $criterias[$criteria->getId()] = [
-                "data" => $criteria,
-                "count" => 0
+            foreach ($entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]) as $criteria) {
+                $criterias[$criteria->getId()] = [
+                    "data" => $criteria,
+                    "count" => 0
+                ];
+            }
+
+            foreach ($noteChanges as $noteChange) {
+                $criterias[$noteChange->getCriteria()->getId()]["count"]++;
+
+                if ($noteChange->getImpact() > 0) {
+                    $globalAddedPoints += $noteChange->getImpact();
+                } else {
+                    $globalRemovedPoints += ($noteChange->getImpact() * -1);
+                }
+            }
+
+            foreach ($criterias as $criteria) {
+                if ($criteria["count"] === 0) {
+                    unset($criterias[$criteria["data"]->getId()]);
+                }
+            }
+
+            usort($criterias, function($a, $b) {
+                return $b["count"] <=> $a["count"];
+            });
+
+            $promotions[] = [
+                "data" => $teacherPromotion->getPromotion(),
+                "studentsAverageNote" => (count($students) > 0) ? $studentsNotesSum / count($students) : 20,
+                "studentsNotesChangeEventsCount" => count($noteChanges),
+                "globalAddedPoints" => $globalAddedPoints,
+                "globalRemovedPoints" => $globalRemovedPoints,
+                "criterias" => $criterias
             ];
         }
 
-        foreach ($noteChanges as $noteChange) {
-            $criterias[$noteChange->getCriteria()->getId()]["count"]++;
-
-            if ($noteChange->getImpact() > 0) {
-                $globalAddedPoints += $noteChange->getImpact();
-            } else {
-                $globalRemovedPoints += ($noteChange->getImpact() * -1);
-            }
-        }
-
-        foreach ($criterias as $criteria) {
-            if ($criteria["count"] === 0) {
-                unset($criterias[$criteria["data"]->getId()]);
-            }
-        }
-
-        usort($criterias, function($a, $b) {
-            return $b["count"] <=> $a["count"];
-        });
-
         return $this->render('pages/logged_in/teacher/details.html.twig', [
-            "studentsAverageNote" => (count($students) > 0) ? $studentsNotesSum / count($students) : 20,
-            "studentsNotesChangeEventsCount" => count($noteChanges),
-            "globalAddedPoints" => $globalAddedPoints,
-            "globalRemovedPoints" => $globalRemovedPoints,
-            "criterias" => $criterias
+            "promotions" => $promotions
         ]);
     }
 }
