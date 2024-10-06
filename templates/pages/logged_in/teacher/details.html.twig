@@ -119,8 +119,8 @@
                                         <tbody>
                                         {% for criteria in criterias %}
                                             <tr>
-                                                <td class="text-center">{{ criteria.name }}</td>
-                                                <td class="text-center">{{ criteriasCount[criteria.id] }}</td>
+                                                <td class="text-center">{{ criteria.data.name }}</td>
+                                                <td class="text-center">{{ criteria.count }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
