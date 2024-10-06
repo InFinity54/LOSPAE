@@ -101,7 +101,7 @@
                                                         {% endif %}
                                                     </td>
                                                     <td>
-                                                        <a href="{# ("admin_teacher_configure", { id: teacher.id }) #}" class="btn btn-primary" title="Configurer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
+                                                        <a href="{{ path("admin_teacher_configure", { id: teacher.id }) }}" class="btn btn-primary" title="Configurer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
                                                             <i class="fas fa-user-cog"></i>
                                                         </a>
 

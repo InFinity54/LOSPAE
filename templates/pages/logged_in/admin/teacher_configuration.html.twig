@@ -1,0 +1,89 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Gestion des enseignants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/template/extensions/choices/styles/base.min.css" />
+    <link rel="stylesheet" type="text/css" href="/template/extensions/choices/styles/choices.min.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Configuration d'un enseignant</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="{{ path("admin_teacher_configure", { id: teacher.id }) }}" method="POST">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Affectation des établissements et promotions</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="card">
+                                        <div class="card-body py-3 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-xl">
+                                                    <img src="/assets/img/avatars/{{ teacher.avatar }}" alt="Photo de profil de {{ teacher.firstName }} {{ teacher.lastName }}" />
+                                                </div>
+
+                                                <div class="ms-3 name">
+                                                    <h5 class="font-bold">{{ teacher.firstName }} {{ teacher.lastName }}</h5>
+                                                    <h6 class="text-muted mb-0">
+                                                        Enseignant
+
+                                                        {% if "ROLE_ADMIN" in teacher.roles %}
+                                                            <span class="badge bg-secondary">Admin</span>
+                                                        {% endif %}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-muted">Sélectionnez ou désélectionnez les promotions à attribuer à l'enseignant ci-dessus, puis cliquez sur le bouton pour enregistrer les modifications. Les établissements seront affectés ou désaffectés automatiquement à l'enseignant en fonction des promotions sélectionnées.</p>
+
+                                    <select class="form-select" id="promotions" name="promotions[]" multiple>
+                                        {% for school in schools %}
+                                            <optgroup label="{{ school.name }} ({{ school.city }})">
+                                                {% for promo in promotions %}
+                                                    {% if promo.school.id is same as(school.id) %}
+                                                        <option value="{{ promo.id }}" {% if promo.id in teacherPromotions %}selected{% endif %}>{{ promo.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer les modifications</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/template/extensions/choices/scripts/choices.min.js"></script>
+    <script src="/assets/js/pages/logged_in/admin/teacher_config.js"></script>
+{% endblock %}

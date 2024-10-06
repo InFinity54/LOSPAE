@@ -21,9 +21,6 @@ class TeacherPromotion
     #[ORM\JoinColumn(nullable: false)]
     private ?Promotion $promotion = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $courseName = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -49,18 +46,6 @@ class TeacherPromotion
     public function setPromotion(?Promotion $promotion): static
     {
         $this->promotion = $promotion;
-
-        return $this;
-    }
-
-    public function getCourseName(): ?string
-    {
-        return $this->courseName;
-    }
-
-    public function setCourseName(string $courseName): static
-    {
-        $this->courseName = $courseName;
 
         return $this;
     }
