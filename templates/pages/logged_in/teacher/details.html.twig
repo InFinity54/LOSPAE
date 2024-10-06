@@ -19,116 +19,134 @@
 
             <div class="page-heading">
                 <h3>Détails des points</h3>
-                <p class="text-muted">Cette page permet de consulter le total des points gagnés ou perdus, ainsi que les motifs de ces modifications, pour l'ensemble de la promotion.</p>
+                <p class="text-muted">Cette page permet de consulter le total des points gagnés ou perdus, ainsi que les motifs de ces modifications, pour l'ensemble de des promotions.</p>
             </div>
 
             <div class="page-content">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="fas fa-sort"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Note moyenne</h6>
-                                        <h6 class="font-extrabold mb-0">{{ studentsAverageNote|number_format(2) }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="fas fa-stream"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Opérations sur les notes</h6>
-                                        <h6 class="font-extrabold mb-0">{{ studentsNotesChangeEventsCount }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon green mb-2">
-                                            <i class="fas fa-plus"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Total des points gagnés</h6>
-                                        <h6 class="font-extrabold mb-0">{{ globalAddedPoints|number_format(2) }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon red mb-2">
-                                            <i class="fas fa-minus"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Total des points perdus</h6>
-                                        <h6 class="font-extrabold mb-0">{{ globalRemovedPoints|number_format(2) }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-pills" id="promotionsTabs" role="tablist">
+                            {% for promotion in promotions %}
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link text-white {% if loop.first %}active{% endif %}" id="promotion{{ promotion.data.id }}-tab" data-bs-toggle="tab" data-bs-target="#promotion{{ promotion.data.id }}" type="button" role="tab" aria-controls="promotion{{ promotion.data.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ promotion.data.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <h4 class="card-title">Motifs les plus utilisés</h4>
+                <div class="tab-content">
+                    {% for promotion in promotions %}
+                        <div class="tab-pane {% if loop.first %}active{% endif %}" id="promotion{{ promotion.data.id }}" role="tabpanel" aria-labelledby="promotion{{ promotion.data.id }}-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body px-4 py-4-5">
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                    <div class="stats-icon blue mb-2">
+                                                        <i class="fas fa-sort"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                    <h6 class="text-muted font-semibold">Note moyenne</h6>
+                                                    <h6 class="font-extrabold mb-0">{{ promotion.studentsAverageNote|number_format(2) }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body px-4 py-4-5">
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                    <div class="stats-icon blue mb-2">
+                                                        <i class="fas fa-stream"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                    <h6 class="text-muted font-semibold">Opérations sur les notes</h6>
+                                                    <h6 class="font-extrabold mb-0">{{ promotion.studentsNotesChangeEventsCount }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body px-4 py-4-5">
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                    <div class="stats-icon green mb-2">
+                                                        <i class="fas fa-plus"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                    <h6 class="text-muted font-semibold">Total des points gagnés</h6>
+                                                    <h6 class="font-extrabold mb-0">{{ promotion.globalAddedPoints|number_format(2) }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body px-4 py-4-5">
+                                            <div class="row">
+                                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                    <div class="stats-icon red mb-2">
+                                                        <i class="fas fa-minus"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                    <h6 class="text-muted font-semibold">Total des points perdus</h6>
+                                                    <h6 class="font-extrabold mb-0">{{ promotion.globalRemovedPoints|number_format(2) }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center">CRITÈRE</th>
-                                            <th class="text-center">OCCURANCES</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for criteria in criterias %}
-                                            <tr>
-                                                <td class="text-center">{{ criteria.data.name }}</td>
-                                                <td class="text-center">{{ criteria.count }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between">
+                                            <h4 class="card-title">Motifs les plus utilisés</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped mb-0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center">CRITÈRE</th>
+                                                        <th class="text-center">OCCURANCES</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for criteria in promotion.criterias %}
+                                                        <tr>
+                                                            <td class="text-center">{{ criteria.data.name }}</td>
+                                                            <td class="text-center">{{ criteria.count }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
