@@ -3,10 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\CurrentNote;
+use App\Entity\NoteChange;
 use App\Entity\Promotion;
 use App\Entity\School;
 use App\Entity\TeacherPromotion;
 use App\Entity\User;
+use App\Services\FileUpload\UserAvatarUpload;
 use App\Services\StringHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpWord\IOFactory;
@@ -168,7 +170,7 @@ class TeacherController extends AbstractController
                         $generatedLetters[] = $fileNameWithoutExt.".pdf";
                     }
                 } catch (Exception $e) {
-                    $this->addFlash("danger", "Il n'a pas été possible de générer certaines lettres de notification des étudiants.");
+                    $this->addFlash("danger", "Il n'a pas été possible de générer certaines lettres de notification des enseignants.");
                 }
             }
 
@@ -192,7 +194,7 @@ class TeacherController extends AbstractController
         }
 
         if (
-            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
             && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
             && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
         ) {
@@ -208,7 +210,7 @@ class TeacherController extends AbstractController
 
         if (is_null($teacher)) {
             $this->addFlash("danger", "L'enseignant demandé est introuvable.");
-            return $this->redirectToRoute("admin_students");
+            return $this->redirectToRoute("admin_teachers");
         }
 
         if ($request->isMethod("POST")) {
@@ -232,13 +234,13 @@ class TeacherController extends AbstractController
                         $teacherPromotion->setPromotion($promo);
                         $entityManager->persist($teacherPromotion);
 
-                        foreach ($promo->getStudents() as $student) {
-                            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["student" => $student, "teacher" => $teacher]);
+                        foreach ($promo->getTeachers() as $teacher) {
+                            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $teacher, "teacher" => $teacher]);
 
                             if (is_null($currentNote)) {
                                 $currentNote = new CurrentNote();
                                 $currentNote->setTeacher($teacher);
-                                $currentNote->setStudent($student);
+                                $currentNote->setTeacher($teacher);
                                 $currentNote->setNote(20);
                                 $entityManager->persist($currentNote);
                             }
@@ -270,5 +272,300 @@ class TeacherController extends AbstractController
             "schools" => $schools,
             "promotions" => $promotions
         ]);
+    }
+
+    #[Route('/admin/teachers/enable/{ids}', name: 'admin_teacher_enable')]
+    public function teacherEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $teachers = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $teacher = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($teacher)) {
+                $teachers[] = $teacher;
+            }
+        }
+
+        if (count($teachers) < count(explode(",", $id))) {
+            $this->addFlash("danger", "Un ou plusieurs enseignants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_teachers");
+        }
+
+        return $this->render('pages/logged_in/admin/teacher_enabling_confirm.html.twig', [
+            "teachers" => $teachers,
+            "teachersIds" => $ids
+        ]);
+    }
+
+    #[Route('/admin/teachers/enable/{ids}/do', name: 'admin_teacher_doenable')]
+    public function teacherDoEnable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $teachers = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $teacher = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($teacher)) {
+                $teachers[] = $id;
+
+                $teacher->setActivated(true);
+                $entityManager->flush();
+            }
+        }
+
+        if (count($teachers) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs enseignants parmis ceux demandés n'ont pas pu être activés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_teachers");
+        }
+
+        $this->addFlash("success", "Les comptes enseignants sélectionnés ont été activés.");
+        return $this->redirectToRoute("admin_teachers");
+    }
+
+    #[Route('/admin/teachers/disable/{ids}', name: 'admin_teacher_disable')]
+    public function teacherDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $teachers = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $teacher = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($teacher)) {
+                $teachers[] = $teacher;
+            }
+        }
+
+        if (count($teachers) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs enseignants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_teachers");
+        }
+
+        return $this->render('pages/logged_in/admin/teacher_disabling_confirm.html.twig', [
+            "teachers" => $teachers,
+            "teachersIds" => $ids
+        ]);
+    }
+
+    #[Route('/admin/teachers/disable/{ids}/do', name: 'admin_teacher_dodisable')]
+    public function teacherDoDisable(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $teachers = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $teacher = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($teacher)) {
+                $teachers[] = $id;
+                $teacher->setActivated(false);
+                $entityManager->flush();
+            }
+        }
+
+        if (count($teachers) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs enseignants parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_teachers");
+        }
+
+        $this->addFlash("success", "Les comptes enseignants sélectionnés ont été désactivés.");
+        return $this->redirectToRoute("admin_teachers");
+    }
+
+    #[Route('/admin/teachers/remove/{ids}', name: 'admin_teacher_remove')]
+    public function teacherRemove(Request $request, EntityManagerInterface $entityManager, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $teachers = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $teacher = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($teacher)) {
+                $teachers[] = $teacher;
+            }
+        }
+
+        if (count($teachers) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs enseignants parmis ceux demandés sont introuvables.");
+            return $this->redirectToRoute("admin_teachers");
+        }
+
+        return $this->render('pages/logged_in/admin/teacher_removing_confirm.html.twig', [
+            "teachers" => $teachers,
+            "teachersIds" => $ids
+        ]);
+    }
+
+    #[Route('/admin/teachers/remove/{ids}/do', name: 'admin_teacher_doremove')]
+    public function teacherDoRemove(Request $request, EntityManagerInterface $entityManager, UserAvatarUpload $avatarUpload, string $ids): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $teachers = [];
+
+        foreach (explode(",", $ids) as $id) {
+            $teacher = $entityManager->getRepository(User::class)->find($id);
+
+            if (!is_null($teacher)) {
+                $teachers[] = $id;
+                $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["teacher" => $id]);
+                $teacherPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]);
+                $currentNotes = $entityManager->getRepository(CurrentNote::class)->findBy(["teacher" => $teacher]);
+
+                foreach ($teacherPromotions as $teacherPromotion) {
+                    $entityManager->remove($teacherPromotion);
+                }
+
+                foreach ($currentNotes as $currentNote) {
+                    $entityManager->remove($currentNote);
+                }
+
+                foreach ($noteChanges as $noteChange) {
+                    $entityManager->remove($noteChange);
+                }
+
+                if ($teacher->getAvatar() !== "default_avatar.svg") {
+                    $teacherAvatarFullPath = $avatarUpload->getTargetDirectory().$teacher->getAvatar();
+
+                    if (file_exists($teacherAvatarFullPath)) {
+                        unlink($teacherAvatarFullPath);
+                    }
+                }
+
+                $entityManager->remove($teacher);
+                $entityManager->flush();
+            }
+        }
+
+        if (count($teachers) < count(explode(",", $ids))) {
+            $this->addFlash("danger", "Un ou plusieurs enseignants parmis ceux demandés n'ont pas pu être désactivés car ils sont introuvables.");
+            return $this->redirectToRoute("admin_teachers");
+        }
+
+        $this->addFlash("success", "Les comptes enseignants sélectionnés ont été désactivés.");
+        return $this->redirectToRoute("admin_teachers");
     }
 }

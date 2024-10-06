@@ -1,0 +1,119 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Gestion des enseignants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Désactivation d'un enseignant</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Confirmation de l'opération</h4>
+                            </div>
+                            <div class="card-body">
+                                {% if teachers|length > 1 %}
+                                    <p>Vous êtes sur le point de désactiver les {{ teachers|length }} comptes enseignants suivants :</p>
+
+                                    <div class="row">
+                                        {% for teacher in teachers %}
+                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                                <div class="card">
+                                                    <div class="card-body py-4 px-4">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar avatar-xl">
+                                                                <img src="/assets/img/avatars/{{ teacher.avatar }}" alt="Photo de profil de {{ teacher.firstName }} {{ teacher.lastName }}" />
+                                                            </div>
+
+                                                            <div class="ms-3 name">
+                                                                <h5 class="font-bold">{{ teacher.firstName }} {{ teacher.lastName }}</h5>
+                                                                <h6 class="text-muted mb-0">
+                                                                    {% if "ROLE_TEACHER" in teacher.roles %}
+                                                                        Enseignant
+                                                                    {% elseif "ROLE_TEACHER" in teacher.roles %}
+                                                                        Enseignant
+                                                                    {% endif %}
+
+                                                                    {% if "ROLE_ADMIN" in teacher.roles %}
+                                                                        <span class="badge bg-secondary">Admin</span>
+                                                                    {% endif %}
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <p>Cela entraînera la désaffectation de ces enseignants de leur promotion actuelle (s'ils en ont une).</p>
+                                    <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
+                                    <p>
+                                        <a href="{{ path("admin_teacher_dodisable", { ids: teachersIds }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
+                                        <a href="{{ path("admin_teachers") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
+                                    </p>
+                                {% else %}
+                                    <p>Vous êtes sur le point de désactiver le compte enseignant suivant :</p>
+
+                                    <div class="card">
+                                        <div class="card-body py-3 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-xl">
+                                                    <img src="/assets/img/avatars/{{ teachers[0].avatar }}" alt="Photo de profil de {{ teachers[0].firstName }} {{ teachers[0].lastName }}" />
+                                                </div>
+
+                                                <div class="ms-3 name">
+                                                    <h5 class="font-bold">{{ teachers[0].firstName }} {{ teachers[0].lastName }}</h5>
+                                                    <h6 class="text-muted mb-0">
+                                                        {% if "ROLE_TEACHER" in teachers[0].roles %}
+                                                            Enseignant
+                                                        {% elseif "ROLE_TEACHER" in teachers[0].roles %}
+                                                            Enseignant
+                                                        {% endif %}
+
+                                                        {% if "ROLE_ADMIN" in teachers[0].roles %}
+                                                            <span class="badge bg-secondary">Admin</span>
+                                                        {% endif %}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p>Cela entraînera la désaffectation de cet enseignant de sa promotion actuelle (s'il en a une).</p>
+                                    <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
+                                    <p>
+                                        <a href="{{ path("admin_teacher_dodisable", { ids: teachers[0].id }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
+                                        <a href="{{ path("admin_teachers") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
