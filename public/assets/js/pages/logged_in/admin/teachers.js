@@ -6,10 +6,6 @@ $("#teacherglobalselection").change((event) => {
     }
 })
 
-$("#configure_selected_teachers").on("click", () => {
-    handleAction("edit");
-});
-
 $("#enable_selected_teachers").on("click", () => {
     handleAction("enable");
 });
