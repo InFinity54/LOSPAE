@@ -97,7 +97,8 @@ class StudentController extends AbstractController
                         $studentLastName = $row[0];
                         $studentFirstName = $row[1];
                         $studentEmail = $row[2];
-                        $studentType = $row[3];
+                        $studentSchool = $row[3];
+                        $studentPromotion = $row[4];
 
                         if (is_null($entityManager->getRepository(User::class)->findOneBy(["email" => $studentEmail]))) {
                             $authorizedSpecialChars = ["#", "@", ".", "/", "!", ",", ":", ";", "?", "%", "*", "-", "+"];
@@ -112,15 +113,22 @@ class StudentController extends AbstractController
                             $student->setFirstName($studentFirstName);
                             $student->setEmail($studentEmail);
                             $student->setPassword($passwordHasher->hashPassword($student, $studentPassword));
-                            $student->setIsActivated(false);
+                            $student->setRoles(["ROLE_STUDENT"]);
+                            $student->setActivated(false);
 
-                            switch ($studentType) {
-                                case "Enseignant":
-                                    $student->setRoles(["ROLE_TEACHER"]);
-                                    break;
-                                default:
-                                    $student->setRoles(["ROLE_STUDENT"]);
-                                    break;
+                            if (!is_null($studentSchool)) {
+                                $school = $entityManager->getRepository(School::class)->findOneBy(["uai" => $studentSchool]);
+
+                                if (!is_null($school)) {
+                                    if (!is_null($studentPromotion)) {
+                                        $promotion = $entityManager->getRepository(Promotion::class)->findOneBy(["name" => $studentPromotion]);
+
+                                        if (!is_null($promotion)) {
+                                            $student->setSchool($school);
+                                            $student->setPromotion($promotion);
+                                        }
+                                    }
+                                }
                             }
 
                             $entityManager->persist($student);
@@ -130,11 +138,10 @@ class StudentController extends AbstractController
                                 "lastName" => $studentLastName,
                                 "firstName" => $studentFirstName,
                                 "email" => $studentEmail,
-                                "type" => $studentType,
                                 "temporaryPassword" => $studentPassword
                             ];
                         } else {
-                            $this->addFlash("warning", "Un compte existe déjà pour cette adresse e-mail.");
+                            $this->addFlash("warning", "Un compte existe déjà pour l'adresse e-mail suivante : ".$studentEmail);
                         }
                     }
 
@@ -157,7 +164,7 @@ class StudentController extends AbstractController
                     $templateFile = $this->getParameter("kernel.project_dir")."/public/files/users_import_letter_model_student.docx";
 
                     foreach ($newStudents as $newStudent) {
-                        $fileNameWithoutExt = "LOSPAE_NewUserLetter_".$newStudent["lastName"]."_".$newStudent["firstName"]."_".date("Ymd");
+                        $fileNameWithoutExt = "LOSPAE_NewUserLetter_Student_".$newStudent["lastName"]."_".$newStudent["firstName"]."_".date("Ymd");
                         $pathToSave = $this->getParameter("kernel.project_dir")."/var/";
 
                         $templateProcessor = new TemplateProcessor($templateFile);

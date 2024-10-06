@@ -140,14 +140,14 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item {% if app.current_route in ["admin_students", "admin_student_configure", "admin_student_enable", "admin_student_disable", "admin_student_remove"] %}active{% endif %}">
+                    <li class="sidebar-item {% if app.current_route in ["admin_students", "admin_students_import", "admin_student_configure", "admin_student_enable", "admin_student_disable", "admin_student_remove"] %}active{% endif %}">
                         <a href="{{ path("admin_students") }}" class='sidebar-link'>
                             <i class="fas fa-users"></i>
                             <span>Gestion des étudiants</span>
                         </a>
                     </li>
 
-                    <li class="sidebar-item {% if app.current_route in ["admin_teachers"] %}active{% endif %}">
+                    <li class="sidebar-item {% if app.current_route in ["admin_teachers", "admin_teachers_import"] %}active{% endif %}">
                         <a href="{{ path("admin_teachers") }}" class='sidebar-link'>
                             <i class="fas fa-chalkboard-teacher"></i>
                             <span>Gestion des enseignants</span>

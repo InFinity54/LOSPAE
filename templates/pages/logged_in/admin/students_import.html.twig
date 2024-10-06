@@ -20,7 +20,7 @@
 
             <div class="page-heading">
                 <h3>Importation d'étudiants</h3>
-                <p class="text-muted">Cette page permet de d'importer de nouveaux étudiants sur LOSPAÉ. Les comptes importés sont désactivés par défaut.</p>
+                <p class="text-muted">Cette page permet d'importer de nouveaux étudiants sur LOSPAÉ. Les comptes importés sont désactivés par défaut.</p>
             </div>
 
             <div class="page-content">
@@ -81,14 +81,28 @@
 
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#studentsImportAccordionType" aria-expanded="false" aria-controls="studentsImportAccordionType">
-                                                Type de compte
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#studentsImportAccordionSchool" aria-expanded="false" aria-controls="studentsImportAccordionSchool">
+                                                Établissement
                                             </button>
                                         </h2>
 
-                                        <div id="studentsImportAccordionType" class="accordion-collapse collapse" data-bs-parent="#studentsImportAccordion">
+                                        <div id="studentsImportAccordionSchool" class="accordion-collapse collapse" data-bs-parent="#studentsImportAccordion">
                                             <div class="accordion-body">
-                                                Le type de compte peut prendre deux valeurs : Etudiant ou Enseignant. Cette valeur sera utilisée à l'importation pour attribuer les droits d'accès correspondant au compte nouvellement créé. <strong>Veillez donc à bien choisir le type de compte et à le vérifier avant l'importation.</strong>
+                                                Le code UAI de l'établissement. Cette information n'est pas obligatoire, mais permet d'affecter automatiquement l'étudiant à sa promotion dès la création de son compte. L'établissement doit déjà exister dans LOSPAÉ pour que l'affectation automatique soit exécutée.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#studentsImportAccordionPromotion" aria-expanded="false" aria-controls="studentsImportAccordionPromotion">
+                                                Promotion
+                                            </button>
+                                        </h2>
+
+                                        <div id="studentsImportAccordionPromotion" class="accordion-collapse collapse" data-bs-parent="#studentsImportAccordion">
+                                            <div class="accordion-body">
+                                                Le nom de la promotion. Cette information n'est pas obligatoire, mais permet d'affecter automatiquement l'étudiant à sa promotion dès la création de son compte. L'établissement et la promotion doivent déjà exister dans LOSPAÉ pour que l'affectation automatique soit exécutée.
                                             </div>
                                         </div>
                                     </div>
