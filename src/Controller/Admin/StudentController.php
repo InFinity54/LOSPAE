@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\CurrentNote;
 use App\Entity\NoteChange;
 use App\Entity\Promotion;
 use App\Entity\School;
@@ -389,11 +390,7 @@ class StudentController extends AbstractController
             if (!is_null($student)) {
                 $students[] = $id;
 
-                if (in_array("ROLE_STUDENT", $student->getRoles()) && is_null($student->getCurrentNote())) {
-                    $student->setCurrentNote(20);
-                }
-
-                $student->setIsActivated(true);
+                $student->setActivated(true);
                 $entityManager->flush();
             }
         }
@@ -481,9 +478,17 @@ class StudentController extends AbstractController
         foreach (explode(",", $ids) as $id) {
             $student = $entityManager->getRepository(User::class)->find($id);
 
+            $currentNotes = $entityManager->getRepository(CurrentNote::class)->findBy(["student" => $student]);
+
+            foreach ($currentNotes as $currentNote) {
+                $entityManager->remove($currentNote);
+            }
+
             if (!is_null($student)) {
                 $students[] = $id;
-                $student->setIsActivated(false);
+                $student->setPromotion(null);
+                $student->setSchool(null);
+                $student->setActivated(false);
                 $entityManager->flush();
             }
         }
