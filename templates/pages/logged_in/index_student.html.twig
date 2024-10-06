@@ -19,90 +19,107 @@
 
             <div class="page-heading">
                 <h3>Accueil étudiant</h3>
+                <p class="text-muted">Cette page contient un résumé de l'état actuel de vos notes. Vous pouvez obtenir plus de détails en utilisant le menu du site et en consultant les différentes pages disponibles.</p>
             </div>
 
             <div class="page-content">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-4">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Note actuelle</h6>
-                                        <h6 class="font-extrabold mb-0">{{ app.user.currentNote|number_format(2) }} / 20</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6 col-lg-4">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="fas fa-history"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Opérations sur ma note</h6>
-                                        <h6 class="font-extrabold mb-0">{{ noteChangesCount }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-pills" id="promotionsTabs" role="tablist">
+                            {% for note in notes %}
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link text-white {% if loop.first %}active{% endif %}" id="note{{ note.teacher.id }}-tab" data-bs-toggle="tab" data-bs-target="#note{{ note.teacher.id }}" type="button" role="tab" aria-controls="note{{ note.teacher.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ note.teacher.lastName|upper }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <h4 class="card-title">Modifications récentes de ma note</h4>
-                            </div>
-                            <div class="card-body">
-                                {% if recentNoteChanges|length > 0 %}
-                                <div class="table-responsive">
-                                    <table class="table table-striped mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center">CRITÈRE</th>
-                                            <th class="text-center">IMPACT</th>
-                                            <th class="text-center">DATE ET HEURE</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for noteChange in recentNoteChanges %}
-                                            <tr>
-                                                <td class="text-center">{{ noteChange.criteria.name }}</td>
-                                                <td class="text-center">
-                                                    {% if noteChange.impact < 0 %}
-                                                        - {{ (noteChange.impact * -1)|number_format(2) }}
-                                                    {% else %}
-                                                        + {{ noteChange.impact|number_format(2) }}
-                                                    {% endif %}
-                                                </td>
-                                                <td class="text-center">{{ noteChange.occuredAt|date("d/m/Y") }} à {{ noteChange.occuredAt|date("H:i")|replace({":": "h"}) }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
+                {% for note in notes %}
+                    <div class="tab-pane {% if loop.first %}active{% endif %}" id="note{{ note.teacher.id }}" role="tabpanel" aria-labelledby="note{{ note.teacher.id }}-tab">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon blue mb-2">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Note actuelle</h6>
+                                                <h6 class="font-extrabold mb-0">{{ note.currentNote|number_format(2) }} / 20</h6>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                {% else %}
-                                <center><p>Votre note n'a pas encore été modifiée.</p></center>
-                                {% endif %}
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon blue mb-2">
+                                                    <i class="fas fa-history"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Opérations sur ma note</h6>
+                                                <h6 class="font-extrabold mb-0">{{ note.totalChanges }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <h4 class="card-title">Modifications récentes de ma note</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {% if note.recentChanges|length > 0 %}
+                                            <div class="table-responsive">
+                                                <table class="table table-striped mb-0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center">CRITÈRE</th>
+                                                        <th class="text-center">IMPACT</th>
+                                                        <th class="text-center">DATE ET HEURE</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for noteChange in note.recentChanges %}
+                                                        <tr>
+                                                            <td class="text-center">{{ noteChange.criteria.name }}</td>
+                                                            <td class="text-center">
+                                                                {% if noteChange.impact < 0 %}
+                                                                    - {{ (noteChange.impact * -1)|number_format(2) }}
+                                                                {% else %}
+                                                                    + {{ noteChange.impact|number_format(2) }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="text-center">{{ noteChange.occuredAt|date("d/m/Y") }} à {{ noteChange.occuredAt|date("H:i")|replace({":": "h"}) }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% else %}
+                                            <center><p>Votre note n'a pas encore été modifiée.</p></center>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
 
             {% include "includes/components/footer.html.twig" %}
