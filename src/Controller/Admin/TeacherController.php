@@ -441,6 +441,22 @@ class TeacherController extends AbstractController
 
             if (!is_null($teacher)) {
                 $teachers[] = $id;
+                $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["teacher" => $id]);
+                $teacherPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]);
+                $currentNotes = $entityManager->getRepository(CurrentNote::class)->findBy(["teacher" => $teacher]);
+
+                foreach ($teacherPromotions as $teacherPromotion) {
+                    $entityManager->remove($teacherPromotion);
+                }
+
+                foreach ($currentNotes as $currentNote) {
+                    $entityManager->remove($currentNote);
+                }
+
+                foreach ($noteChanges as $noteChange) {
+                    $entityManager->remove($noteChange);
+                }
+
                 $teacher->setActivated(false);
                 $entityManager->flush();
             }

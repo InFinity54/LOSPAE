@@ -63,7 +63,7 @@
                                         {% endfor %}
                                     </div>
 
-                                    <p>Cela entraînera la désaffectation de ces enseignants de leur promotion actuelle (s'ils en ont une).</p>
+                                    <p class="text-danger">Toutes les données concernant ces enseignants seront définitivement supprimées de LOSPAÉ, y compris les notes actuelles de ces étudiants, l'historique de leurs changements ainsi que ses affectations. Elles devront être recréées manuellement après réactivation.</p>
                                     <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                     <p>
                                         <a href="{{ path("admin_teacher_dodisable", { ids: teachersIds }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
@@ -97,7 +97,7 @@
                                         </div>
                                     </div>
 
-                                    <p>Cela entraînera la désaffectation de cet enseignant de sa promotion actuelle (s'il en a une).</p>
+                                    <p class="text-danger">Toutes les données concernant cet enseignant seront définitivement supprimées de LOSPAÉ, y compris les notes actuelles de ces étudiants, l'historique de leurs changements ainsi que ses affectations. Elles devront être recréées manuellement après réactivation.</p>
                                     <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                     <p>
                                         <a href="{{ path("admin_teacher_dodisable", { ids: teachers[0].id }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>

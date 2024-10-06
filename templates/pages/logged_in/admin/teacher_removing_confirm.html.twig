@@ -63,7 +63,7 @@
                                         {% endfor %}
                                     </div>
 
-                                    <p class="text-danger">Cette opération est irréversible. Toutes les données concernant ces enseignants seront définitivement supprimées de LOSPAÉ.</p>
+                                    <p class="text-danger">Cette opération est irréversible. Toutes les données concernant ces enseignants seront définitivement supprimées de LOSPAÉ, y compris les notes actuelles de ces étudiants, l'historique de leurs changements ainsi que ses affectations.</p>
                                     <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                     <p>
                                         <a href="{{ path("admin_teacher_doremove", { ids: teachersIds }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
@@ -97,7 +97,7 @@
                                         </div>
                                     </div>
 
-                                    <p class="text-danger">Cette opération est irréversible. Toutes les données concernant cet enseignant seront définitivement supprimées de LOSPAÉ.</p>
+                                    <p class="text-danger">Cette opération est irréversible. Toutes les données concernant cet enseignant seront définitivement supprimées de LOSPAÉ, y compris les notes actuelles de ces étudiants, l'historique de leurs changements ainsi que ses affectations.</p>
                                     <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                     <p>
                                         <a href="{{ path("admin_teacher_doremove", { ids: teachers[0].id }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
