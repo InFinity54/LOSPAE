@@ -90,7 +90,7 @@
                 {% endif %}
 
                 {% if "ROLE_TEACHER" in app.user.roles %}
-                    <li class="sidebar-title">Gestion de la classe</li>
+                    <li class="sidebar-title text-body-secondary"><b>Gestion de la classe</b></li>
 
                     <li class="sidebar-item {% if app.current_route in ["teacher_notes"] %}active{% endif %}">
                         <a href="{{ path("teacher_notes") }}" class='sidebar-link'>
@@ -131,7 +131,7 @@
                 {% endif %}
 
                 {% if "ROLE_ADMIN" in app.user.roles %}
-                    <li class="sidebar-title">Administration</li>
+                    <li class="sidebar-title text-body-secondary"><b>Administration</b></li>
 
                     <li class="sidebar-item {% if app.current_route in ["admin_criterias", "admin_criteria_add", "admin_criteria_edit", "admin_criteria_remove"] %}active{% endif %}">
                         <a href="{{ path("admin_criterias") }}" class='sidebar-link'>
