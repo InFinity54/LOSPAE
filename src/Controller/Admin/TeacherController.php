@@ -216,6 +216,10 @@ class TeacherController extends AbstractController
         if ($request->isMethod("POST")) {
             $alreadyAffectedPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]);
 
+            foreach ($alreadyAffectedPromotions as $alreadyAffectedPromotion) {
+                $entityManager->remove($alreadyAffectedPromotion);
+            }
+
             if (!is_null($request->request->all("promotions")) && count($request->request->all("promotions")) > 0) {
                 foreach ($alreadyAffectedPromotions as $alreadyAffectedPromotion) {
                     if (!in_array($alreadyAffectedPromotion->getPromotion()->getId(), $request->request->all("promotions"))) {
@@ -234,22 +238,18 @@ class TeacherController extends AbstractController
                         $teacherPromotion->setPromotion($promo);
                         $entityManager->persist($teacherPromotion);
 
-                        foreach ($promo->getTeachers() as $teacher) {
-                            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $teacher, "teacher" => $teacher]);
+                        foreach ($promo->getStudents() as $student) {
+                            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $teacher, "student" => $student]);
 
                             if (is_null($currentNote)) {
                                 $currentNote = new CurrentNote();
-                                $currentNote->setTeacher($teacher);
+                                $currentNote->setStudent($student);
                                 $currentNote->setTeacher($teacher);
                                 $currentNote->setNote(20);
                                 $entityManager->persist($currentNote);
                             }
                         }
                     }
-                }
-            } else {
-                foreach ($alreadyAffectedPromotions as $alreadyAffectedPromotion) {
-                    $entityManager->remove($alreadyAffectedPromotion);
                 }
             }
 
