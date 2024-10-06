@@ -3,6 +3,7 @@
 namespace App\Controller\Teacher;
 
 use App\Entity\Criteria;
+use App\Entity\CurrentNote;
 use App\Entity\NoteChange;
 use App\Entity\TeacherPromotion;
 use App\Entity\User;
@@ -65,29 +66,27 @@ class StudentsNotesController extends AbstractController
 
                 foreach ($a->getCurrentNotes() as $currentNote) {
                     if ($currentNote->getTeacher() === $this->getUser()) {
-                        $aNote = $currentNote;
+                        $aNote = $currentNote->getNote();
+                        break;
                     }
                 }
 
                 foreach ($b->getCurrentNotes() as $currentNote) {
                     if ($currentNote->getTeacher() === $this->getUser()) {
-                        $bNote = $currentNote;
+                        $bNote = $currentNote->getNote();
+                        break;
                     }
                 }
 
-                if ($aNote->getNote() != $bNote->getNote()) {
-                    return $bNote <=> $aNote; // Ordre décroissant par les notes
+                if ($aNote === null && $bNote === null) {
+                    return 0;
+                } elseif ($aNote === null) {
+                    return 1;
+                } elseif ($bNote === null) {
+                    return -1;
                 }
 
-                // Comparaison par nom de famille
-                $lastNameComparison = strcmp($a->getLastName(), $b->getLastName());
-
-                // Si les noms de famille sont identiques, comparer par prénom
-                if ($lastNameComparison === 0) {
-                    return strcmp($a->getFirstName(), $b->getFirstName());
-                }
-
-                return $lastNameComparison;
+                return $bNote <=> $aNote; // Tri par ordre décroissant
             });
         }
 
@@ -122,15 +121,17 @@ class StudentsNotesController extends AbstractController
 
         if ($request->isMethod("POST")) {
             $student = $entityManager->getRepository(User::class)->find($request->request->get("student"));
+            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $this->getUser(), "student" => $student]);
             $criteria = $entityManager->getRepository(Criteria::class)->find($request->request->get("criteria"));
 
             if ($criteria->getImpact() < 0) {
-                $student->setCurrentNote($student->getCurrentNote() - ($criteria->getImpact() * -1));
+                $currentNote->setNote($currentNote->getNote() - ($criteria->getImpact() * -1));
             } else {
-                $student->setCurrentNote($student->getCurrentNote() + $criteria->getImpact());
+                $currentNote->setNote($currentNote->getNote() + $criteria->getImpact());
             }
 
             $noteChange = new NoteChange();
+            $noteChange->setTeacher($this->getUser());
             $noteChange->setStudent($student);
             $noteChange->setCriteria($criteria);
             $noteChange->setImpact($criteria->getImpact());
@@ -142,8 +143,26 @@ class StudentsNotesController extends AbstractController
             return $this->redirectToRoute("teacher_notechange");
         }
 
-        $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
+        $students = [];
         $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
+
+        foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $this->getUser()]) as $teacherPromotion) {
+            foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
+                $students[] = $student;
+            }
+        }
+
+        usort($students, function($a, $b) {
+            // Comparaison par nom de famille
+            $lastNameComparison = strcmp($a->getLastName(), $b->getLastName());
+
+            // Si les noms de famille sont identiques, comparer par prénom
+            if ($lastNameComparison === 0) {
+                return strcmp($a->getFirstName(), $b->getFirstName());
+            }
+
+            return $lastNameComparison;
+        });
 
         return $this->render('pages/logged_in/teacher/notechange.html.twig', [
             "students" => $students,
@@ -177,8 +196,26 @@ class StudentsNotesController extends AbstractController
 
         if ($request->request->count() > 0) {
             if ($request->request->has("criterias")) {
+                $students = [];
                 $selectedCriterias = [];
-                $students = $entityManager->getRepository(User::class)->findUsersByRole("ROLE_STUDENT");
+
+                foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $this->getUser()]) as $teacherPromotion) {
+                    foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
+                        $students[] = $student;
+                    }
+                }
+
+                usort($students, function($a, $b) {
+                    // Comparaison par nom de famille
+                    $lastNameComparison = strcmp($a->getLastName(), $b->getLastName());
+
+                    // Si les noms de famille sont identiques, comparer par prénom
+                    if ($lastNameComparison === 0) {
+                        return strcmp($a->getFirstName(), $b->getFirstName());
+                    }
+
+                    return $lastNameComparison;
+                });
 
                 foreach ($request->request->all()["criterias"] as $criteriaId) {
                     $selectedCriterias[] = $entityManager->getRepository(Criteria::class)->find($criteriaId);
@@ -192,15 +229,17 @@ class StudentsNotesController extends AbstractController
                 foreach ($request->request->keys() as $noteChangeId) {
                     $noteChangeData = explode("_", $noteChangeId);
                     $student = $entityManager->getRepository(User::class)->find($noteChangeData[0]);
+                    $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $this->getUser(), "student" => $student]);
                     $criteria = $entityManager->getRepository(Criteria::class)->find($noteChangeData[1]);
 
                     if ($criteria->getImpact() < 0) {
-                        $student->setCurrentNote($student->getCurrentNote() - ($criteria->getImpact() * -1));
+                        $currentNote->setNote($currentNote->getNote() - ($criteria->getImpact() * -1));
                     } else {
-                        $student->setCurrentNote($student->getCurrentNote() + $criteria->getImpact());
+                        $currentNote->setNote($currentNote->getNote() + $criteria->getImpact());
                     }
 
                     $noteChange = new NoteChange();
+                    $noteChange->setTeacher($this->getUser());
                     $noteChange->setStudent($student);
                     $noteChange->setCriteria($criteria);
                     $noteChange->setImpact($criteria->getImpact());

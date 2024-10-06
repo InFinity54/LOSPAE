@@ -2,6 +2,7 @@
 
 namespace App\Controller\Teacher;
 
+use App\Entity\CurrentNote;
 use App\Entity\NoteChange;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +36,7 @@ class NoteChangeHistoryController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy([], ["occuredAt" => "DESC"]);
+        $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["teacher" => $this->getUser()], ["occuredAt" => "DESC"]);
 
         return $this->render('pages/logged_in/teacher/history.html.twig', [
             "noteChanges" => $noteChanges
@@ -98,11 +99,13 @@ class NoteChangeHistoryController extends AbstractController
         }
 
         $noteChange = $entityManager->getRepository(NoteChange::class)->find($id);
+        $student = $noteChange->getStudent();
+        $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $this->getUser(), "student" => $student]);
 
         if ($noteChange->getImpact() < 0) {
-            $noteChange->getStudent()->getNote()->setCurrentNote($noteChange->getStudent()->getNote()->getCurrentNote() + ($noteChange->getImpact() * -1));
+            $currentNote->setNote($currentNote->getNote() + ($noteChange->getImpact() * -1));
         } else {
-            $noteChange->getStudent()->getNote()->setCurrentNote($noteChange->getStudent()->getNote()->getCurrentNote() - $noteChange->getImpact());
+            $currentNote->setNote($currentNote->getNote() - $noteChange->getImpact());
         }
 
         $entityManager->remove($noteChange);
