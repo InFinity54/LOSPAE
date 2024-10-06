@@ -34,11 +34,21 @@ class HomeController extends AbstractController
 
         if (in_array("ROLE_STUDENT", $this->getUser()->getRoles())) {
             $student = $entityManager->getRepository(User::class)->findOneBy(["email" => $this->getUser()->getUserIdentifier()]);
-            $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student->getId()], ["occuredAt" => "DESC"]);
+            $notes = [];
+
+            foreach ($entityManager->getRepository(CurrentNote::class)->findBy(["student" => $student]) as $currentNote) {
+                $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student, "teacher" => $currentNote->getTeacher()]);
+
+                $notes[] = [
+                    "teacher" => $currentNote->getTeacher(),
+                    "currentNote" => $currentNote->getNote(),
+                    "totalChanges" => count($noteChanges),
+                    "recentChanges" => array_slice($noteChanges, 0, 10)
+                ];
+            }
 
             return $this->render('pages/logged_in/index_student.html.twig', [
-                "noteChangesCount" => count($noteChanges),
-                "recentNoteChanges" => array_slice($noteChanges, 0, 5)
+                "notes" => $notes
             ]);
         }
 
