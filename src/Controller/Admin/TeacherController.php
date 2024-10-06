@@ -116,7 +116,6 @@ class TeacherController extends AbstractController
                                 "lastName" => $teacherLastName,
                                 "firstName" => $teacherFirstName,
                                 "email" => $teacherEmail,
-                                "type" => "Enseignant",
                                 "temporaryPassword" => $teacherPassword
                             ];
                         } else {

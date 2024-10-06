@@ -1,2 +1,2 @@
-﻿Nom;Prenom;Email;Type
-DOE;John;john.doe@exemple.fr;Etudiant
+﻿Nom;Prenom;Email;Etablissement;Promotion
+DOE;John;john.doe@exemple.fr;UAIETAB;NOMPROMO1
