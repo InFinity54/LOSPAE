@@ -49,7 +49,6 @@ class NoteChangeDetailsController extends AbstractController
 
             $studentsNotesSum = 0;
             $criterias = [];
-            $criteriasCount = [];
             $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy([], ["occuredAt" => "DESC"]);
             $globalAddedPoints = 0.0;
             $globalRemovedPoints = 0.0;
