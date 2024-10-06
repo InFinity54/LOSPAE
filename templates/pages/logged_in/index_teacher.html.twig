@@ -77,11 +77,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {% for promo in promos %}
+                                            {% for promotion in promotions %}
                                                 <tr>
-                                                    <td class="text-center">{{ promo.school.name }} ({{ promo.school.city }})</td>
-                                                    <td class="text-center">{{ promo.name }}</td>
-                                                    <td class="text-center">{{ promo.students|length }}</td>
+                                                    <td class="text-center">{{ promotion.school.name }} ({{ promotion.school.city }})</td>
+                                                    <td class="text-center">{{ promotion.name }}</td>
+                                                    <td class="text-center">{{ promotion.students|length }}</td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>

@@ -44,11 +44,12 @@
                                         <div class="ms-3 name">
                                             <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }} ({{ student.promotion.name }})</h5>
                                             <h6 class="text-muted mb-0">
-                                                {% if student.currentNote is not null %}
-                                                    {{ student.currentNote|number_format(2) }} / 20
-                                                {% else %}
-                                                    En attente d'initialisation
-                                                {% endif %}
+                                                {% for currentNote in student.currentNotes %}
+                                                    {% if currentNote.teacher.id is same as(app.user.id) %}
+                                                        {{ currentNote.note|number_format(2) }} / 20
+                                                        {% set hasCurrentNote = true %}
+                                                    {% endif %}
+                                                {% endfor %}
                                             </h6>
                                         </div>
                                     </div>
