@@ -34,6 +34,8 @@
                                     <table class="table table-striped mb-0">
                                         <thead>
                                             <tr>
+                                                <th class="text-center">ÉTABLISSEMENT</th>
+                                                <th class="text-center">PROMOTION</th>
                                                 <th class="text-center">ÉTUDIANT</th>
                                                 <th class="text-center">CRITÈRE</th>
                                                 <th class="text-center">IMPACT</th>
@@ -44,6 +46,8 @@
                                         <tbody>
                                         {% for noteChange in noteChanges %}
                                             <tr>
+                                                <td class="text-center">{{ noteChange.student.promotion.school.name }}<br />({{ noteChange.student.promotion.school.city }})</td>
+                                                <td class="text-center">{{ noteChange.student.promotion.name }}</td>
                                                 <td class="text-center">{{ noteChange.student.lastName }} {{ noteChange.student.firstName }}</td>
                                                 <td class="text-center">{{ noteChange.criteria.name }}</td>
                                                 <td class="text-center">
