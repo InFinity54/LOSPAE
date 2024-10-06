@@ -2,6 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Promotion;
+use App\Entity\School;
+use App\Entity\TeacherPromotion;
 use App\Entity\User;
 use App\Services\StringHandler;
 use Doctrine\ORM\EntityManagerInterface;
@@ -174,5 +177,85 @@ class TeacherController extends AbstractController
         }
 
         return $this->render('pages/logged_in/admin/teachers_import.html.twig');
+    }
+
+    #[Route('/admin/teachers/configure/{id}', name: 'admin_teacher_configure')]
+    public function teacherConfigure(Request $request, EntityManagerInterface $entityManager, string $id): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $teacher = $entityManager->getRepository(User::class)->find($id);
+
+        if (is_null($teacher)) {
+            $this->addFlash("danger", "L'enseignant demandé est introuvable.");
+            return $this->redirectToRoute("admin_students");
+        }
+
+        if ($request->isMethod("POST")) {
+            $alreadyAffectedPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]);
+
+            if (!is_null($request->request->all("promotions")) && count($request->request->all("promotions")) > 0) {
+                foreach ($alreadyAffectedPromotions as $alreadyAffectedPromotion) {
+                    if (!in_array($alreadyAffectedPromotion->getPromotion()->getId(), $request->request->all("promotions"))) {
+                        $teacherPromotion = $entityManager->getRepository(TeacherPromotion::class)->findOneBy(["teacher" => $teacher, "promotion" => $alreadyAffectedPromotion->getPromotion()]);
+                        $entityManager->remove($teacherPromotion);
+                    }
+                }
+
+                foreach ($request->request->all("promotions") as $promoId) {
+                    $promo = $entityManager->getRepository(Promotion::class)->find($promoId);
+                    $teacherPromotion = $entityManager->getRepository(TeacherPromotion::class)->findOneBy(["teacher" => $teacher, "promotion" => $promo]);
+
+                    if (is_null($teacherPromotion)) {
+                        $teacherPromotion = new TeacherPromotion();
+                        $teacherPromotion->setTeacher($teacher);
+                        $teacherPromotion->setPromotion($promo);
+                        $entityManager->persist($teacherPromotion);
+                    }
+                }
+            } else {
+                foreach ($alreadyAffectedPromotions as $alreadyAffectedPromotion) {
+                    $entityManager->remove($alreadyAffectedPromotion);
+                }
+            }
+
+            $entityManager->flush();
+            $this->addFlash("success", "L'affectation de l'enseignant ciblé a été modifiée.");
+            return $this->redirectToRoute("admin_teachers");
+        }
+
+        $teacherPromotions = [];
+        $schools = $entityManager->getRepository(School::class)->findBy([], ["name" => "ASC"]);
+        $promotions = $entityManager->getRepository(Promotion::class)->findBy([], ["name" => "ASC"]);
+
+        foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]) as $teacherPromotion) {
+            $teacherPromotions[] = $teacherPromotion->getPromotion()->getId();
+        }
+
+        return $this->render('pages/logged_in/admin/teacher_configuration.html.twig', [
+            "teacher" => $teacher,
+            "teacherPromotions" => $teacherPromotions,
+            "schools" => $schools,
+            "promotions" => $promotions
+        ]);
     }
 }
