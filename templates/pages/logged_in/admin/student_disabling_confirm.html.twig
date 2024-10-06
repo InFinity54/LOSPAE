@@ -63,6 +63,7 @@
                                         {% endfor %}
                                     </div>
 
+                                    <p>Cela entraînera la désaffectation de ces étudiants de leur promotion actuelle (s'ils en ont une).</p>
                                     <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                     <p>
                                         <a href="{{ path("admin_student_dodisable", { ids: studentsIds }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
@@ -96,6 +97,7 @@
                                         </div>
                                     </div>
 
+                                    <p>Cela entraînera la désaffectation de cet étudiant de sa promotion actuelle (s'il en a une).</p>
                                     <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                     <p>
                                         <a href="{{ path("admin_student_dodisable", { ids: students[0].id }) }}" class="btn btn-primary">Oui, je suis sûr(e).</a>
