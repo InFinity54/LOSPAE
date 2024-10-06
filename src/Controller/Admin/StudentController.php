@@ -686,13 +686,14 @@ class StudentController extends AbstractController
             if (!is_null($student)) {
                 $students[] = $id;
 
-                if (in_array("ROLE_STUDENT", $student->getRoles())) {
-                    $student->setCurrentNote(20);
+                foreach ($student->getNoteChanges() as $noteChange) {
+                    $entityManager->remove($noteChange);
+                    $entityManager->flush();
+                }
 
-                    foreach ($student->getNoteChanges() as $noteChange) {
-                        $entityManager->remove($noteChange);
-                        $entityManager->flush();
-                    }
+                foreach ($student->getCurrentNotes() as $currentNote) {
+                    $currentNote->setNote(20);
+                    $entityManager->flush();
                 }
 
                 $entityManager->flush();
