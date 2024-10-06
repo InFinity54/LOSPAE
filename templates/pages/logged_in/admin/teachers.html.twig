@@ -101,22 +101,24 @@
                                                         {% endif %}
                                                     </td>
                                                     <td>
+                                                        {% if teacher.isActivated %}
                                                         <a href="{{ path("admin_teacher_configure", { id: teacher.id }) }}" class="btn btn-primary" title="Configurer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
                                                             <i class="fas fa-user-cog"></i>
                                                         </a>
+                                                        {% endif %}
 
                                                         {% if teacher.email is not same as(app.user.email) %}
                                                             {% if teacher.isActivated %}
-                                                                <a href="{# path("admin_teacher_disable", { ids: teacher.id }) #}" class="btn btn-danger" title="Désactiver le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
+                                                                <a href="{{ path("admin_teacher_disable", { ids: teacher.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
                                                                     <i class="fas fa-user-times"></i>
                                                                 </a>
                                                             {% else %}
-                                                                <a href="{# path("admin_teacher_enable", { ids: teacher.id }) #}" class="btn btn-success" title="Activer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
+                                                                <a href="{{ path("admin_teacher_enable", { ids: teacher.id }) }}" class="btn btn-success" title="Activer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
                                                                     <i class="fas fa-user-check"></i>
                                                                 </a>
                                                             {% endif %}
 
-                                                            <a href="{# path("admin_teacher_remove", { ids: teacher.id }) #}" class="btn btn-dark" title="Supprimer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
+                                                            <a href="{{ path("admin_teacher_remove", { ids: teacher.id }) }}" class="btn btn-dark" title="Supprimer le compte de {{ teacher.firstName }} {{ teacher.lastName }}">
                                                                 <i class="fas fa-user-slash"></i>
                                                             </a>
                                                         {% endif %}
