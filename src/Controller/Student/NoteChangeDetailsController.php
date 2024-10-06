@@ -3,6 +3,7 @@
 namespace App\Controller\Student;
 
 use App\Entity\Criteria;
+use App\Entity\CurrentNote;
 use App\Entity\NoteChange;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,49 +39,70 @@ class NoteChangeDetailsController extends AbstractController
         
         $student = $entityManager->getRepository(User::class)->findOneBy(["email" => $this->getUser()->getUserIdentifier()]);
         $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
-        $criteriasCount = [];
-        $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student->getId()], ["occuredAt" => "DESC"]);
-        $lastNoteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student->getId()], ["occuredAt" => "DESC"], 10);
-        $noteChangeAvg = "eq";
-        $totalAddedPoints = 0.0;
-        $totalRemovedPoints = 0.0;
-        $lastNotesAddedPoints = 0.0;
-        $lastNotesRemovedPoints = 0.0;
+        $details = [];
 
-        foreach ($criterias as $criteria) {
-            $criteriasCount[$criteria->getId()] = 0;
-        }
+        foreach ($entityManager->getRepository(CurrentNote::class)->findBy(["student" => $student]) as $currentNote) {
+            $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student, "teacher" => $currentNote->getTeacher()]);
+            $usedCriterias = [];
+            $totalAddedPoints = 0;
+            $totalRemovedPoints = 0;
+            $noteChangeAvg = "eq";
+            $lastNotesAddedPoints = 0.0;
+            $lastNotesRemovedPoints = 0.0;
 
-        foreach ($noteChanges as $noteChange) {
-            $criteriasCount[$noteChange->getCriteria()->getId()]++;
-
-            if ($noteChange->getImpact() > 0) {
-                $totalAddedPoints += $noteChange->getImpact();
-            } else {
-                $totalRemovedPoints += ($noteChange->getImpact() * -1);
+            foreach ($criterias as $criteria) {
+                $usedCriterias[$criteria->getId()] = [
+                    "data" => $criteria,
+                    "count" => 0
+                ];
             }
-        }
 
-        foreach ($lastNoteChanges as $noteChange) {
-            if ($noteChange->getImpact() > 0) {
-                $lastNotesAddedPoints += $noteChange->getImpact();
-            } else {
-                $lastNotesRemovedPoints += ($noteChange->getImpact() * -1);
+            foreach ($noteChanges as $noteChange) {
+                $usedCriterias[$noteChange->getCriteria()->getId()]["count"]++;
+
+                if ($noteChange->getImpact() > 0) {
+                    $totalAddedPoints += $noteChange->getImpact();
+                } else {
+                    $totalRemovedPoints += ($noteChange->getImpact() * -1);
+                }
             }
-        }
 
-        if ($lastNotesAddedPoints > $lastNotesRemovedPoints) {
-            $noteChangeAvg = "inc";
-        } else if ($lastNotesRemovedPoints > $lastNotesAddedPoints) {
-            $noteChangeAvg = "dec";
+            foreach ($entityManager->getRepository(NoteChange::class)->findBy(["student" => $student, "teacher" => $currentNote->getTeacher()], ["occuredAt" => "DESC"], 10) as $recentNoteChange) {
+                if ($recentNoteChange->getImpact() > 0) {
+                    $lastNotesAddedPoints += $recentNoteChange->getImpact();
+                } else {
+                    $lastNotesRemovedPoints += ($recentNoteChange->getImpact() * -1);
+                }
+            }
+
+            foreach ($usedCriterias as $criteria) {
+                if ($criteria["count"] === 0) {
+                    unset($usedCriterias[$criteria["data"]->getId()]);
+                }
+            }
+
+            usort($usedCriterias, function($a, $b) {
+                return $b["count"] <=> $a["count"];
+            });
+
+            if ($lastNotesAddedPoints > $lastNotesRemovedPoints) {
+                $noteChangeAvg = "inc";
+            } else if ($lastNotesRemovedPoints > $lastNotesAddedPoints) {
+                $noteChangeAvg = "dec";
+            }
+
+            $details[] = [
+                "teacher" => $currentNote->getTeacher(),
+                "currentNote" => $currentNote->getNote(),
+                "totalAddedPoints" => $totalAddedPoints,
+                "totalRemovedPoints" => $totalRemovedPoints,
+                "noteChangeAvg" => $noteChangeAvg,
+                "criterias" => $usedCriterias
+            ];
         }
 
         return $this->render('pages/logged_in/student/details.html.twig', [
-            "totalAddedPoints" => $totalAddedPoints,
-            "totalRemovedPoints" => $totalRemovedPoints,
-            "noteChangeAvg" => $noteChangeAvg,
-            "criterias" => $criterias,
-            "criteriasCount" => $criteriasCount
+            "details" => $details
         ]);
     }
 }

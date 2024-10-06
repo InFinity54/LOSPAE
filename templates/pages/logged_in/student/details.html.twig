@@ -23,121 +23,141 @@
             </div>
 
             <div class="page-content">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Note actuelle</h6>
-                                        <h6 class="font-extrabold mb-0">{{ app.user.currentNote|number_format(2) }} / 20</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon green mb-2">
-                                            <i class="fas fa-plus"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Total des points gagnés</h6>
-                                        <h6 class="font-extrabold mb-0">{{ totalAddedPoints|number_format(2) }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon red mb-2">
-                                            <i class="fas fa-minus"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Total des points perdus</h6>
-                                        <h6 class="font-extrabold mb-0">{{ totalRemovedPoints|number_format(2) }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="fas fa-chart-line"></i>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Tendance moyenne</h6>
-                                        <h6 class="font-extrabold mb-0">
-                                            {% if noteChangeAvg is same as("inc") %}
-                                                En hausse
-                                            {% elseif noteChangeAvg is same as("dec") %}
-                                                En baisse
-                                            {% else %}
-                                                Stable
-                                            {% endif %}
-                                        </h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-pills" id="promotionsTabs" role="tablist">
+                            {% for detail in details %}
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link text-white {% if loop.first %}active{% endif %}" id="note{{ detail.teacher.id }}-tab" data-bs-toggle="tab" data-bs-target="#note{{ detail.teacher.id }}" type="button" role="tab" aria-controls="note{{ detail.teacher.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ detail.teacher.lastName|upper }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <h4 class="card-title">Motifs les plus utilisés</h4>
+                {% for detail in details %}
+                    <div class="tab-pane {% if loop.first %}active{% endif %}" id="note{{ detail.teacher.id }}" role="tabpanel" aria-labelledby="note{{ detail.teacher.id }}-tab">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon blue mb-2">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Note actuelle</h6>
+                                                <h6 class="font-extrabold mb-0">{{ detail.currentNote|number_format(2) }} / 20</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped mb-0">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center">CRITÈRE</th>
-                                            <th class="text-center">OCCURANCES</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for criteria in criterias %}
-                                            <tr>
-                                                <td class="text-center">{{ criteria.name }}</td>
-                                                <td class="text-center">{{ criteriasCount[criteria.id] }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
+
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon green mb-2">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Total des points gagnés</h6>
+                                                <h6 class="font-extrabold mb-0">{{ detail.totalAddedPoints|number_format(2) }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon red mb-2">
+                                                    <i class="fas fa-minus"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Total des points perdus</h6>
+                                                <h6 class="font-extrabold mb-0">{{ detail.totalRemovedPoints|number_format(2) }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon blue mb-2">
+                                                    <i class="fas fa-chart-line"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Tendance récente</h6>
+                                                <h6 class="font-extrabold mb-0">
+                                                    {% if detail.noteChangeAvg is same as("inc") %}
+                                                        En hausse
+                                                    {% elseif detail.noteChangeAvg is same as("dec") %}
+                                                        En baisse
+                                                    {% else %}
+                                                        Stable
+                                                    {% endif %}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <h4 class="card-title">Motifs les plus utilisés</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        {% if detail.criterias|length > 0 %}
+                                            <div class="table-responsive">
+                                                <table class="table table-striped mb-0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center">CRITÈRE</th>
+                                                        <th class="text-center">OCCURANCES</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for criteria in detail.criterias %}
+                                                        <tr>
+                                                            <td class="text-center">{{ criteria.data.name }}</td>
+                                                            <td class="text-center">{{ criteria.count }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% else %}
+                                            <center><p>Votre note n'a pas encore été modifiée.</p></center>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
 
             {% include "includes/components/footer.html.twig" %}
