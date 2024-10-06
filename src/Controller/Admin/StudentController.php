@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\NoteChange;
-use App\Entity\Promo;
 use App\Entity\Promotion;
 use App\Entity\School;
 use App\Entity\User;
@@ -47,18 +46,12 @@ class StudentController extends AbstractController
         }
 
         $generatedLetters = [];
-        $students = [];
-        $studentsCount = $entityManager->getRepository(User::class)->count();
         $pageNumber = !is_null($request->query->get("page")) ? $request->query->get("page") : 0;
+        $students = $entityManager->getRepository(User::class)->findByRole("ROLE_STUDENT", 20, $pageNumber * 20);
+        $studentsCount = $entityManager->getRepository(User::class)->countByRole("ROLE_STUDENT");
 
         if (count($request->query->all()) > 0 && in_array("generatedLetters", array_keys($request->query->all()))) {
             $generatedLetters = $request->query->all()["generatedLetters"];
-        }
-
-        foreach ($entityManager->getRepository(User::class)->findBy([], ["lastName" => "ASC", "firstName" => "ASC"], 20, $pageNumber * 20) as $student) {
-            if (in_array("ROLE_STUDENT", $student->getRoles())) {
-                $students[] = $student;
-            }
         }
 
         return $this->render('pages/logged_in/admin/students.html.twig', [
