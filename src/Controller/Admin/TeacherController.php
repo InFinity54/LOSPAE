@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\CurrentNote;
 use App\Entity\Promotion;
 use App\Entity\School;
 use App\Entity\TeacherPromotion;
@@ -230,6 +231,18 @@ class TeacherController extends AbstractController
                         $teacherPromotion->setTeacher($teacher);
                         $teacherPromotion->setPromotion($promo);
                         $entityManager->persist($teacherPromotion);
+
+                        foreach ($promo->getStudents() as $student) {
+                            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["student" => $student, "teacher" => $teacher]);
+
+                            if (is_null($currentNote)) {
+                                $currentNote = new CurrentNote();
+                                $currentNote->setTeacher($teacher);
+                                $currentNote->setStudent($student);
+                                $currentNote->setNote(20);
+                                $entityManager->persist($currentNote);
+                            }
+                        }
                     }
                 }
             } else {
