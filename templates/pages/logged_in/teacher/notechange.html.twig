@@ -46,7 +46,7 @@
                                                     <select class="form-select" id="student" name="student" required data-parsley-required="true" data-parsley-error-message="Vous devez sélectionner un étudiant.">
                                                         <option value="" selected hidden>Sélectionnez un étudiant...</option>
                                                         {% for student in students %}
-                                                            <option value="{{ student.id }}">{{ student.lastName }} {{ student.firstName }}</option>
+                                                            <option value="{{ student.id }}">{{ student.lastName }} {{ student.firstName }} ({{ student.promotion.name }})</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>

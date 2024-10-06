@@ -47,7 +47,7 @@
                                                 <tbody>
                                                 {% for student in students %}
                                                     <tr>
-                                                        <td>{{ student.firstName }} {{ student.lastName }}</td>
+                                                        <td>{{ student.firstName }} {{ student.lastName }} ({{ student.promotion.name }})</td>
                                                         {% for criteria in selectedCriterias %}
                                                             <td class="text-center">
                                                                 <input type="checkbox" id="{{ student.id }}_{{ criteria.id }}" name="{{ student.id }}_{{ criteria.id }}" value="{{ criteria.impact }}" class="form-check-input">
