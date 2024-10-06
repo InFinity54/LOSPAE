@@ -35,6 +35,7 @@
                                     <table class="table table-striped mb-0">
                                         <thead>
                                         <tr>
+                                            <th class="text-center">ENSEIGNANT</th>
                                             <th class="text-center">CRITÈRE</th>
                                             <th class="text-center">IMPACT</th>
                                             <th class="text-center">DATE ET HEURE</th>
@@ -43,6 +44,7 @@
                                         <tbody>
                                         {% for noteChange in noteChanges %}
                                             <tr>
+                                                <td class="text-center">{{ noteChange.teacher.lastName|upper }}</td>
                                                 <td class="text-center">{{ noteChange.criteria.name }}</td>
                                                 <td class="text-center">
                                                     {% if noteChange.impact < 0 %}
