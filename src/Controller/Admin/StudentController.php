@@ -672,7 +672,7 @@ class StudentController extends AbstractController
             return $this->redirectToRoute("unconfigured");
         }
 
-        if (!in_array("ROLE_ADMIN", $this->getStudent()->getRoles())) {
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
             $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
             return $this->redirectToRoute("homepage");
         }
