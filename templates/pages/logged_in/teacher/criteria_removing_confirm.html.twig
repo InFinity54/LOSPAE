@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Administration > Critères de notation{% endblock %}
+{% block title %}Gestion des critères de notation{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
@@ -33,8 +33,8 @@
                                 <p class="text-danger">Cette opération est irréversible. Toutes les données liées à ce critère seront définitivement supprimées de LOSPAÉ.</p>
                                 <p>Êtes-vous sûr de vouloir effectuer cette opération ?</p>
                                 <p>
-                                    <a href="{{ path("admin_criteria_doremove", { id: criteria.id }) }}" class="btn btn-danger">Oui, je suis sûr(e).</a>
-                                    <a href="{{ path("admin_criterias") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
+                                    <a href="{{ path("teacher_criteria_doremove", { id: criteria.id }) }}" class="btn btn-danger">Oui, je suis sûr(e).</a>
+                                    <a href="{{ path("teacher_criterias") }}" class="btn btn-secondary">Non, j'ai changé d'avis.</a>
                                 </p>
                                 </div>
                             </div>

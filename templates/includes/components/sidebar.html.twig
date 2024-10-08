@@ -128,17 +128,17 @@
                             <span>Bilan des promotions</span>
                         </a>
                     </li>
-                {% endif %}
 
-                {% if "ROLE_ADMIN" in app.user.roles %}
-                    <li class="sidebar-title text-body-secondary"><b>Administration</b></li>
-
-                    <li class="sidebar-item {% if app.current_route in ["admin_criterias", "admin_criteria_add", "admin_criteria_edit", "admin_criteria_remove"] %}active{% endif %}">
-                        <a href="{{ path("admin_criterias") }}" class='sidebar-link'>
+                    <li class="sidebar-item {% if app.current_route in ["teacher_criterias", "teacher_criteria_add", "teacher_criteria_edit", "teacher_criteria_remove"] %}active{% endif %}">
+                        <a href="{{ path("teacher_criterias") }}" class='sidebar-link'>
                             <i class="fas fa-calculator"></i>
                             <span>Critères de notation</span>
                         </a>
                     </li>
+                {% endif %}
+
+                {% if "ROLE_ADMIN" in app.user.roles %}
+                    <li class="sidebar-title text-body-secondary"><b>Administration</b></li>
 
                     <li class="sidebar-item {% if app.current_route in ["admin_students", "admin_students_import", "admin_student_configure", "admin_student_enable", "admin_student_disable", "admin_student_remove"] %}active{% endif %}">
                         <a href="{{ path("admin_students") }}" class='sidebar-link'>

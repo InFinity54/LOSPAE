@@ -3,6 +3,7 @@
 namespace App\Controller\Student;
 
 use App\Entity\Criteria;
+use App\Entity\TeacherPromotion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,16 @@ class CriteriasController extends AbstractController
             return $this->redirectToRoute("homepage");
         }
 
-        $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["impact" => "ASC"]);
+        $criterias = [];
+
+        foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["promotion" => $this->getUser()->getPromotion()]) as $promotionTeacher) {
+            $teacherCriterias = $entityManager->getRepository(Criteria::class)->findBy(["teacher" => $promotionTeacher->getTeacher()], ["impact" => "ASC"]);
+
+            $criterias[] = [
+                "teacher" => $promotionTeacher->getTeacher(),
+                "criterias" => $teacherCriterias
+            ];
+        }
 
         return $this->render('pages/logged_in/student/criterias.html.twig', [
             "criterias" => $criterias

@@ -23,43 +23,65 @@
             </div>
 
             <div class="page-content">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Liste des critères de notation</h4>
-                            </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" id="criteriasTabs" role="tablist">
+                            {% for criteria in criterias %}
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link {% if loop.first %}active{% endif %}" id="criteria{{ criteria.teacher.id }}-tab" data-bs-toggle="tab" data-bs-target="#note{{ criteria.teacher.id }}" type="button" role="tab" aria-controls="criteria{{ criteria.teacher.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ criteria.teacher.lastName|upper }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
 
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">NOM</th>
-                                                <th class="text-center">IMPACT</th>
-                                                <th class="text-center">MODALITÉS</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for criteria in criterias %}
-                                                <tr>
-                                                    <td class="text-center">{{ criteria.name }}</td>
-                                                    <td class="text-center">{{ criteria.impact|number_format(2) }}</td>
-                                                    <td class="text-center">
-                                                        {% if criteria.modality is not same as("") %}
-                                                            {{ criteria.modality }}
-                                                        {% else %}
-                                                            Aucune modalité particulière.
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
+                <div class="tab-content">
+                    {% for criteria in criterias %}
+                        <div class="tab-pane {% if loop.first %}active{% endif %}" id="note{{ criteria.teacher.id }}" role="tabpanel" aria-labelledby="note{{ criteria.teacher.id }}-tab">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Liste des critères de notation</h4>
+                                        </div>
+
+                                        <div class="card-body">
+                                            {% if criteria.criterias|length > 0 %}
+                                            <div class="table-responsive">
+                                                <table class="table table-striped mb-0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center">NOM</th>
+                                                        <th class="text-center">IMPACT</th>
+                                                        <th class="text-center">MODALITÉS</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for teacherCriteria in criteria.criterias %}
+                                                        <tr>
+                                                            <td class="text-center">{{ teacherCriteria.name }}</td>
+                                                            <td class="text-center">{{ teacherCriteria.impact|number_format(2) }}</td>
+                                                            <td class="text-center">
+                                                                {% if teacherCriteria.modality is not null %}
+                                                                    {{ teacherCriteria.modality }}
+                                                                {% else %}
+                                                                    Aucune modalité particulière.
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            {% else %}
+                                                <center><p>Aucun critère actuellement enregistré.</p></center>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
 

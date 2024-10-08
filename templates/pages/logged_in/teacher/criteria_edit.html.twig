@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Administration > Critères de notation{% endblock %}
+{% block title %}Gestion des critères de notation{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
@@ -24,7 +24,7 @@
             <div class="page-content">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ path("admin_criteria_edit", { id: criteria.id }) }}" method="POST" data-parsley-validate>
+                        <form action="{{ path("teacher_criteria_edit", { id: criteria.id }) }}" method="POST" data-parsley-validate>
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Informations sur le nouveau critère</h4>

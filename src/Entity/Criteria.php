@@ -14,6 +14,10 @@ class Criteria
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $teacher = null;
+
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -26,6 +30,18 @@ class Criteria
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTeacher(): ?User
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(?User $teacher): static
+    {
+        $this->teacher = $teacher;
+
+        return $this;
     }
 
     public function getName(): ?string

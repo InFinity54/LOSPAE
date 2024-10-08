@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Administration > Critères de notation{% endblock %}
+{% block title %}Gestion des critères de notation{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
@@ -28,7 +28,7 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <h4 class="card-title">Liste des critères de notation</h4>
-                                <a href="{{ path("admin_criteria_add") }}" class="btn btn-primary">Ajouter un nouveau critère</a>
+                                <a href="{{ path("teacher_criteria_add") }}" class="btn btn-primary">Ajouter un nouveau critère</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -46,7 +46,7 @@
                                                 <tr>
                                                     <td class="text-center">{{ criteria.name }}</td>
                                                     <td class="text-center">
-                                                        {% if criteria.modality is not same as("") %}
+                                                        {% if criteria.modality is not null %}
                                                             {{ criteria.modality }}
                                                         {% else %}
                                                             Aucune modalité particulière.
@@ -54,11 +54,11 @@
                                                     </td>
                                                     <td class="text-center">{{ criteria.impact|number_format(2) }}</td>
                                                     <td>
-                                                        <a href="{{ path("admin_criteria_edit", { id: criteria.id }) }}" class="btn btn-primary" title="Modifier le critère">
+                                                        <a href="{{ path("teacher_criteria_edit", { id: criteria.id }) }}" class="btn btn-primary" title="Modifier le critère">
                                                             <i class="fas fa-pen"></i>
                                                         </a>
 
-                                                        <a href="{{ path("admin_criteria_remove", { id: criteria.id }) }}" class="btn btn-danger" title="Supprimer le critère">
+                                                        <a href="{{ path("teacher_criteria_remove", { id: criteria.id }) }}" class="btn btn-danger" title="Supprimer le critère">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </a>
                                                     </td>
