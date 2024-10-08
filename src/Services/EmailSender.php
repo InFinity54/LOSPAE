@@ -29,7 +29,7 @@ class EmailSender
      * @param string $recoveryCode
      * @return bool
      */
-    public function sendPasswordRecoveryCode(User $user, string $recoveryCode): bool
+    /*public function sendPasswordRecoveryCode(User $user, string $recoveryCode): bool
     {
         try {
             $email = new TemplatedEmail();
@@ -47,5 +47,5 @@ class EmailSender
         catch (TransportExceptionInterface $e) {
             return false;
         }
-    }
+    }*/
 }
