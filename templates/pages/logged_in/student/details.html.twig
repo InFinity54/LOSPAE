@@ -28,7 +28,7 @@
                         <ul class="nav nav-pills" id="promotionsTabs" role="tablist">
                             {% for detail in details %}
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link text-white {% if loop.first %}active{% endif %}" id="note{{ detail.teacher.id }}-tab" data-bs-toggle="tab" data-bs-target="#note{{ detail.teacher.id }}" type="button" role="tab" aria-controls="note{{ detail.teacher.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ detail.teacher.lastName|upper }}</a>
+                                    <a class="nav-link {% if loop.first %}active{% endif %}" id="note{{ detail.teacher.id }}-tab" data-bs-toggle="tab" data-bs-target="#note{{ detail.teacher.id }}" type="button" role="tab" aria-controls="note{{ detail.teacher.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ detail.teacher.lastName|upper }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
