@@ -6,6 +6,7 @@ use App\Entity\CurrentNote;
 use App\Entity\NoteChange;
 use App\Entity\Promotion;
 use App\Entity\School;
+use App\Entity\TeacherPromotion;
 use App\Entity\User;
 use App\Services\FileUpload\UserAvatarUpload;
 use App\Services\StringHandler;
@@ -681,6 +682,7 @@ class StudentController extends AbstractController
 
         foreach (explode(",", $ids) as $id) {
             $student = $entityManager->getRepository(User::class)->find($id);
+            $studentTeachers = $entityManager->getRepository(TeacherPromotion::class)->findBy(["promotion" => $student->getPromotion()]);
 
             if (!is_null($student)) {
                 $students[] = $id;
@@ -690,8 +692,17 @@ class StudentController extends AbstractController
                     $entityManager->flush();
                 }
 
-                foreach ($student->getCurrentNotes() as $currentNote) {
+                foreach ($studentTeachers as $studentTeacher) {
+                    $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["student" => $student, "teacher" => $studentTeacher->getTeacher()]);
+
+                    if (is_null($currentNote)) {
+                        $currentNote = new CurrentNote();
+                        $currentNote->setStudent($student);
+                        $currentNote->setTeacher($studentTeacher->getTeacher());
+                    }
+
                     $currentNote->setNote(20);
+                    $entityManager->persist($currentNote);
                     $entityManager->flush();
                 }
 
