@@ -37,7 +37,7 @@ class HomeController extends AbstractController
             $notes = [];
 
             foreach ($entityManager->getRepository(CurrentNote::class)->findBy(["student" => $student]) as $currentNote) {
-                $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student, "teacher" => $currentNote->getTeacher()]);
+                $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student, "teacher" => $currentNote->getTeacher()], ["occuredAt" => "DESC"]);
 
                 $notes[] = [
                     "teacher" => $currentNote->getTeacher(),
