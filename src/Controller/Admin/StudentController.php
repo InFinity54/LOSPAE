@@ -478,16 +478,9 @@ class StudentController extends AbstractController
 
         foreach (explode(",", $ids) as $id) {
             $student = $entityManager->getRepository(User::class)->find($id);
-            $currentNotes = $entityManager->getRepository(CurrentNote::class)->findBy(["student" => $student]);
-
-            foreach ($currentNotes as $currentNote) {
-                $entityManager->remove($currentNote);
-            }
 
             if (!is_null($student)) {
                 $students[] = $id;
-                $student->setPromotion(null);
-                $student->setSchool(null);
                 $student->setActivated(false);
                 $entityManager->flush();
             }
