@@ -22,12 +22,9 @@ L'application permet de gérer une liste d'étudiants, et de leur ajouter ou ret
   * Possibilité de modifier la note d'un ou plusieurs étudiants pour un ou plusieurs motifs simultanément
   * Possibilité d'annuler une modification en cas d'erreur (restitution des points enlevés ou retrait des points ajoutés le cas échéant)
   * Possibilité de visualiser l'historique des modifications apportées à l'ensemble des étudiants gérés
+ * Gestion des critères : chaque enseignant dispose de ces propres critères de notation, qu'il peut gérer à tout moment
 
 ## Évolution de l'application
 
 Quelques évolutions sont planifiées pour l'application, dans le but d'améliorer LOSPAÉ, notamment en raison des modifications apportées par la version 3.0.0 et l'ajout de la gestion multi-promotions/multi-enseignants. Parmis celles prévues :
 * Suivi de la classe par l'enseignant par onglets (un par promotion) pour faciliter la lecture
-* Refonte partielle des critères
-  * Chaque enseignant disposera de ces propres critères, et non plus d'une liste commune
-  * En conséquence, la gestion des critères ne sera plus effectuée par un administrateur mais par les enseignants eux-mêmes
-  * Les critères de notation, pour les étudiants, seront également affichés sous forme d'onglets (comme pour les autres pages du site)
