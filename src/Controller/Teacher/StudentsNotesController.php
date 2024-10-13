@@ -124,20 +124,22 @@ class StudentsNotesController extends AbstractController
             $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $this->getUser(), "student" => $student]);
             $criteria = $entityManager->getRepository(Criteria::class)->find($request->request->get("criteria"));
 
-            if ($criteria->getImpact() < 0) {
-                $currentNote->setNote($currentNote->getNote() - ($criteria->getImpact() * -1));
-            } else {
-                $currentNote->setNote($currentNote->getNote() + $criteria->getImpact());
-            }
+            for ($i = 0; $i < $request->request->get("occurrences"); $i++) {
+                if ($criteria->getImpact() < 0) {
+                    $currentNote->setNote($currentNote->getNote() - ($criteria->getImpact() * -1));
+                } else {
+                    $currentNote->setNote($currentNote->getNote() + $criteria->getImpact());
+                }
 
-            $noteChange = new NoteChange();
-            $noteChange->setTeacher($this->getUser());
-            $noteChange->setStudent($student);
-            $noteChange->setCriteria($criteria);
-            $noteChange->setImpact($criteria->getImpact());
-            $noteChange->setOccuredAt(new DateTime("now"));
-            $entityManager->persist($noteChange);
-            $entityManager->flush();
+                $noteChange = new NoteChange();
+                $noteChange->setTeacher($this->getUser());
+                $noteChange->setStudent($student);
+                $noteChange->setCriteria($criteria);
+                $noteChange->setImpact($criteria->getImpact());
+                $noteChange->setOccuredAt(new DateTime("now"));
+                $entityManager->persist($noteChange);
+                $entityManager->flush();
+            }
 
             $this->addFlash("success", "La note de l'étudiant sélectionné a bien été modifiée.");
             return $this->redirectToRoute("teacher_notechange");

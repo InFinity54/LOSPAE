@@ -58,7 +58,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group row align-items-center">
                                                 <div class="col-lg-2 col-3">
-                                                    <label class="col-form-label" for="student">Raison de la modification</label>
+                                                    <label class="col-form-label" for="criteria">Raison de la modification</label>
                                                 </div>
 
                                                 <div class="col-lg-10 col-9">
@@ -82,6 +82,34 @@
 
                                                 <div class="col-lg-10 col-9">
                                                     <input id="impact" name="impact" type="text" step="0.25" class="form-control" readonly value="Sélectionnez un critère pour connaître son impact">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group row align-items-center">
+                                                <div class="col-lg-2 col-3">
+                                                    <label class="col-form-label" for="occurrences">Nombre de répétition</label>
+                                                </div>
+
+                                                <div class="col-lg-10 col-9">
+                                                    <input id="occurrences" name="occurrences" type="number" step="1" class="form-control" value="1" min="1" max="99">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group row align-items-center">
+                                                <div class="col-lg-2 col-3">
+                                                    <label class="col-form-label" for="totalimpact">Impact total</label>
+                                                </div>
+
+                                                <div class="col-lg-10 col-9">
+                                                    <input id="totalimpact" name="totalimpact" type="text" step="0.25" class="form-control" readonly value="Sélectionnez un critère pour connaître son impact">
                                                 </div>
                                             </div>
                                         </div>
@@ -112,8 +140,20 @@
 
             if (selectedCriteriaImpact.toString().startsWith("-") === false) {
                 $("#impact").val("+ " + Number($("#criteria option:selected").data("impact")).toFixed(2));
+                $("#totalimpact").val("+ " + (Number($("#criteria option:selected").data("impact")) * Number($("#occurrences").val())).toFixed(2));
             } else {
                 $("#impact").val("- " + Number($("#criteria option:selected").data("impact").toString().replace("-", "")).toFixed(2));
+                $("#totalimpact").val("- " + (Number($("#criteria option:selected").data("impact").toString().replace("-", "")) * Number($("#occurrences").val())).toFixed(2));
+            }
+        });
+
+        $("#occurrences").on("change", () => {
+            const selectedCriteriaImpact = $("#criteria option:selected").data("impact");
+
+            if (selectedCriteriaImpact.toString().startsWith("-") === false) {
+                $("#totalimpact").val("+ " + (Number($("#criteria option:selected").data("impact")) * Number($("#occurrences").val())).toFixed(2));
+            } else {
+                $("#totalimpact").val("- " + (Number($("#criteria option:selected").data("impact").toString().replace("-", "")) * Number($("#occurrences").val())).toFixed(2));
             }
         });
     </script>
