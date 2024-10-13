@@ -214,16 +214,31 @@ class TeacherController extends AbstractController
         }
 
         if ($request->isMethod("POST")) {
-            $alreadyAffectedPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]);
+            $alreadyAffectedPromotionsIds = [];
 
-            foreach ($alreadyAffectedPromotions as $alreadyAffectedPromotion) {
-                $entityManager->remove($alreadyAffectedPromotion);
+            foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]) as $alreadyAffectedPromotion) {
+                //$entityManager->remove($alreadyAffectedPromotion);
+                $alreadyAffectedPromotionsIds[] = $alreadyAffectedPromotion->getPromotion()->getId();
             }
 
             if (!is_null($request->request->all("promotions")) && count($request->request->all("promotions")) > 0) {
-                foreach ($alreadyAffectedPromotions as $alreadyAffectedPromotion) {
-                    if (!in_array($alreadyAffectedPromotion->getPromotion()->getId(), $request->request->all("promotions"))) {
-                        $teacherPromotion = $entityManager->getRepository(TeacherPromotion::class)->findOneBy(["teacher" => $teacher, "promotion" => $alreadyAffectedPromotion->getPromotion()]);
+                foreach ($alreadyAffectedPromotionsIds as $alreadyAffectedPromotionId) {
+                    if (!in_array($alreadyAffectedPromotionId, $request->request->all("promotions"))) {
+                        $teacherPromotion = $entityManager->getRepository(TeacherPromotion::class)->findOneBy(["teacher" => $teacher, "promotion" => $alreadyAffectedPromotionId]);
+
+                        foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
+                            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $teacher, "student" => $student]);
+                            $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["teacher" => $teacher, "student" => $student]);
+
+                            if (!is_null($currentNote)) {
+                                $entityManager->remove($currentNote);
+                            }
+
+                            foreach ($noteChanges as $noteChange) {
+                                $entityManager->remove($noteChange);
+                            }
+                        }
+
                         $entityManager->remove($teacherPromotion);
                     }
                 }
