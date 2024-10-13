@@ -76,6 +76,7 @@ class CriteriasController extends AbstractController
             $criteria->setName($request->request->get("name"));
             $criteria->setImpact($request->request->get("impact"));
             $criteria->setModality($request->request->get("modality"));
+            $criteria->setTeacher($this->getUser());
             $entityManager->persist($criteria);
             $entityManager->flush();
             $this->addFlash("success", "Le critère a bien été enregistré et est désormais utilisable sur LOSPAÉ.");
