@@ -229,25 +229,29 @@ class StudentsNotesController extends AbstractController
                 ]);
             } else {
                 foreach ($request->request->keys() as $noteChangeId) {
-                    $noteChangeData = explode("_", $noteChangeId);
-                    $student = $entityManager->getRepository(User::class)->find($noteChangeData[0]);
-                    $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $this->getUser(), "student" => $student]);
-                    $criteria = $entityManager->getRepository(Criteria::class)->find($noteChangeData[1]);
+                    if ($request->request->get($noteChangeId) > 0) {
+                        $noteChangeData = explode("_", $noteChangeId);
+                        $student = $entityManager->getRepository(User::class)->find($noteChangeData[0]);
+                        $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $this->getUser(), "student" => $student]);
+                        $criteria = $entityManager->getRepository(Criteria::class)->find($noteChangeData[1]);
 
-                    if ($criteria->getImpact() < 0) {
-                        $currentNote->setNote($currentNote->getNote() - ($criteria->getImpact() * -1));
-                    } else {
-                        $currentNote->setNote($currentNote->getNote() + $criteria->getImpact());
+                        for ($i = 0; $i < $request->request->get($noteChangeId); $i++) {
+                            if ($criteria->getImpact() < 0) {
+                                $currentNote->setNote($currentNote->getNote() - ($criteria->getImpact() * -1));
+                            } else {
+                                $currentNote->setNote($currentNote->getNote() + $criteria->getImpact());
+                            }
+
+                            $noteChange = new NoteChange();
+                            $noteChange->setTeacher($this->getUser());
+                            $noteChange->setStudent($student);
+                            $noteChange->setCriteria($criteria);
+                            $noteChange->setImpact($criteria->getImpact());
+                            $noteChange->setOccuredAt(new DateTime("now"));
+                            $entityManager->persist($noteChange);
+                            $entityManager->flush();
+                        }
                     }
-
-                    $noteChange = new NoteChange();
-                    $noteChange->setTeacher($this->getUser());
-                    $noteChange->setStudent($student);
-                    $noteChange->setCriteria($criteria);
-                    $noteChange->setImpact($criteria->getImpact());
-                    $noteChange->setOccuredAt(new DateTime("now"));
-                    $entityManager->persist($noteChange);
-                    $entityManager->flush();
                 }
 
                 $this->addFlash("success", "Les notes des étudiants sélectionnés ont été modifiées.");
