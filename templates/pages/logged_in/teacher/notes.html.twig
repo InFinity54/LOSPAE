@@ -20,7 +20,7 @@
             <div class="page-heading">
                 <h3>Suivi des notes des étudiants</h3>
 
-                {% if students|length > 0 %}
+                {% if promotions|length > 0 %}
                     {% if app.request.query.has("sort") and app.request.query.get("sort") is same as("name") %}
                         <p class="text-muted">Cette page permet de voir les notes actuelles des étudiants, en temps réel, par ordre alphabétique des étudiants.</p>
                         <a href="{{ path("teacher_notes") }}" class="btn btn-primary">Trier par note</a>
@@ -31,36 +31,56 @@
                 {% endif %}
             </div>
 
-            <div class="row">
-                {% if students|length > 0 %}
-                    {% for student in students %}
-                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                            <div class="card">
-                                <div class="card-body py-4 px-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar avatar-xl">
-                                            <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
-                                        </div>
-                                        <div class="ms-3 name">
-                                            <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }} ({{ student.promotion.name }})</h5>
-                                            <h6 class="text-muted mb-0">
-                                                {% for currentNote in student.currentNotes %}
-                                                    {% if currentNote.teacher.id is same as(app.user.id) %}
-                                                        {{ currentNote.note|number_format(2) }} / 20
-                                                        {% set hasCurrentNote = true %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </h6>
+            <div class="page-content">
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs" id="promosTabs" role="tablist">
+                            {% for promotion in promotions %}
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link {% if loop.first %}active{% endif %}" id="promo{{ promotion.promo.id }}-tab" data-bs-toggle="tab" data-bs-target="#promo{{ promotion.promo.id }}" type="button" role="tab" aria-controls="promo{{ promotion.promo.id }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ promotion.promo.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {% if promotions|length > 0 %}
+                <div class="tab-content">
+                    {% for promotion in promotions %}
+                        <div class="tab-pane {% if loop.first %}active{% endif %}" id="promo{{ promotion.promo.id }}" role="tabpanel" aria-labelledby="promo{{ promotion.promo.id }}-tab">
+                            <div class="row">
+                                {% for student in promotion.students %}
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                        <div class="card">
+                                            <div class="card-body py-4 px-4">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-xl">
+                                                        <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
+                                                    </div>
+                                                    <div class="ms-3 name">
+                                                        <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }} ({{ student.promotion.name }})</h5>
+                                                        <h6 class="text-muted mb-0">
+                                                            {% for currentNote in student.currentNotes %}
+                                                                {% if currentNote.teacher.id is same as(app.user.id) %}
+                                                                    {{ currentNote.note|number_format(2) }} / 20
+                                                                    {% set hasCurrentNote = true %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                     {% endfor %}
-                {% else %}
-                    <div class="alert alert-info">Aucun étudiant ne vous a actuellement été affecté.</div>
-                {% endif %}
-            </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info">Aucune promotion ne vous a actuellement été affecté.</div>
+            {% endif %}
 
             {% include "includes/components/footer.html.twig" %}
         </div>

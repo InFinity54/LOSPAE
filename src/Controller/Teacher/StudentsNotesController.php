@@ -41,57 +41,64 @@ class StudentsNotesController extends AbstractController
         }
 
         $teacherPromotions = $entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $this->getUser()]);
-        $students = [];
+        $promotions = [];
 
         foreach ($teacherPromotions as $teacherPromotion) {
+            $students = [];
+
             foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
                 $students[] = $student;
             }
-        }
 
-        if ($request->query->has("sort") && $request->query->get("sort") === "name") {
-            usort($students, function($a, $b) {
-                $lastNameComparison = strcmp($a->getLastName(), $b->getLastName());
+            if ($request->query->has("sort") && $request->query->get("sort") === "name") {
+                usort($students, function($a, $b) {
+                    $lastNameComparison = strcmp($a->getLastName(), $b->getLastName());
 
-                if ($lastNameComparison === 0) {
-                    return strcmp($a->getFirstName(), $b->getFirstName());
-                }
-
-                return $lastNameComparison;
-            });
-        } else {
-            usort($students, function($a, $b) {
-                $aNote = null;
-                $bNote = null;
-
-                foreach ($a->getCurrentNotes() as $currentNote) {
-                    if ($currentNote->getTeacher() === $this->getUser()) {
-                        $aNote = $currentNote->getNote();
-                        break;
+                    if ($lastNameComparison === 0) {
+                        return strcmp($a->getFirstName(), $b->getFirstName());
                     }
-                }
 
-                foreach ($b->getCurrentNotes() as $currentNote) {
-                    if ($currentNote->getTeacher() === $this->getUser()) {
-                        $bNote = $currentNote->getNote();
-                        break;
+                    return $lastNameComparison;
+                });
+            } else {
+                usort($students, function($a, $b) {
+                    $aNote = null;
+                    $bNote = null;
+
+                    foreach ($a->getCurrentNotes() as $currentNote) {
+                        if ($currentNote->getTeacher() === $this->getUser()) {
+                            $aNote = $currentNote->getNote();
+                            break;
+                        }
                     }
-                }
 
-                if ($aNote === null && $bNote === null) {
-                    return 0;
-                } elseif ($aNote === null) {
-                    return 1;
-                } elseif ($bNote === null) {
-                    return -1;
-                }
+                    foreach ($b->getCurrentNotes() as $currentNote) {
+                        if ($currentNote->getTeacher() === $this->getUser()) {
+                            $bNote = $currentNote->getNote();
+                            break;
+                        }
+                    }
 
-                return $bNote <=> $aNote; // Tri par ordre décroissant
-            });
+                    if ($aNote === null && $bNote === null) {
+                        return 0;
+                    } elseif ($aNote === null) {
+                        return 1;
+                    } elseif ($bNote === null) {
+                        return -1;
+                    }
+
+                    return $bNote <=> $aNote; // Tri par ordre décroissant
+                });
+            }
+
+            $promotions[] = [
+                "promo" => $teacherPromotion->getPromotion(),
+                "students" => $students
+            ];
         }
 
         return $this->render('pages/logged_in/teacher/notes.html.twig', [
-            "students" => $students
+            "promotions" => $promotions
         ]);
     }
 
