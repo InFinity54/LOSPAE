@@ -50,7 +50,9 @@
                                                         <td>{{ student.firstName }} {{ student.lastName }} ({{ student.promotion.name }})</td>
                                                         {% for criteria in selectedCriterias %}
                                                             <td class="text-center">
-                                                                <input type="checkbox" id="{{ student.id }}_{{ criteria.id }}" name="{{ student.id }}_{{ criteria.id }}" value="{{ criteria.impact }}" class="form-check-input">
+                                                                <button type="button" class="btn btn-sm increaseCriteriaNumber" data-criteria="{{ student.id }}_{{ criteria.id }}">+</button>
+                                                                <input type="number" id="{{ student.id }}_{{ criteria.id }}" name="{{ student.id }}_{{ criteria.id }}" min="0" step="1" value="0" max="99" width="15" class="form-control-sm">
+                                                                <button type="button" class="btn btn-sm decreaseCriteriaNumber" data-criteria="{{ student.id }}_{{ criteria.id }}">-</button>
                                                             </td>
                                                         {% endfor %}
                                                     </tr>
@@ -76,4 +78,5 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="/assets/js/pages/logged_in/admin/notechange_multiple_step2.js"></script>
 {% endblock %}
