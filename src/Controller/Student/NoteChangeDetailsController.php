@@ -5,6 +5,7 @@ namespace App\Controller\Student;
 use App\Entity\Criteria;
 use App\Entity\CurrentNote;
 use App\Entity\NoteChange;
+use App\Entity\TeacherPromotion;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,7 +42,8 @@ class NoteChangeDetailsController extends AbstractController
         $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
         $details = [];
 
-        foreach ($entityManager->getRepository(CurrentNote::class)->findBy(["student" => $student]) as $currentNote) {
+        foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["promotion" => $student->getPromotion()]) as $teacherPromotion) {
+            $currentNote = $entityManager->getRepository(CurrentNote::class)->findOneBy(["teacher" => $teacherPromotion->getTeacher(), "student" => $student]);
             $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy(["student" => $student, "teacher" => $currentNote->getTeacher()]);
             $usedCriterias = [];
             $totalAddedPoints = 0;
