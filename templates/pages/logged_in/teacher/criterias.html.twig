@@ -31,6 +31,7 @@
                                 <a href="{{ path("teacher_criteria_add") }}" class="btn btn-primary">Ajouter un nouveau critère</a>
                             </div>
                             <div class="card-body">
+                                {% if criterias|length > 0 %}
                                 <div class="table-responsive">
                                     <table class="table table-striped mb-0">
                                         <thead>
@@ -67,6 +68,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {% else %}
+                                <center><p>Vous n'avez créé aucun critère de notation pour le moment.</p></center>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
