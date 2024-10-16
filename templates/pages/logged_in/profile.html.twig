@@ -37,10 +37,10 @@
                                         </div>
 
                                         <div class="col-lg-10 col-9">
-                                            {% if app.user.promo is not null %}
-                                                {{ app.user.promo.school.name }}
-                                                <br />{{ app.user.promo.school.address }}
-                                                <br />{{ app.user.promo.school.postalCode }} {{ app.user.promo.school.city }}
+                                            {% if app.user.promotion is not null %}
+                                                {{ app.user.promotion.school.name }}
+                                                <br />{{ app.user.promotion.school.address }}
+                                                <br />{{ app.user.promotion.school.postalCode }} {{ app.user.promotion.school.city }}
                                             {% else %}
                                                 Aucun établissement affecté
                                             {% endif %}
@@ -53,8 +53,8 @@
                                         </div>
 
                                         <div class="col-lg-10 col-9">
-                                            {% if app.user.promo is not null %}
-                                                {{ app.user.promo.name }}
+                                            {% if app.user.promotion is not null %}
+                                                {{ app.user.promotion.name }}
                                             {% else %}
                                                 Aucune promotion affecté
                                             {% endif %}
