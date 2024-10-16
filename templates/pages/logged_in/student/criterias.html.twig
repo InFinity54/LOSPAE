@@ -62,7 +62,7 @@
                                                             <td class="text-center">{{ teacherCriteria.name }}</td>
                                                             <td class="text-center">{{ teacherCriteria.impact|number_format(2) }}</td>
                                                             <td class="text-center">
-                                                                {% if teacherCriteria.modality is not null %}
+                                                                {% if teacherCriteria.modality is not null and teacherCriteria.modality is not same as("") %}
                                                                     {{ teacherCriteria.modality }}
                                                                 {% else %}
                                                                     Aucune modalité particulière.
