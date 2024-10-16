@@ -42,14 +42,22 @@ class NoteChangeDetailsController extends AbstractController
 
         foreach ($teacherPromotions as $teacherPromotion) {
             $students = [];
+            $noteChanges = [];
 
             foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
                 $students[] = $student;
+
+                foreach ($student->getNoteChanges() as $noteChange) {
+                    $noteChanges[] = $noteChange;
+                }
             }
+
+            usort($noteChanges, function($a, $b) {
+                return $b->getOccuredAt() <=> $a->getOccuredAt();
+            });
 
             $studentsNotesSum = 0;
             $criterias = [];
-            $noteChanges = $entityManager->getRepository(NoteChange::class)->findBy([], ["occuredAt" => "DESC"]);
             $globalAddedPoints = 0.0;
             $globalRemovedPoints = 0.0;
 

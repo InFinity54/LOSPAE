@@ -123,6 +123,7 @@
                                             <h4 class="card-title">Motifs les plus utilisés</h4>
                                         </div>
                                         <div class="card-body">
+                                            {% if promotion.criterias|length > 0 %}
                                             <div class="table-responsive">
                                                 <table class="table table-striped mb-0">
                                                     <thead>
@@ -141,6 +142,9 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            {% else %}
+                                            <center><p>Aucune modification de note trouvée pour cette promotion.</p></center>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
