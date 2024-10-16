@@ -47,7 +47,7 @@
                                                 <tr>
                                                     <td class="text-center">{{ criteria.name }}</td>
                                                     <td class="text-center">
-                                                        {% if criteria.modality is not null %}
+                                                        {% if criteria.modality is not null and criteria.modality is not same as("") %}
                                                             {{ criteria.modality }}
                                                         {% else %}
                                                             Aucune modalité particulière.
