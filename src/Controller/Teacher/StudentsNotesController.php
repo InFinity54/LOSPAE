@@ -153,7 +153,7 @@ class StudentsNotesController extends AbstractController
         }
 
         $students = [];
-        $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
+        $criterias = $entityManager->getRepository(Criteria::class)->findBy(["teacher" => $this->getUser()], ["name" => "ASC"]);
 
         foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $this->getUser()]) as $teacherPromotion) {
             foreach ($teacherPromotion->getPromotion()->getStudents() as $student) {
@@ -268,7 +268,7 @@ class StudentsNotesController extends AbstractController
             $this->addFlash("danger", "Vous devez sélectionner au moins un critère");
         }
 
-        $criterias = $entityManager->getRepository(Criteria::class)->findBy([], ["name" => "ASC"]);
+        $criterias = $entityManager->getRepository(Criteria::class)->findBy(["teacher" => $this->getUser()], ["name" => "ASC"]);
 
         return $this->render('pages/logged_in/teacher/notechange_multiple_step1.html.twig', [
             "criterias" => $criterias
