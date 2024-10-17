@@ -38,6 +38,7 @@
                             </div>
 
                             <div class="card-body">
+                                {% if schools|length > 0 %}
                                 <div class="table-responsive">
                                     <table class="table table-striped mb-0">
                                         <thead>
@@ -64,7 +65,7 @@
                                                     <td class="text-center">{{ school.promos }}</td>
                                                     <td class="text-center">{{ school.students }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-dark" title="Supprimer l'établissement {{ school.data.name }}">
+                                                        <a href="{{ path("admin_school_remove", { ids: school.data.id }) }}" class="btn btn-dark" title="Supprimer l'établissement {{ school.data.name }}">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </a>
                                                     </td>
@@ -72,8 +73,12 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
+                                    {% else %}
+                                    <center><p>Aucun établissement scolaire n'est enregistré.</p></center>
+                                    {% endif %}
                                 </div>
 
+                                {% if schools|length > 0 %}
                                 <nav class="mx-auto mt-4">
                                     <ul class="pagination">
                                         {% set totalPages = totalElements > 20 ? (totalElements / 20) | round(0, 'floor') : 0 %}
@@ -99,6 +104,7 @@
                                         {% endif %}
                                     </ul>
                                 </nav>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
