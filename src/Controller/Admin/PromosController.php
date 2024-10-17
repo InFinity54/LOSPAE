@@ -4,7 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\CurrentNote;
 use App\Entity\NoteChange;
-use App\Entity\Promo;
 use App\Entity\Promotion;
 use App\Entity\School;
 use App\Entity\TeacherPromotion;
