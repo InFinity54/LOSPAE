@@ -3,8 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Academy;
+use App\Entity\CurrentNote;
+use App\Entity\NoteChange;
 use App\Entity\Promo;
+use App\Entity\Promotion;
 use App\Entity\School;
+use App\Entity\TeacherPromotion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -224,16 +228,27 @@ class SchoolsController extends AbstractController
 
             if (!is_null($school)) {
                 $schools[] = $id;
-                $promos = $entityManager->getRepository(Promo::class)->findBy(["school" => $id]);
+                $promos = $entityManager->getRepository(Promotion::class)->findBy(["school" => $id]);
 
                 foreach ($promos as $promo) {
                     foreach ($promo->getStudents() as $student) {
-                        $entityManager->remove($student);
-                        $entityManager->flush();
+                        foreach ($entityManager->getRepository(NoteChange::class)->findBy(["student" => $student]) as $noteChange) {
+                            $entityManager->remove($noteChange);
+                        }
+
+                        foreach ($entityManager->getRepository(CurrentNote::class)->findBy(["student" => $student]) as $currentNote) {
+                            $entityManager->remove($currentNote);
+                        }
+
+                        $student->setPromotion(null);
+                        $student->setSchool(null);
+                    }
+
+                    foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["promotion" => $promo]) as $teacherPromotion) {
+                        $entityManager->remove($teacherPromotion);
                     }
 
                     $entityManager->remove($promo);
-                    $entityManager->flush();
                 }
 
                 $entityManager->remove($school);
