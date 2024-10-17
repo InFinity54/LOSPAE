@@ -3,6 +3,8 @@
 namespace App\Controller\Teacher;
 
 use App\Entity\Criteria;
+use App\Entity\NoteChange;
+use ContainerVIaTTxw\getAcademyRepositoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -197,6 +199,11 @@ class CriteriasController extends AbstractController
 
         if (is_null($criteria)) {
             $this->addFlash("danger", "Le critère demandé n'existe pas.");
+            return $this->redirectToRoute("teacher_criterias");
+        }
+
+        if ($entityManager->getRepository(NoteChange::class)->count(["criteria" => $criteria]) > 0) {
+            $this->addFlash("danger", "Le critère ciblé a été utilisé pour modifier des notes. Suppression impossible.");
             return $this->redirectToRoute("teacher_criterias");
         }
 
