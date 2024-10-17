@@ -4,7 +4,6 @@ namespace App\Controller\Teacher;
 
 use App\Entity\Criteria;
 use App\Entity\NoteChange;
-use ContainerVIaTTxw\getAcademyRepositoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
