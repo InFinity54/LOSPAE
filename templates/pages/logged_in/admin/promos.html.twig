@@ -52,7 +52,7 @@
                                                     <td class="text-center">{{ promo.data.name }}</td>
                                                     <td class="text-center">{{ promo.students }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-dark" title="Supprimer la promotion {{ promo.data.name }} de l'établissement">
+                                                        <a href="{{ path("admin_promo_remove", { id: promo.data.id }) }}" class="btn btn-dark" title="Supprimer la promotion {{ promo.data.name }} de l'établissement {{ promo.data.school.name }}">
                                                             <i class="fas fa-trash-alt"></i>
                                                         </a>
                                                     </td>
