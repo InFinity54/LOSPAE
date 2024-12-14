@@ -580,6 +580,15 @@ class StudentController extends AbstractController
                     }
                 }
 
+                $currentNotes = $entityManager->getRepository(CurrentNote::class)->findBy(["student" => $id]);
+
+                if (!is_null($currentNotes) && count($currentNotes) > 0) {
+                    foreach ($currentNotes as $currentNote) {
+                        $entityManager->remove($currentNote);
+                        $entityManager->flush();
+                    }
+                }
+
                 if ($student->getAvatar() !== "default_avatar.svg") {
                     $studentAvatarFullPath = $avatarUpload->getTargetDirectory().$student->getAvatar();
 
