@@ -1,5 +1,6 @@
 RewriteEngine On
 RewriteCond %{REQUEST_URI} !^/$
+RewriteCond %{REQUEST_URI} !^/favicon.ico$
 RewriteCond %{REQUEST_URI} !^/template/compiled/css/app\.css$
 RewriteCond %{REQUEST_URI} !^/template/compiled/css/app-dark\.css$
 RewriteCond %{REQUEST_URI} !^/assets/css/global\.css$
