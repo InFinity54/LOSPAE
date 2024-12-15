@@ -125,9 +125,6 @@
                                                         </a>
 
                                                         {% if student.isActivated %}
-                                                            <a href="{{ path("admin_student_reset", { ids: student.id }) }}" class="btn btn-info" title="Réinitialiser la note de {{ student.firstName }} {{ student.lastName }}">
-                                                                <i class="fas fa-list-ol"></i>
-                                                            </a>
                                                             <a href="{{ path("admin_student_disable", { ids: student.id }) }}" class="btn btn-danger" title="Désactiver le compte de {{ student.firstName }} {{ student.lastName }}">
                                                                 <i class="fas fa-user-times"></i>
                                                             </a>

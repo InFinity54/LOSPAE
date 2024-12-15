@@ -1,0 +1,80 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Réinitialisation des notes des étudiants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Réinitialisation des notes des étudiants</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="{{ path("teacher_notereset_choose") }}" method="POST" data-parsley-validate>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Promotions</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Sélectionnez la ou les promotions pour lesquels vous souhaitez réinitialiser les notes des étudiants. Une fois votre sélection effectuée, enregistrez cette dernière pour passer à l'étape suivante de la procédure de réinitialisation des notes.
+                                    </p>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="promosglobalselection" /></th>
+                                                <th class="text-center">ÉTABLISSEMENT CONCERNÉ</th>
+                                                <th class="text-center">NOM DE LA PROMOTION</th>
+                                                <th class="text-center">NOMBRE D'ÉTUDIANTS</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for promo in promotions %}
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" class="promoselection" id="{{ promo.data.id }}" name="{{ promo.data.id }}" />
+                                                    </td>
+                                                    <td class="text-center">{{ promo.data.school.name }} ({{ promo.data.school.city }})</td>
+                                                    <td class="text-center">{{ promo.data.name }}</td>
+                                                    <td class="text-center">{{ promo.studentCount }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Enregistrer la sélection</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/assets/js/pages/logged_in/teacher/notereset.js"></script>
+{% endblock %}

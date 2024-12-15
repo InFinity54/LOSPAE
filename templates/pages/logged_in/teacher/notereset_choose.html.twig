@@ -1,0 +1,82 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Réinitialisation des notes des étudiants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Réinitialisation des notes des étudiants</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <form action="{{ path("teacher_notereset_do") }}" method="POST" data-parsley-validate>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Liste des étudiants</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Sélectionnez le ou les étudiants pour lesquels vous souhaitez réinitialiser les notes. Une fois la sélection terminée, enregistrez cette dernière pour lancer la réinitialisation des notes.
+                                    </p>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="studentsglobalselection" /></th>
+                                                <th class="text-center">NOM</th>
+                                                <th class="text-center">PRÉNOM</th>
+                                                <th class="text-center">ÉTABLISSEMENT CONCERNÉ</th>
+                                                <th class="text-center">NOM DE LA PROMOTION</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for student in students %}
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" class="studentselection" id="{{ student.id }}" name="{{ student.id }}" />
+                                                    </td>
+                                                    <td>{{ student.lastName }}</td>
+                                                    <td>{{ student.firstName }}</td>
+                                                    <td class="text-center">{{ student.promotion.school.name }} ({{ student.promotion.school.city }})</td>
+                                                    <td class="text-center">{{ student.promotion.name }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer d-flex justify-content-end">
+                                    <button class="btn btn-light-primary" type="submit">Réinitialiser les notes des étudiants sélectionnés</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/assets/js/pages/logged_in/teacher/notereset_choose.js"></script>
+{% endblock %}

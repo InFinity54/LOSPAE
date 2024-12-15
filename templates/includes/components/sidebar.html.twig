@@ -112,6 +112,9 @@
                             <li class="submenu-item {% if app.current_route is same as("teacher_notemultiplechange") %}active{% endif %}">
                                 <a href="{{ path("teacher_notemultiplechange") }}" class="submenu-link">Modifier plusieurs notes à la fois</a>
                             </li>
+                            <li class="submenu-item {% if app.current_route in ["teacher_notereset", "teacher_notereset_choose"] %}active{% endif %}">
+                                <a href="{{ path("teacher_notereset") }}" class="submenu-link">Réinitialiser les notes</a>
+                            </li>
                         </ul>
                     </li>
 
