@@ -6,10 +6,6 @@ $("#studentglobalselection").change((event) => {
     }
 })
 
-$("#reset_selected_students").on("click", () => {
-    handleAction("reset");
-});
-
 $("#edit_selected_students").on("click", () => {
     handleAction("edit");
 });
