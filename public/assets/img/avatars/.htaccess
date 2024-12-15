@@ -1,0 +1,7 @@
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Order Deny,Allow
+    Deny from all
+    # Autoriser les requêtes provenant de votre site uniquement
+    SetEnvIf Referer "^http?://lospae\.local" AccessOK
+    Allow from env=AccessOK
+</FilesMatch>
