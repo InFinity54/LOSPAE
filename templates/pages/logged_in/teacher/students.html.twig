@@ -1,0 +1,102 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gestion des étudiants{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Gestion des étudiants</h3>
+                <p class="text-muted">Cette page permet de gérer vos étudiants. Depuis cette page, vous pouvez, si nécessaire, réinitialiser le mot de passe qu'un étudiant aurait oublié.</p>
+            </div>
+
+            <div class="page-content">
+                {% if generatedLetters|length > 0 %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Lettres générées</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Des lettres ont été générées pour les comptes étudiants dont le mot de passe vient d'être modifié. Vous pouvez les télécharger pour les fournir aux étudiants concernés.
+                                        <br />
+                                        ATTENTION : Ce sera votre seule opportunité de les télécharger. Ces documents ne vous seront pas représentés par la suite et seront supprimés de LOSPAÉ dans quelques heures.
+                                    </p>
+
+                                    <ul>
+                                        {% for generatedLetter in generatedLetters %}
+                                            <li><a href="{{ path("download_notificationletter", {filename: generatedLetter}) }}" target="_blank">{{ generatedLetter }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste des étudiants</h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">NOM</th>
+                                                <th class="text-center">PRÉNOM</th>
+                                                <th class="text-center">ÉTABLISSEMENT</th>
+                                                <th class="text-center">PROMOTION</th>
+                                                <th>ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in students %}
+                                                <tr>
+                                                    <td class="text-center">{{ student.lastName }}</td>
+                                                    <td class="text-center">{{ student.firstName }}</td>
+                                                    {% if student.promotion is not null %}
+                                                    <td class="text-center">{{ student.promotion.school.name }} ({{ student.promotion.school.city }})</td>
+                                                    <td class="text-center">{{ student.promotion.name }}</td>
+                                                    {% else %}
+                                                    <td class="text-center">Aucun</td>
+                                                    <td class="text-center">Aucune</td>
+                                                    {% endif %}
+                                                    <td>
+                                                        <a href="{{ path("teacher_student_passwordreset", { id: student.id }) }}" class="btn btn-primary" title="Réinitialiser le mot de passe de {{ student.firstName }} {{ student.lastName }}">
+                                                            <i class="fas fa-key"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}

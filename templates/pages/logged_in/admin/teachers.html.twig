@@ -40,7 +40,7 @@
 
                                     <ul>
                                         {% for generatedLetter in generatedLetters %}
-                                            <li><a href="{{ path("admin_download_notificationletter", {filename: generatedLetter}) }}" target="_blank">{{ generatedLetter }}</a></li>
+                                            <li><a href="{{ path("download_notificationletter", {filename: generatedLetter}) }}" target="_blank">{{ generatedLetter }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </div>

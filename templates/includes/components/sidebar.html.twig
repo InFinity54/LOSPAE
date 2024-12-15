@@ -138,6 +138,13 @@
                             <span>Critères de notation</span>
                         </a>
                     </li>
+
+                    <li class="sidebar-item {% if app.current_route in ["teacher_students"] %}active{% endif %}">
+                        <a href="{{ path("teacher_students") }}" class='sidebar-link'>
+                            <i class="fas fa-users"></i>
+                            <span>Gestion des étudiants</span>
+                        </a>
+                    </li>
                 {% endif %}
 
                 {% if "ROLE_ADMIN" in app.user.roles %}
