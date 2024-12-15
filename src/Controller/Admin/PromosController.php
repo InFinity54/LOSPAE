@@ -7,6 +7,7 @@ use App\Entity\NoteChange;
 use App\Entity\Promotion;
 use App\Entity\School;
 use App\Entity\TeacherPromotion;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,6 +94,87 @@ class PromosController extends AbstractController
         return $this->render('pages/logged_in/admin/promo_add.html.twig', [
             "schools" => $schools
         ]);
+    }
+
+    #[Route('/admin/promos/edit/{id}', name: 'admin_promo_edit')]
+    public function promoEdit(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $promo = $entityManager->getRepository(Promotion::class)->find($id);
+
+        if (is_null($promo)) {
+            $this->addFlash("danger", "La promotion demandée n'existe pas.");
+            return $this->redirectToRoute("admin_promos");
+        }
+
+        return $this->render('pages/logged_in/admin/promo_edit.html.twig', [
+            "promo" => $promo
+        ]);
+    }
+
+    #[Route('/admin/promos/removestudent/{studentId}', name: 'admin_promo_removestudent')]
+    public function promoRemoveStudent(Request $request, EntityManagerInterface $entityManager, int $studentId): Response
+    {
+        if (!is_null($this->getUser()) && !$this->getUser()->isActivated()) {
+            return $this->redirectToRoute("deactivated");
+        }
+
+        if (is_null($this->getUser())) {
+            return $this->redirectToRoute("login");
+        }
+
+        if (
+            !in_array("ROLE_STUDENT", $this->getUser()->getRoles())
+            && !in_array("ROLE_TEACHER", $this->getUser()->getRoles())
+            && !in_array("ROLE_ADMIN", $this->getUser()->getRoles())
+        ) {
+            return $this->redirectToRoute("unconfigured");
+        }
+
+        if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            $this->addFlash("danger", "Vous n'êtes pas autorisé à accéder à cette page.");
+            return $this->redirectToRoute("homepage");
+        }
+
+        $student = $entityManager->getRepository(User::class)->find($studentId);
+
+        if (is_null($student)) {
+            $this->addFlash("danger", "L'étudiant demandé n'existe pas.");
+            return $this->redirectToRoute("admin_promos");
+        }
+
+        $promo = $entityManager->getRepository(Promotion::class)->find($student->getPromotion()->getId());
+
+        if (is_null($promo)) {
+            $this->addFlash("danger", "La promotion demandée n'existe pas.");
+            return $this->redirectToRoute("admin_promos");
+        }
+
+        $student->setPromotion(null);
+        $entityManager->persist($student);
+        $entityManager->flush();
+        $this->addFlash("success", "L'étudiant a été retiré de cette promotion.");
+        return $this->redirectToRoute("admin_promo_edit", ["id" => $promo->getId()]);
     }
 
     #[Route('/admin/promos/remove/{id}', name: 'admin_promo_remove')]

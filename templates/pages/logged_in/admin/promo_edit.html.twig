@@ -1,0 +1,98 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Administration > Promotions{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css" />
+{% endblock %}
+
+{% block body %}
+    <div id="app">
+        {% include "includes/components/sidebar.html.twig" %}
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Édition d'une promotion</h3>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Promotion sélectionnée</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="card">
+                                    <div class="card-body py-3 px-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="ms-3 name">
+                                                <h5 class="font-bold">{{ promo.name }}</h5>
+                                                <h6 class="text-muted mb-0">
+                                                    {{ promo.school.name }}
+                                                    <br />{{ promo.school.address }}
+                                                    <br />{{ promo.school.postalCode }} {{ promo.school.city }}
+                                                </h6>
+                                                <h6 class="text-muted mt-3 mb-0">
+                                                    {{ promo.students|length }} étudiant{% if promo.students|length > 1 %}s{% endif %}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Étudiants</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Voici la liste des étudiants actuellement affectés à cette promotion. Cliquez sur le bouton de suppression pour retirer l'étudiant concerné de cette promotion.</p>
+
+                                <div class="row">
+                                    {% for student in promo.students %}
+                                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                            <div class="card">
+                                                <div class="card-body py-4 px-4">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar avatar-xl">
+                                                            <img src="/assets/img/avatars/{{ student.avatar }}" alt="Photo de profil de {{ student.firstName }} {{ student.lastName }}" />
+                                                        </div>
+                                                        <div class="ms-3 name">
+                                                            <h5 class="font-bold">{{ student.firstName }} {{ student.lastName }}</h5>
+                                                            <h6 class="text-muted mb-0">
+                                                                <a href="{{ path("admin_promo_removestudent", { promoId: promo.id, studentId: student.id }) }}" class="btn btn-danger" title="Retirer {{ student.firstName }} {{ student.lastName }} de cette promotion">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </a>
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "includes/components/footer.html.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
