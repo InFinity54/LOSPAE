@@ -1,4 +1,5 @@
 <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    ErrorDocument 403 /index.php
     Order Deny,Allow
     Deny from all
     # Autoriser les requêtes provenant de votre site uniquement
