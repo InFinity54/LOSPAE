@@ -143,7 +143,7 @@
 
                                 <nav class="mx-auto mt-4">
                                     <ul class="pagination">
-                                        {% set totalPages = totalElements > 20 ? (totalElements / 20) | round(0, 'floor') : 1 %}
+                                        {% set totalPages = totalElements > 20 ? (totalElements / 20) | round(0, 'ceil') : 1 %}
                                         {% if currentPage > 0 %}
                                             <li class="page-item">
                                                 <a class="page-link" href="{{ path("admin_students") }}?page={{ currentPage - 1 }}" aria-label="Previous">
