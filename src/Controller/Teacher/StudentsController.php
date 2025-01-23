@@ -113,13 +113,14 @@ class StudentsController extends AbstractController
         }
 
         $authorizedSpecialChars = ["#", "@", ".", "/", "!", ",", ":", ";", "?", "%", "*", "-", "+"];
-        $studentPassword = ucfirst(strtolower(substr(StringHandler::remove_accents($student->getLastName()), 0, 3)));
+        $studentPassword = ucfirst(strtolower(substr(StringHandler::remove_accents(str_replace(' ', '', $student->getLastName())), 0, 3)));
         $studentPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
-        $studentPassword .= ucfirst(strtolower(substr(StringHandler::remove_accents($student->getFirstName()), 0, 3)));
+        $studentPassword .= ucfirst(strtolower(substr(StringHandler::remove_accents(str_replace(' ', '', $student->getFirstName())), 0, 3)));
         $studentPassword .= $authorizedSpecialChars[array_rand($authorizedSpecialChars)];
         $studentPassword .= rand(10, 99);
 
         $student->setPassword($passwordHasher->hashPassword($student, $studentPassword));
+        $entityManager->flush();
 
         try {
             $templateFile = $this->getParameter("kernel.project_dir")."/public/files/users_import_letter_model_student.docx";
