@@ -217,7 +217,7 @@ class TeacherController extends AbstractController
             $alreadyAffectedPromotionsIds = [];
 
             foreach ($entityManager->getRepository(TeacherPromotion::class)->findBy(["teacher" => $teacher]) as $alreadyAffectedPromotion) {
-                //$entityManager->remove($alreadyAffectedPromotion);
+                $entityManager->remove($alreadyAffectedPromotion);
                 $alreadyAffectedPromotionsIds[] = $alreadyAffectedPromotion->getPromotion()->getId();
             }
 
